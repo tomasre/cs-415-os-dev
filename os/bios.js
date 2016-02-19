@@ -2,5 +2,13 @@
 
 var os = {
     fs: {},
-    ps: {}
+    ps: {},
+    _internals: {
+        fs: {
+            disk:{}
+        },
+        ps: {
+            pcb: {}
+        }
+    }
 };
