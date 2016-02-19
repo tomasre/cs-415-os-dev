@@ -8,7 +8,7 @@ var os = {
             disk:{}
         },
         ps: {
-            pcb: {}
+            pcb: []
         }
     }
 };
