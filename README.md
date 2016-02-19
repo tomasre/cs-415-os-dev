@@ -19,7 +19,7 @@ wrap your entire function in a closure:
 os files are named based on their structure for example:   
 os.fs.read.js   
 os.fs.write.js   
-os.ps.scheduler.js   
+os.ps.registerProcess.js   
 
 ## os data structures   
 os._internals is used to store the filesystem and process data   

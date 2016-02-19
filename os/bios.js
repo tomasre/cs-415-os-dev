@@ -8,7 +8,14 @@ var os = {
             disk:{}
         },
         ps: {
-            pcb: []
+            pcb: [],
+            states: {
+                START: 1,
+                STOP: 2,
+                WAITING: 3,
+                READY: 4,
+                RUNNING: 5
+            }
         }
     }
 };
