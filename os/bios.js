@@ -5,7 +5,8 @@ var os = {
     ps: {},
     _internals: {
         fs: {
-            disk:{}
+            disk:{},
+            operationQueue: []
         },
         ps: {
             pcb: [],
@@ -15,7 +16,8 @@ var os = {
                 WAITING: 3,
                 READY: 4,
                 RUNNING: 5
-            }
+            },
+            runningProcess: ''
         }
     }
 };

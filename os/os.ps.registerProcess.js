@@ -12,7 +12,7 @@
             id: os._internals.pcb.length,
             name: name,
             state: os._internals.ps.state.START,
-            entrypoint: cb
+            entryPoint: cb
         });
     }
 
