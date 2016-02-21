@@ -16,12 +16,14 @@
      */
     function readFile (filehandle, size, cb) {
 
-        var psname = os._internals.ps.runningProcess.slice(0)
+        var psname = os._internals.ps.runningProcess.slice(0);
+
+        var realFileHandle = os._internals.fs.disk[filehandle.name].meta;
 
         os._internals.fs.operationQueue.push({
             operation: function () {
                 setTimeout(function () {
-                    performReadOperation(psname, filehandle, size, cb);
+                    performReadOperation(psname, realFileHandle, size, cb);
                 }, generateRandomTimeout());
             },
             // copy string
