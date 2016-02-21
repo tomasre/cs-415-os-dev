@@ -8,7 +8,7 @@
      */
     function registerProcess(name, cb) {
 
-        os._internals.pcb.push({
+        os._internals.ps.pcb.push({
             id: os._internals.pcb.length,
             name: name,
             state: os._internals.ps.state.START,
