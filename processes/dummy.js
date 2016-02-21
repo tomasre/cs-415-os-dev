@@ -1,7 +1,28 @@
 'use strict';
 (function () {
-    os.fs.read(function (err, data) {
-        console.log('data from read:');
-        console.log(data);
+
+    os.fs.open('EXAMPLE_FILENAME.TXT', function (errorOpen, fh) {
+        if (errorOpen) {
+            // ERROR OPENING FILE, as a process I HAVE TO HANDLE THIS here!!!!!!!!
+            console.log(errorOpen);
+        } else {
+
+            // I NOW HAVE ACCESS TO filehandle as object fh
+
+
+            os.fs.read(fh, 5, function (errorRead, data) {
+                if (errorRead) {
+                    // ERROR READING FILE, as a process I HAVE TO HANDLE THIS here!!!!!!!!
+                    console.log(errorRead);
+                } else {
+
+                    // I know have the data
+                    console.log(data);
+                }
+            })
+        }
     });
+
+    // I DO NOT HAVE ACCESS TO THE FILE HERE!!!!!!!!!!!!!!!!!!!!!
+
 })();
