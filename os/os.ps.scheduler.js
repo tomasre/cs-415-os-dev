@@ -3,6 +3,8 @@
 
     os._internals.ps.scheduleProcess = scheduleProcess;
 
+    os._internals.ps.fsOperationReadyToReturn = fsOperationReadyToReturn;
+
     /*
      picks a process from the pcb
      */
@@ -84,5 +86,27 @@
             }
         }
         return false;
+    }
+
+    /*
+    sets the entrypoint callback as the entrypoint in the pcb for the processName
+    also marks it as 'READY' in the pcb
+     */
+    function fsOperationReadyToReturn(processName, entrypoint) {
+        for (var i = 0; i < os._internals.ps.pcb.length; i++) {
+            var process = os._internals.ps.pcb[i];
+            if (process.name !== processName) {
+                // not the process we need to find
+                continue;
+            }
+
+            // found the process
+            process.entryPoint = entrypoint;
+            process.state = os._internals.ps.states.READY;
+            return;
+        }
+
+        // if we got here we didnt find the process - cant recover
+        console.log('os.ps.scheduler.fsOperationReadyToReturn ERROR didnt find matching process name for: ' + processName);
     }
 })();

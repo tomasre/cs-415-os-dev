@@ -16,28 +16,39 @@
      */
     function readFile (filehandle, size, cb) {
 
+        var psname = os._internals.ps.runningProcess.slice(0)
+
         os._internals.fs.operationQueue.push({
             operation: function () {
                 setTimeout(function () {
-                    performReadOperation(filehandle, size, cb);
+                    performReadOperation(psname, filehandle, size, cb);
                 }, generateRandomTimeout());
             },
             // copy string
-            processName: os._internals.ps.runningProcess.slice(0)
+            processName: psname
         });
     }
 
     /*
      performs the actual read operation on the disk (syncronously) as operation is wrapping it asynchronously
      */
-    function performReadOperation(filehandle, size, cb) {
+    function performReadOperation(psname, filehandle, size, cb) {
+
+        var entrypoint;
         if (size > MAX_SIZE_PER_READ) {
             // call cb with an error
-            cb('size over max size allowed per read operation');
+            entrypoint = function () {
+                cb('size over max size allowed per read operation');
+            };
+
         } else {
             // valid request return the data
-            cb(null, os._internals.fs.disk[filehandle.name].data.substr(filehandle.pos, size));
+            entrypoint = function () {
+                cb(null, os._internals.fs.disk[filehandle.name].data.substr(filehandle.pos, size));
+            };
         }
+
+        os._internals.ps.fsOperationReadyToReturn(psname, entrypoint);
     }
 
     /*
