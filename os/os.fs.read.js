@@ -1,15 +1,25 @@
 'use strict';
 (function () {
+
+    var MAX_SIZE_PER_READ = 100;
+
     os.fs.read = readFile;
 
-    function readFile (cb) {
-        console.log('READ');
-        cb(null, 'fuck');
+    /*
+    example usage:
+    os.fs.read(filehandle, size, cb);
+    filehandle is the filehandle given from os.fs.open
+    size is the number of characters to read
+    cb is a function which takes 2 arguments:
+    error: an error if one occurred
+    data: the actual data returned by the fs
+     */
+    function readFile (filehandle, size, cb) {
 
         os._internals.fs.operationQueue.push({
             operation: function () {
                 setTimeout(function () {
-                    performReadOperation(cb);
+                    performReadOperation(filehandle, size, cb);
                 }, generateRandomTimeout());
             },
             // copy string
@@ -18,10 +28,16 @@
     }
 
     /*
-     performs the actual read operation on the disk
+     performs the actual read operation on the disk (syncronously) as operation is wrapping it asynchronously
      */
-    function performReadOperation(cb) {
-
+    function performReadOperation(filehandle, size, cb) {
+        if (size > MAX_SIZE_PER_READ) {
+            // call cb with an error
+            cb('size over max size allowed per read operation');
+        } else {
+            // valid request return the data
+            cb(null, os._internals.fs.disk[filehandle.name].data.substr(filehandle.pos, size));
+        }
     }
 
     /*
