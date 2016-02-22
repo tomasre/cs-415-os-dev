@@ -2,9 +2,26 @@
 
   os.fs.open = openFile;
 
-  function openFile (fileName, cb) {
 
-    var psname = os._internals.ps.runningProcess.slice(0);
+  function openFile(fileName, cb){
+    var process = os._internals.ps.runningProcess.slice(0);
+
+    os._internals.fs.operationQueue.push({
+      operation: function(){
+        setTimeout(function(){
+          performOpenOperation(process,fileName, cb);
+        }, generateRandomTimeout());
+      },
+
+      //copy string ???? do not know why this is required
+
+      processName: process
+    });
+  }
+
+  //performs fake open operation  on string ie>> creats file handle
+  function performOpenOperation (psname, fileName, cb) {
+
     var entrypoint;
 
     //checks if the property is defined
@@ -22,6 +39,7 @@
             name: filename,
 
             pos: 0
+          };
 
             entrypoint = function(){
 
@@ -32,7 +50,7 @@
              os._internals.ps.fsOperationReadyToReturn(psname, entrypoint);
 
 
-          };
+          }
 
         }
 
@@ -41,9 +59,12 @@
 
 
 
+    
+
+
+function generateRandomTimeout() {
+        return Math.floor(Math.random() * (100 - 10) + 10);
     }
-
-
 
 
   
