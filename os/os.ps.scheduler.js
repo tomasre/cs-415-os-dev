@@ -27,13 +27,23 @@
                     try {
                         process.entryPoint();
 
-                        // as of right now the processes is done (or waiting for a filesystem operation
-                        if (waitingForFsOp(process.name)) {
-                            // change state to waiting
-                            process.state = os._internals.ps.states.WAITING;
+                        if (process.name = 'fs') {
+
+                            // fs is always ready
+                            process.state = os._internals.ps.states.READY;
+
                         } else {
-                            process.state = os._internals.ps.states.STOP;
+
+                            // as of right now the processes is done (or waiting for a filesystem operation
+                            if (waitingForFsOp(process.name)) {
+                                // change state to waiting
+                                process.state = os._internals.ps.states.WAITING;
+                            } else {
+                                process.state = os._internals.ps.states.STOP;
+                            }
                         }
+
+
 
                         setTimeout(function () {
                             // TODO what if all processes are waiting for fs and fs is waiting for disk
