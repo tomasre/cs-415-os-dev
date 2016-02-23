@@ -38,7 +38,7 @@
         Create a new file inside of the simulated disk, declare as an array to hold the result later on.
         cb returns null, then true to tell the process(e?) that the file has been created.
       */
-      os._internals.fs.disk[fileName] = [];
+      os._internals.fs.disk[fileName] = new Object();
       cb(null, true);
     }
     
