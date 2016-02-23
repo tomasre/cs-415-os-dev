@@ -1,30 +1,33 @@
 'use strict'
 
 (function() {
-  // created a main function since the scheduler needs a main processor
+  // Register the entry point, main with process named "Stats"
+  os.ps.register('Stats', main);
+  
+  // input file name should be called "Stats_Data.csv" and output file should be named "Average.csv"
+  var FNAME_IN = "Stats_Data.csv";
+  var FNAME_OUT = "Average.csv";
+  
   var main = function() {
-    /* The input file should be called Stats_Data.csv and the output file is average.csv */
-    var szFName_In = "Stats_Data.csv";
-    var szFName_Out = "average.csv";
-    var total = 0;
-
-    // try to open the file, if file exists we perform operation, if not we throw error
-    try {
-      // csv file is comma separated, so we delimit the string based on commas
-      var file = os.fs.open(szFName_In);
-      var values = file.split(",");
-    
-      // sum up all the values from the array of numbers we took from the file and store into the total
-      for (var i = 0; i < values.length; i++) {
-        total += values[i];
-      }
-      total = total / values.length;
-    
-      // Missing a create output file, and writing to the output file
-      os.fs.close(szFName_In);
-    } catch (e) {
-      console.log("Error could not open: " + e);
+    os.fs.open(FNAME_IN, function(errorOpen, fh) ) {
+      if(errorOpen) {
+        console.log("Could not open file: " + errorOpen);
+      } else {
+        os.fs.read(fh, 100, function(errorReadingFile, data) ) {
+          if(errorReadingFile) {
+            console.log("Error reading the file: " + errorReadingFile);
+          } else {
+            var result = 0;
+            for(var i = 0; i < data.length; i++) {
+              result += data[i];
+            }
+            
+          }
+        }
+      }  
     }
-  };
+  }
+}
+}
   
 })();
