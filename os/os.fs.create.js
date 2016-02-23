@@ -13,6 +13,8 @@
   os.fs.create = createFile;
   
   var createFile = function(fileName, cb) {
+    var psname = os._internals.ps.runningProcess.slice(0);
+    
     // Checks if the file exists, if so perform the operation. If not, return an error
     if (typeof os._internals.fs.disk[fileName] === "undefined"){
       os._internals.fs.operationQueue.push({
