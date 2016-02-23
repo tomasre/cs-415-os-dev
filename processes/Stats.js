@@ -1,5 +1,10 @@
 'use strict'
 
+/*
+  This process takes statistical data from FNAME_IN file and takes the average
+  of all the data and outputs the result into a FNAME_OUT file
+*/
+
 (function() {
   // Register the entry point, main with process named "Stats"
   os.ps.register('Stats', main);
@@ -8,6 +13,7 @@
   var FNAME_IN = "Stats_Data.csv";
   var FNAME_OUT = "Average.csv";
   
+  var int_Data = [];
   var result = 0;
   
   var main = function() {
@@ -23,11 +29,16 @@
           if(errorReadingFile) {
             console.log("Error(2): " + errorReadingFile);
           } else {
+            /* data returned to us is of str type. we convert the string into an integer array so we can perform 
+               mathematical operations. Don't need to check because os.fs.read always returns a substr which is of 
+               str data type.
+            */
+            int_Data = data.split(',');
             // we take the average of the data we received from the disk
-            for(var i = 0; i < data.length; i++) {
-              result += data[i];
+            for(var i = 0; i < int_Data.length; i++) {
+              result += int_Data[i];
             }
-            result = result / data.length;
+            result = result / int_Data.length;
             
             // tell the file system we are done with "Stats_Data.csv" by closing the file
             os.fs.close(FNAME_IN, function(errorClosingFile, errorMessage)) {
