@@ -1,5 +1,14 @@
 'use strict'
 
+/*
+    example usage:
+    os.fs.write(fileName cb);
+    fileName is the name of the file you want to write to
+    cb is a function which takes 2 arguments:
+    error: an error if one occurred
+    wroteToFile: which is a bool that returns true if we wrote to file and false if we didn't
+*/
+
 (function() {
   os.fs.create = createFile;
   
@@ -15,7 +24,7 @@
         }
       });
     } else {
-      cb("File already exists inside of the disc");
+      cb("File already exists inside of the disc", false);
     }
   }
   
