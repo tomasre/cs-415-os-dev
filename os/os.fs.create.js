@@ -3,14 +3,14 @@
 (function() {
   os.fs.create = createFile;
   
-  var createFile = function() {
+  var createFile = function(fileName, cb) {
     // Checks if the file exists, if so perform the operation. If not, return an error
     if (typeof os._internals.fs.disk[fileName] === "undefined"){
       os._internals.fs.operationQueue.push({
         operation: function() {
           processName: psname, 
           setTimeout(function () {
-            performCreateOperation(psname, fileName, size, cb);
+            performCreateOperation(psname, fileName, cb);
           }, generateRandomTimeout());
         }
       });
