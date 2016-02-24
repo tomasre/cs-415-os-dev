@@ -11,6 +11,8 @@
     function main () {
         var operation = os._internals.fs.operationQueue.pop();
 
-        operation.operation();
+        if (operation) {
+            operation.operation();
+        }
     }
 })();
