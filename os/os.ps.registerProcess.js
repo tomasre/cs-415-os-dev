@@ -9,7 +9,7 @@
     function registerProcess(name, cb) {
 
         os._internals.ps.pcb.push({
-            id: os._internals.pcb.length,
+            id: os._internals.ps.pcb.length,
             name: name,
             state: os._internals.ps.state.START,
             entryPoint: cb
