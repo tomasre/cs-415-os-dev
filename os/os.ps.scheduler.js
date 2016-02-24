@@ -38,6 +38,9 @@
 
                         } else {
 
+
+                            console.log('IS WAITING FOR OPERATION: ' + waitingForFsOp(process.name));
+
                             // as of right now the processes is done (or waiting for a filesystem operation
                             if (waitingForFsOp(process.name)) {
                                 // change state to waiting
