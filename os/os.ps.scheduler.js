@@ -61,6 +61,8 @@
 
                 process.state = os._internals.ps.states.RUNNING;
                 os._internals.ps.runningProcess = process.name;
+
+                break;
             }
         }
     }
