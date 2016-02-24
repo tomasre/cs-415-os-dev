@@ -31,26 +31,19 @@
                         process.entryPoint();
                         console.log('SCHEDULER: context switched back to scheduler');
 
-                        if (process.name === 'fs') {
 
-                            // fs is always ready
-                            process.state = os._internals.ps.states.READY;
-
-                        } else {
-
-
-                            console.log('IS WAITING FOR OPERATION: ' + waitingForFsOp(process.name));
-
+                        if (process.name !== 'fs') {
+                            // treat normally
                             // as of right now the processes is done (or waiting for a filesystem operation
-                            if (waitingForFsOp(process.name) && process.name !== 'fs') {
+                            if (waitingForFsOp(process.name)) {
                                 // change state to waiting
                                 process.state = os._internals.ps.states.WAITING;
                             } else {
                                 process.state = os._internals.ps.states.STOP;
                             }
+                        } else {
+                            process.state = os._internals.ps.states.READY;
                         }
-
-
 
                         setTimeout(function () {
                             // TODO what if all processes are waiting for fs and fs is waiting for disk
