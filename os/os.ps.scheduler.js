@@ -31,7 +31,7 @@
                         process.entryPoint();
                         console.log('SCHEDULER: context switched back to scheduler');
 
-                        if (process.name = 'fs') {
+                        if (process.name === 'fs') {
 
                             // fs is always ready
                             process.state = os._internals.ps.states.READY;
