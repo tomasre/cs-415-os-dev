@@ -25,7 +25,7 @@
     var entrypoint;
 
     //checks if the property is defined
-    if (typeof os._internals.fs.disk[fileName] === "undefined"){
+    if (!os._internals.fs.disk[fileName]){
       entrypoint = function(){
         cb('file does not exist');
 
@@ -53,25 +53,8 @@
           }
 
         }
-
-
-
-
-
-
-    
-
-
 function generateRandomTimeout() {
         return Math.floor(Math.random() * (100 - 10) + 10);
     }
-
-
   
-
-
-
-
-
-
 })();

@@ -4,8 +4,8 @@
     os.ps.register('dummy', main);
 
     function main() {
-        os.fs.open('EXAMPLE_FILENAME.TXT', function (errorOpen, fh) {
-            console.log('fs open success');
+        os.fs.open('Stats_Data.csv', function (errorOpen, fh) {
+            console.log('fs open CB');
             if (errorOpen) {
                 // ERROR OPENING FILE, as a process I HAVE TO HANDLE THIS here!!!!!!!!
                 console.log(errorOpen);
