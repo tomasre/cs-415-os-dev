@@ -18,6 +18,11 @@
             return;
         }
 
+        // shift the array so the first one doesnt get chosen too many times in a row
+        var elem = os._internals.ps.pcb.shift();
+        os._internals.ps.pcb.push(elem);
+
+
         for (var i = 0; i < os._internals.ps.pcb.length; i++) {
             var process = os._internals.ps.pcb[i];
             if (process.state === os._internals.ps.states.READY || process.state === os._internals.ps.states.START){
@@ -25,8 +30,8 @@
                 // run the process after next tick
                 setTimeout(function () {
                     try {
-                        console.log('STATE PRE');
-                        console.log(JSON.parse(JSON.stringify(os)));
+                        //console.log('STATE PRE');
+                        //console.log(JSON.parse(JSON.stringify(os)));
                         console.log('SCHEDULER: switching context to: ' + process.name);
                         process.entryPoint();
                         console.log('SCHEDULER: context switched back to scheduler');
