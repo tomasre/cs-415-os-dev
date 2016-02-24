@@ -25,7 +25,9 @@
                 // run the process after next tick
                 setTimeout(function () {
                     try {
+                        console.log('SCHEDULER: switching context to: ' + process.name);
                         process.entryPoint();
+                        console.log('SCHEDULER: context switched back to scheduler');
 
                         if (process.name = 'fs') {
 
