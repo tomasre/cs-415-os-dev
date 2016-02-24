@@ -36,7 +36,7 @@
       } else {
           os._internals.fs.disk[fileName].meta={
 
-            name: filename,
+            name: fileName,
 
             pos: 0
           };
