@@ -38,7 +38,9 @@
 
             name: fileName,
 
-            pos: 0
+            pos: 0,
+            
+            fileInUse: true
           };
 
             entrypoint = function(){
