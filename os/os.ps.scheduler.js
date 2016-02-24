@@ -38,6 +38,7 @@
                             if (waitingForFsOp(process.name)) {
                                 // change state to waiting
                                 process.state = os._internals.ps.states.WAITING;
+                                console.log('waiting for op');
                             } else {
                                 process.state = os._internals.ps.states.STOP;
                             }
@@ -78,7 +79,7 @@
                 continue;
             }
 
-            if (process.state === os._internals.ps.states.READY || process.state === os._internals.ps.states.START) {
+            if (process.state !== os._internals.ps.states.STOP) {
                 return false;
             }
         }
