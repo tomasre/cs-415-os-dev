@@ -11,7 +11,7 @@
         os._internals.ps.pcb.push({
             id: os._internals.ps.pcb.length,
             name: name,
-            state: os._internals.ps.state.START,
+            state: os._internals.ps.states.START,
             entryPoint: cb
         });
     }
