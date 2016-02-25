@@ -1,1 +1,8 @@
+'use strict';
 
+(function() {
+  
+  var eof = function(FNAME, cb) {
+    
+  };
+})();
