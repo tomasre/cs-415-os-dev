@@ -40,6 +40,8 @@
 
             pos: 0,
             
+            size: os._internals.fs.disk[fileName].data.length,
+            
             fileInUse: true
           };
 
