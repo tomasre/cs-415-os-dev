@@ -14,7 +14,7 @@
   var eof = function(fileHandle, cb) {
     var psname = os._internals.ps.runningProcess.slice(0);
     
-    if(os._internals.fs.disk[fileHandle.name].meta !== "undefined") {
+    if(os._internals.fs.disk[fileHandle.name].meta) {
       var realFileHandle = os._internals.fs.disk[fileHandle.name].meta;
     
       os._internals.fs.operationQueue.push({
