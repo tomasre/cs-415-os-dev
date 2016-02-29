@@ -1,6 +1,6 @@
 (function(){
 
-  var fileSize = os._internals.fs.disk['Contact_Data'].data.length;
+  var fileSize;
   var resultStrPosition= 0;
   var data;
   var finishedReading = false;
@@ -8,17 +8,26 @@
   var searchKey = "jimmy";
   var IO_CHAR_RESTRICTION = 100;
 
-  op.ps.register('ContactManager', main);
+  os.ps.register('ContactManager', main);
 
   function main() {
 
-    os.fs.openFile('Contact_Data.csv', function(errorOpen, filehandle){
+    os.fs.open('Contact_Data.csv', function(errorOpen, filehandle){
       if (errorOpen){
 
         console.log(errorOpen);
 
       } else {
 
+        os.fs.length(filehandle.name,function(lengthError, size){
+
+          if(lengthError){
+            console.log(lengthError);
+          } else {
+            fileSize = size;
+          }
+
+        });
 
         while(finishedReading===false){
 
@@ -38,78 +47,107 @@
                 console.log(errorSeek);
 
               } else {
+                os.fs.eof(filehandle,function(msg, end){
+                  if(end === true){
+                    finishedReading = true;
+                  }
+                  console.log(msg);
 
-                if (data.length >== fileSize){
-                  finishedLoading = true;
-
-                }
+                });
               }
-
             });
-
           }
-
-
         });
       }
+        var result = search(data,searchKey);
+        console.log("Contact Found: " + result);
+        var destinationFile = "newContact.csv";
+
+
+        os.ps.create(destinationFile, function(errorCreate,fileName){
+
+          if(errorCreate){
+            console.log(errorCreate);
+
+          } else {
+
+            while(finishedWriting === false){
+              os.ps.write(filename,result.substring(resultStrPosition,IO_CHAR_RESTRICTION),function(errorWrite,writeFile){
+
+                if(errorWrite){
+
+                  console.log(errorWrite);
+
+                } else {
+
+                  resultStrPosition = resultStrPosition + IO_CHAR_RESTRICTION;
+
+                  if(resultStrPosition >= result.length){
+
+                    finishedWriting = true;
+                  }
+                }
+
+              });
+            }
+          }
+        });
     }
+
+
   });
 
 
 
-      var result = search(data,searchKey);
-      console.log("Contact Found: " + result);
-      var destinationFile = "newContact.csv";
 
-
-      os.ps.create(destinationFile, function(errorCreate,fileName){
-        if(errorCreate){
-          console.log(errorCreate);
-        } else {
-      while(finishedWriting === false){
-      os.ps.write(filename,result.substring(resultStrPosition,IO_CHAR_RESTRICTION) function(errorWrite,writeFile){
-
-        if(errorWrite){
-
-          console.log(seekError)
-
-        } else {
-
-          resultStrPosition = resultStrPosition + IO_CHAR_RESTRICTION;
-
-          if(resultStrPosition >== result.length){
-
-            finishedWriting = true;
-          }
-        }
-
-      });
-    }
-  }
-});
 }
 
 
     
   
 
-function search(csvFileData, contact){
-  var newString;
-  var substr = csvFileData.split("\n");
+  function search(csvFileData, contact){
+    var newString;
+    var substr = csvFileData.split("\n");
 
-  for (row in substr) {
-    console.log(substr[row]);
-    var entry = "";
-    entry = substr[row];
-    if(entry[0]===contact){
-      newString = entry.join(",");
+    for (row in substr) {
+      console.log(substr[row]);
+      var entry = "";
+      entry = substr[row];
+      if(entry[0]===contact){
+        newString = entry.join(",");
     }
   }
 
   return newString;
 
 }
-  
+ /*
+  function openEntryP(errorOpen,fileHandle){
+
+  }
+
+  function lengthEntryP(errorOpen,fileHandle){
+
+  }
+
+  function readEntryP(errorRead,subString){
+
+  }
+
+  function seekEntryP(errorSeek){
+
+  }
+
+  function createEntryP(errorCreate, fileName){
+
+  }
+
+  function writeEntryP(errorWrite){
+
+  } */
+
+
 
 
 
