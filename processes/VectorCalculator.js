@@ -25,6 +25,7 @@ this will be using the async.waterfall library to manage callbacks
                         callback(errorLength);
 
                     } else {
+                        console.log('VM: length success---------');
                         // NOTE we are passing no error, then the length to the next item in the waterfall
                         callback(null, length);
                     }
@@ -47,6 +48,7 @@ this will be using the async.waterfall library to manage callbacks
 
                     } else {
                         // NOTE: this is passing the length and fh to the next waterfall function
+                        console.log('VM: open success---------');
                         callback(null, length, fh);
                     }
                 });
@@ -112,6 +114,7 @@ this will be using the async.waterfall library to manage callbacks
                             // read was successful
                             // append the data we got
                             fullFile += data;
+                            console.log('VM: read success---------');
 
                             // now we seek forward what we just read
                             os.fs.seek(fh, charCount, function (errorSeek) {
@@ -125,6 +128,8 @@ this will be using the async.waterfall library to manage callbacks
                                     waterfallCallback(errorSeek);
 
                                 } else {
+                                    currentPosition += charCount;
+                                    console.log('VM: seek success---------');
                                     // we successfully seeked forward
                                     // we can now check if we are finished
                                     checkCompleted();
@@ -150,7 +155,7 @@ this will be using the async.waterfall library to manage callbacks
                  '2,3\n' +
                  '1,3',
                  */
-
+                
                 // parse the data
                 var vectors = fullData.split('\n');
                 for (var i = 0; i < vectors.length; i++) {
@@ -167,7 +172,7 @@ this will be using the async.waterfall library to manage callbacks
                     for (var j = 0; j < vectors[i].length; j++) {
                         sum += vectors[i][j];
                     }
-                    out += sum;
+                    out.push(sum);
                 }
 
                 console.log('vector_calculator: result: ' + out.join(','));
