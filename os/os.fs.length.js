@@ -24,7 +24,10 @@ function performLengthOfOperation(psname,fileName,cb){
   try {
 
     var size = os._internals.fs.disk[fileName].data.length;
-    entrypoint = (null,size);
+    os._internals.fs.disk[fileName].size = size;
+    entrypoint =function() {
+      cb(null, size);
+    }
 
   } catch (e){
 
