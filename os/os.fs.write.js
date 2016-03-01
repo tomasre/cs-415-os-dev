@@ -9,7 +9,6 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
 
     function writeFile(fileName,data,cb){
         var psname = os._internals.ps.runningProcess.slice(0);
-        console.log('ADDING TO OP QUEUE');
 
         os._internals.fs.operationQueue.push({
             operation: function () {
