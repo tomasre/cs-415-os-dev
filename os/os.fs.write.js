@@ -26,7 +26,7 @@ function performWriteFile(psname, fileName, dataPar, cb){
   
   if(withinMaxSize(dataPar.length) && fileExists(fileName)){
 
-    os._internals.fs.disk[fileName]l=.data = fileString + dataPar;
+    os._internals.fs.disk[fileName].data = fileString + dataPar;
 
     entrypoiont = function(){
 
@@ -56,7 +56,7 @@ function generateRandomTimeout() {
 
 function withinMaxSize(dataLength){
 
-  if(data <== 100 ){
+  if(data <= 100 ){
 
     return true;
 

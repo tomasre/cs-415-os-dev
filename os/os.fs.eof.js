@@ -25,7 +25,7 @@
         operation: function(){
           setTimeout(function() {
             performEOFOperation(psname, realFileHandle, cb);
-          }, genenerateRandomTimeout());
+          }, generateRandomTimeout());
         },
         // copy string
         processName: psname
