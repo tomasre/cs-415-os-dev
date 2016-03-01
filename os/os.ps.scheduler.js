@@ -14,7 +14,8 @@
         in a state of READY or START
          */
         if (allProcessesDone()) {
-            console.log('OS DONE');
+            console.log('OPERATING SYSTEM EXECUTION FINISHED... Printing fs....');
+            console.log(os._internals.fs.disk);
             return;
         }
 
