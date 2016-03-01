@@ -30,6 +30,7 @@ this will be using the async.waterfall library to manage callbacks
                     }
                 });
             },
+
             /*
             This is the open function
             notice how its wrapped in another function the outside function is kind of
@@ -50,6 +51,7 @@ this will be using the async.waterfall library to manage callbacks
                     }
                 });
             },
+
             /*
             THIS is the next function note how we have access to the fh
             Note for this example I will be reading a few characters max to illustrate reading the whole file
@@ -77,10 +79,15 @@ this will be using the async.waterfall library to manage callbacks
                 function checkCompleted() {
                     if (currentPosition >= length) {
                         // WE ARE DONE READING THE WHOLE FILE,
-                        // we can move on with th
+                        // we can move on with the waterfall
+                        // note we are passing all the data we have got so far to the next waterfall function
+                        waterfallCallback(null, length, fh, fullFile);
+
+                    } else {
+                        // we need to read another block at least
+                        readNextBlock();
                     }
                 }
-
 
                 /*
                 reads the next block of data, then seeks forward that amount, then calls check completed to
@@ -126,51 +133,79 @@ this will be using the async.waterfall library to manage callbacks
                         }
                     });
                 }
+
+                // NOTE!!!!!!!
+                // We have to call checkCompleted (or technically readNextBlock once to start the chain
+                checkCompleted();
+            },
+
+            /*
+            WE HAVE ALL OUR DATA WE CAN DO OUR PROCESSING
+             */
+            function (length, fh, fullData, callback) {
+                // sync processing
+                /*
+                my file looks like:
+                 data: '1,2\n' +
+                 '2,3\n' +
+                 '1,3',
+                 */
+
+                // parse the data
+                var vectors = fullData.split('\n');
+                for (var i = 0; i < vectors.length; i++) {
+                    vectors[i] = vectors[i].split(',');
+                    for (var j = 0; j < vectors[i].length; j++) {
+                        vectors[i][j] = parseInt(vectors[i][j]);
+                    }
+                }
+
+                // calculate the sum of each column
+                var out = [];
+                for (var i = 0; i < vectors.length; i++) {
+                    var sum = 0;
+                    for (var j = 0; j < vectors[i].length; j++) {
+                        sum += vectors[i][j];
+                    }
+                    out += sum;
+                }
+
+                console.log('vector_calculator: result: ' + out.join(','));
+                callback(null, out.join(','));
+            },
+
+            /*
+            Note writing to output file
+            This is only one vector so the length will be less than 100 CHAR (fs buffer size)
+            So I am doing it in one operation, if you are writing a giant file it will happen in multiple
+             */
+            function (fileData, callback) {
+                os.fs.write('vector_stats_out', fileData, function (error) {
+                   if (error) {
+                       console.log('vector_data.csv: error writing file:');
+                       console.log(error);
+                       console.log('\n');
+                       callback(error);
+
+                   } else {
+                       // DONE WRITING - time to just close
+                       callback(null);
+                   }
+                });
             }
+
             /*
             this is the ending function that gets called after the waterfall is complete
              */
         ], function (error, result) {
-
-        });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        os.fs.open('Stats_Data.csv', function (errorOpen, fh) {
-            console.log('fs open CB');
-            if (errorOpen) {
-                // ERROR OPENING FILE, as a process I HAVE TO HANDLE THIS here!!!!!!!!
-                console.log(errorOpen);
+            if (error) {
+                console.log('vector_calculator: ERROR in execution. exited early' );
             } else {
-
-                // I NOW HAVE ACCESS TO filehandle as object fh
-
-
-                os.fs.read(fh, 5, function (errorRead, data) {
-                    if (errorRead) {
-                        // ERROR READING FILE, as a process I HAVE TO HANDLE THIS here!!!!!!!!
-                        console.log(errorRead);
-                    } else {
-
-                        // I know have the data
-                        console.log(data);
-                    }
-                })
+                // NOTE THIS MEANS ALL THE BLOCKS SUCCESSFULLY RAN
+                console.log('vector_calculator: FS WRITE RESULTS SKIPPING FS FOR PROOF: ');
+                console.log(os._internals.fs.disk['vector_stats_out'].data);
+                console.log('DONE');
             }
         });
-
-
     }
-
 })();
