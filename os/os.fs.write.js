@@ -1,91 +1,82 @@
+'use strict';
+/*
+CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
+ */
 (function(){
 
-var MAX_WRITE_SIZE = 100;
-os.fs.write = writeFile;
+    var MAX_WRITE_SIZE = 100;
+    os.fs.write = writeFile;
 
-function writeFile(fileName,data,cb){
-  var process = os._internals.ps.runningProcess.slice(0);
+    function writeFile(fileName,data,cb){
+        var psname = os._internals.ps.runningProcess.slice(0);
+        console.log('ADDING TO OP QUEUE');
 
-  os._internals.fs.operationQueue.push({
-
-    operation: function(){
-
-      setTimeout(function(){
-        performWriteFile(process, fileName, data, cb);
-      },generateRandomTimeout());
-    },
-    processName: process
-  });
-
-}
-
-function performWriteFile(psname, fileName, dataPar, cb){
-  var entrypoint;
-  var fileString = os._internals.fs.disk[fileName].data;
-
-  
-  if(withinMaxSize(dataPar.length) && fileExists(fileName)){
-
-    os._internals.fs.disk[fileName].data = fileString + dataPar;
-
-    entrypoiont = function(){
-
-      cb(null,fileName)
-
+        os._internals.fs.operationQueue.push({
+            operation: function () {
+                setTimeout(function () {
+                    performWriteFile(psname, fileName, data, cb);
+                }, generateRandomTimeout());
+            },
+            // copy string
+            processName: psname
+        });
     }
-  
 
-    } else {
+    function performWriteFile(psname, fileName, dataPar, cb){
+        var entrypoint;
 
-      entrypoint = function() {
+        if (!os._internals.fs.disk[fileName]) {
+            os._internals.fs.disk[fileName] = {
+                data:'',
+                meta: {
 
-        cb('write error');
+                }
+            }
+        }
+        var fileString = os._internals.fs.disk[fileName].data;
 
-      }
-    }
-  
+        if(withinMaxSize(dataPar.length) && fileExists(fileName)){
+            os._internals.fs.disk[fileName].data = fileString + dataPar;
+            entrypoint = function(){
+                cb(null,fileName)
+            }
+        } else {
+            entrypoint = function() {
+                cb('write error');
+            }
+        }
 
-
-    os._internals.ps.fsOperationReadyToReturn(psname,entrypoint);
+        os._internals.ps.fsOperationReadyToReturn(psname,entrypoint);
 
     }
 
-function generateRandomTimeout() {
+    function generateRandomTimeout() {
         return Math.floor(Math.random() * (100 - 10) + 10);
     }
 
-function withinMaxSize(dataLength){
+    function withinMaxSize(dataLength){
 
-  if(data <= 100 ){
+        if(dataLength <= 100 ){
 
-    return true;
+            return true;
 
-  } else {
+        } else {
 
-    return false;
+            return false;
 
-  }
-}
+        }
+    }
 
-function fileExists(name){
+    function fileExists(name){
 
-  if(typeof os._internals.fs.disk[name] === "undefined") {
+        if(typeof os._internals.fs.disk[name] === "undefined") {
 
-    return false;
+            return false;
 
-  } else {
+        } else {
 
-    return true;
+            return true;
 
-  }
-}
-
-
-
-
-
-
-
-
-
+        }
+    }
 })();
