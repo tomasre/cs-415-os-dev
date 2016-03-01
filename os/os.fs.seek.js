@@ -9,14 +9,14 @@
 
     var realFileHandle = os._internals.fs.disk[fileHandle.name].meta;
 
-    os._internals.fs.operationQueue.pus({
+    os._internals.fs.operationQueue.push({
       operation: function(){
         setTimeout(function() {
           performSeekOperation(psname, realFileHandle, charsRead, cb);
 
 
 
-        }, genenerateRandomTimeout());
+        }, generateRandomTimeout());
       },
 
       processName: psname

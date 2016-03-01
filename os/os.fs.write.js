@@ -21,14 +21,15 @@ function writeFile(fileName,data,cb){
 
 function performWriteFile(psname, fileName, dataPar, cb){
   var entrypoint;
+
   var fileString = os._internals.fs.disk[fileName].data;
 
   
   if(withinMaxSize(dataPar.length) && fileExists(fileName)){
 
-    os._internals.fs.disk[fileName]l=.data = fileString + dataPar;
+    os._internals.fs.disk[fileName].data = fileString + dataPar;
 
-    entrypoiont = function(){
+    entrypoint = function(){
 
       cb(null,fileName)
 
@@ -56,7 +57,7 @@ function generateRandomTimeout() {
 
 function withinMaxSize(dataLength){
 
-  if(data <== 100 ){
+  if(dataLength <= 100 ){
 
     return true;
 

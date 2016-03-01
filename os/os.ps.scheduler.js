@@ -19,8 +19,8 @@
         }
 
         // shift the array so the first one doesnt get chosen too many times in a row
-        var elem = os._internals.ps.pcb.shift();
-        os._internals.ps.pcb.push(elem);
+        //var elem = os._internals.ps.pcb.shift();
+        //os._internals.ps.pcb.push(elem);
 
 
         for (var i = 0; i < os._internals.ps.pcb.length; i++) {
@@ -31,7 +31,7 @@
                 setTimeout(function () {
                     try {
                         //console.log('STATE PRE');
-                        //console.log(JSON.parse(JSON.stringify(os)));
+                        console.log(JSON.parse(JSON.stringify(os)));
                         console.log('SCHEDULER: switching context to: ' + process.name);
                         process.entryPoint();
                         console.log('SCHEDULER: context switched back to scheduler');
