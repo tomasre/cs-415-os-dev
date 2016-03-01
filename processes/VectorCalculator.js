@@ -146,46 +146,17 @@ this will be using the async.waterfall library to manage callbacks
 
             /*
             WE HAVE ALL OUR DATA WE CAN DO OUR PROCESSING
-             */
-            function (length, fh, fullData, callback) {
-                // sync processing
-                /*
-                my file looks like:
-                 data: '1,2\n' +
-                 '2,3\n' +
-                 '1,3',
-                 */
-                
-                // parse the data
-                var vectors = fullData.split('\n');
-                for (var i = 0; i < vectors.length; i++) {
-                    vectors[i] = vectors[i].split(',');
-                    for (var j = 0; j < vectors[i].length; j++) {
-                        vectors[i][j] = parseInt(vectors[i][j]);
-                    }
-                }
-
-                // calculate the sum of each column
-                var out = [];
-                for (var i = 0; i < vectors.length; i++) {
-                    var sum = 0;
-                    for (var j = 0; j < vectors[i].length; j++) {
-                        sum += vectors[i][j];
-                    }
-                    out.push(sum);
-                }
-
-                console.log('vector_calculator: result: ' + out.join(','));
-                callback(null, out.join(','));
-            },
-
-            /*
             Note writing to output file
             This is only one vector so the length will be less than 100 CHAR (fs buffer size)
             So I am doing it in one operation, if you are writing a giant file it will happen in multiple
              */
-            function (fileData, callback) {
-                os.fs.write('vector_stats_out', fileData, function (error) {
+            function (length, fh, fullFile, callback) {
+
+                var outFile = performVectorOperations(fullFile);
+
+
+
+                os.fs.write('vector_stats_out', outFile, function (error) {
                    if (error) {
                        console.log('vector_data.csv: error writing file:');
                        console.log(error);
@@ -194,6 +165,7 @@ this will be using the async.waterfall library to manage callbacks
 
                    } else {
                        // DONE WRITING - time to just close
+                       console.log('dONE');
                        callback(null);
                    }
                 });
@@ -207,10 +179,43 @@ this will be using the async.waterfall library to manage callbacks
                 console.log('vector_calculator: ERROR in execution. exited early' );
             } else {
                 // NOTE THIS MEANS ALL THE BLOCKS SUCCESSFULLY RAN
-                console.log('vector_calculator: FS WRITE RESULTS SKIPPING FS FOR PROOF: ');
-                console.log(os._internals.fs.disk['vector_stats_out'].data);
-                console.log('DONE');
+                // DONE
             }
         });
+    }
+
+    // do the actual vector sync calculations
+    function performVectorOperations(fullData) {
+        /*
+         my file looks like:
+         data: '1,2\n' +
+         '2,3\n' +
+         '1,3',
+         */
+
+        // parse the data
+        var vectors = fullData.split('\n');
+        for (var i = 0; i < vectors.length; i++) {
+            vectors[i] = vectors[i].split(',');
+            for (var j = 0; j < vectors[i].length; j++) {
+                vectors[i][j] = parseInt(vectors[i][j]);
+            }
+
+        }
+
+        var out = [];
+        // initialize sums
+        for (var i = 0; i < vectors[0].length; i++) {
+            out[i] = 0;
+        }
+
+        // sum it up
+        for (var i = 0; i < vectors.length; i++) {
+            for (var j = 0; j < vectors[i].length; j++) {
+                out[j] += vectors[i][j];
+            }
+        }
+
+        return out.join(',');
     }
 })();
