@@ -18,4 +18,14 @@
     
     // add more initial files here
 
+    /*
+    VectorCalculator.js initial file
+     */
+    os._internals.fs.disk['vector_data.csv'] = {
+        // actual data
+        data: '1,2\n' +
+            '2,3\n' +
+            '1,3',
+        meta: {}
+    };
 })();
