@@ -18,6 +18,8 @@ var os = {
                 RUNNING: 5
             },
             runningProcess: ''
-        }
+        },
+        stream: {},
+        drivers: {}
     }
 };
