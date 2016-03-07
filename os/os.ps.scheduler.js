@@ -33,9 +33,10 @@
                     try {
                         //console.log('STATE PRE');
                         //console.log(JSON.parse(JSON.stringify(os)));
-                        console.log('SCHEDULER: switching context to: ' + process.name);
+
+                        //console.log('SCHEDULER: switching context to: ' + process.name);
                         process.entryPoint();
-                        console.log('SCHEDULER: context switched back to scheduler');
+                        //console.log('SCHEDULER: context switched back to scheduler');
 
 
                         if (process.name !== 'fs') {
