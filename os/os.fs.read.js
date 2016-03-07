@@ -35,18 +35,19 @@
      performs the actual read operation on the disk (syncronously) as operation is wrapping it asynchronously
      */
     function performReadOperation(psname, filehandle, size, cb) {
+        console.log("Read Operation: " +psname);
 
         var entrypoint;
         if (size > MAX_SIZE_PER_READ) {
             // call cb with an error
             entrypoint = function () {
-                cb('size over max size allowed per read operation');
+                cb(-1);
             };
 
         } else {
             // valid request return the data
             entrypoint = function () {
-                cb(null, os._internals.fs.disk[filehandle.name].data.substr(filehandle.pos, size));
+                cb(0, os._internals.fs.disk[filehandle.name].data.substr(filehandle.pos, size));
             };
         }
 

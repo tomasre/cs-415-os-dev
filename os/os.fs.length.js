@@ -18,6 +18,7 @@ function lengthOf (fileName, cb) {
 }
 
 function performLengthOfOperation(psname,fileName,cb){
+  console.log("Open Operation: "+psname);
   
   var entrypoint;
 
@@ -26,14 +27,14 @@ function performLengthOfOperation(psname,fileName,cb){
     var size = os._internals.fs.disk[fileName].data.length;
     os._internals.fs.disk[fileName].size = size;
     entrypoint =function() {
-      cb(null, size);
+      cb(0, size);
     }
 
   } catch (e){
 
     console.log(e);
     entrypoint = function(){
-    cb('lengthOf error');
+    cb(-1);
     }
   }
 
