@@ -19,8 +19,10 @@
         will print to the "terminal" webpage portion
         right now just printing to console
          */
+
+        var terminalTextField = document.getElementById('terminal');
         console.log('DISPLAY DRIVER PRINTING:');
-        console.log(buffer);
+        terminalTextField.innerHTML = terminalTextField.innerHTML +buffer + "<br>";
         console.log('\n');
     }
 })();

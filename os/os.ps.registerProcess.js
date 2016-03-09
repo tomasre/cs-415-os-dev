@@ -27,7 +27,7 @@
 
         // for testing attaching all stdout instances to display driver
         pcb.streams.stdout.registerDriver(os._internals.drivers.display.streamUpdateFunction);
-
+        pcb.streams.stdin.registerDriver(os._internals.drivers.keyboard.keyboardInputFunction);
         os._internals.ps.pcb.push(pcb);
     }
 
