@@ -13,12 +13,14 @@
        */
       function (callback) {
         os.fs.length(targetFile, function (errorLength, length) {
-          if (errorLength) {
+          //if -1 is "returned" an error has occured
+          //the proper error UNIX/C error message will be printed
+          if (errorLength === -1) {
             console.log('contact data: error getting file length:');
-            console.log(errorLength);
+            //console.log(os.errno.errorCode);
             console.log('\n');
             // NOTE there was an error so we pass an error to the callback
-            callback(errorLength);
+            callback('Error');
 
           } else {
             console.log('VM: length success---------');
@@ -35,7 +37,7 @@
        */
       function (length, callback) {
         os.fs.open(targetFile, function (errorOpen, fh) {
-          if (errorOpen) {
+          if (errorOpen === -1) {
             console.log('Contact_Data.csv: error opening file:');
             console.log(errorOpen);
             console.log('\n');
@@ -98,14 +100,14 @@
           var charCount = currentPosition + CHARS_TO_READ > length ? length - currentPosition : CHARS_TO_READ;
 
           os.fs.read(fh, charCount, function (errorRead, data) {
-            if (errorRead) {
+            if (errorRead===-1) {
               // ERROR on the read not continuing
               console.log('Contact_Data.csv: error reading file:');
-              console.log(errorRead);
+              //console.log(errorCode);
               console.log('\n');
 
               // note calling waterfall function to exit this whole read 'asynchronous loop'
-              waterfallCallback(errorRead);
+              waterfallCallback('Error Read');
 
             } else {
               // read was successful
@@ -115,14 +117,14 @@
 
               // now we seek forward what we just read
               os.fs.seek(fh, charCount, function (errorSeek) {
-                if (errorSeek) {
+                if (errorSeek===-1) {
                   // ERROR on the seek not continuing
                   console.log('Contact_Data.csv: error seeking file:');
-                  console.log(errorSeek);
+                  //console.log(errorCode);
                   console.log('\n');
 
                   // note calling waterfall function to exit this whole seek 'asynchronous loop'
-                  waterfallCallback(errorSeek);
+                  waterfallCallback('Error Seek');
 
                 } else {
                   currentPosition += charCount;

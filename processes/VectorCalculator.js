@@ -17,12 +17,12 @@ this will be using the async.waterfall library to manage callbacks
              */
             function (callback) {
                 os.fs.length('vector_data.csv', function (errorLength, length) {
-                    if (errorLength) {
+                    if (errorLength===-1) {
                         console.log('vector_data.csv: error getting file length:');
-                        console.log(errorLength);
+                        //console.log(errorCode);
                         console.log('\n');
                         // NOTE there was an error so we pass an error to the callback
-                        callback(errorLength);
+                        callback('Error Length');
 
                     } else {
                         console.log('VM: length success---------');
@@ -39,12 +39,12 @@ this will be using the async.waterfall library to manage callbacks
              */
             function (length, callback) {
                 os.fs.open('vector_data.csv', function (errorOpen, fh) {
-                    if (errorOpen) {
+                    if (errorOpen===-1) {
                         console.log('vector_data.csv: error opening file:');
-                        console.log(errorOpen);
+                        //console.log(errorOpen);
                         console.log('\n');
                         // AN ERROR OCCURRED BREAK THE WATERFALL 'CHAIN'
-                        callback(errorOpen);
+                        callback('Error Open');
 
                     } else {
                         // NOTE: this is passing the length and fh to the next waterfall function
@@ -101,10 +101,10 @@ this will be using the async.waterfall library to manage callbacks
                     var charCount = currentPosition + CHARS_TO_READ > length ? length - currentPosition: CHARS_TO_READ;
 
                     os.fs.read(fh, charCount, function (errorRead, data) {
-                        if (errorRead) {
+                        if (errorRead===-1) {
                             // ERROR on the read not continuing
                             console.log('vector_data.csv: error reading file:');
-                            console.log(errorRead);
+                            //console.log(errorRead);
                             console.log('\n');
 
                             // note calling waterfall function to exit this whole read 'asynchronous loop'
@@ -118,14 +118,14 @@ this will be using the async.waterfall library to manage callbacks
 
                             // now we seek forward what we just read
                             os.fs.seek(fh, charCount, function (errorSeek) {
-                                if (errorSeek) {
+                                if (errorSeek===-1) {
                                     // ERROR on the seek not continuing
                                     console.log('vector_data.csv: error seeking file:');
-                                    console.log(errorSeek);
+                                   // console.log(errorSeek);
                                     console.log('\n');
 
                                     // note calling waterfall function to exit this whole seek 'asynchronous loop'
-                                    waterfallCallback(errorSeek);
+                                    waterfallCallback('Error Seek');
 
                                 } else {
                                     currentPosition += charCount;
@@ -157,9 +157,9 @@ this will be using the async.waterfall library to manage callbacks
 
 
                 os.fs.write('vector_stats_out', outFile, function (error) {
-                   if (error) {
+                   if (error===-1) {
                        console.log('vector_data.csv: error writing file:');
-                       console.log(error);
+                       //console.log(error);
                        console.log('\n');
                        callback(error);
 
@@ -175,7 +175,7 @@ this will be using the async.waterfall library to manage callbacks
             this is the ending function that gets called after the waterfall is complete
              */
         ], function (error, result) {
-            if (error) {
+            if (error===-1) {
                 console.log('vector_calculator: ERROR in execution. exited early' );
             } else {
                 // NOTE THIS MEANS ALL THE BLOCKS SUCCESSFULLY RAN

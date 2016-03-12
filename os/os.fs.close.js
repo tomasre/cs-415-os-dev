@@ -12,7 +12,7 @@
 (function() {
   os.fs.close = closeFile;
 
-  var closeFile = function (FNAME, cb) {
+  function closeFile (FNAME, cb) {
     var psname = os._internals.ps.runningProcess.slice(0);
 
     os._internals.fs.operationQueue.push({

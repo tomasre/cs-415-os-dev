@@ -6,7 +6,7 @@
     function main() {
         os.fs.open('Stats_Data.csv', function (errorOpen, fh) {
             console.log('fs open CB');
-            if (errorOpen) {
+            if (errorOpen === -1) {
                 // ERROR OPENING FILE, as a process I HAVE TO HANDLE THIS here!!!!!!!!
                 console.log(errorOpen);
             } else {
@@ -15,7 +15,7 @@
 
 
                 os.fs.read(fh, 5, function (errorRead, data) {
-                    if (errorRead) {
+                    if (errorRead===-1) {
                         // ERROR READING FILE, as a process I HAVE TO HANDLE THIS here!!!!!!!!
                         console.log(errorRead);
                     } else {

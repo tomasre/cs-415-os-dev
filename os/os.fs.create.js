@@ -32,12 +32,12 @@
     };
 
     entrypoint = function(){
-      cb(null,fileName)
+      cb(0,fileName)
     }
 
   } else {
         entrypoint = function () {
-            cb('File already exists');
+            cb(-1);
         }
     }
       os._internals.ps.fsOperationReadyToReturn(psname,entrypoint);

@@ -27,19 +27,20 @@
   }
 
     function performSeekOperation(psname, fileHandle, charsRead, cb){
+      console.log("Seek Operation: "+psname);
       var entrypoint;
       var startPoint = os._internals.fs.disk[fileHandle.name].meta.pos;
 
 
-      if (typeof os._internals.fs.disk[fileHandle.name]==="undefinded"){
+      if (typeof os._internals.fs.disk[fileHandle.name]==="undefined"){
         entrypoint = function(){
-          cb('seek error')
+          cb(-1)
         }
        }else {
 
         os._internals.fs.disk[fileHandle.name].meta.pos = startPoint + charsRead;
         entrypoint = function() {
-          cb(null);
+          cb(0);
         }
 
         os._internals.ps.fsOperationReadyToReturn(psname, entrypoint);
