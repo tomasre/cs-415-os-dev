@@ -158,7 +158,7 @@ this will be using the async.waterfall library to manage callbacks
                 async.waterfall([
 
                     function (callback) {
-                        os.fs.create(outFile, function (errCreate, newFile) {
+                        os.fs.create('vector_calc_out.csv', function (errCreate, newFile) {
 
                             if (errCreate === -1) {
                                 console.log("error on create");
@@ -175,7 +175,7 @@ this will be using the async.waterfall library to manage callbacks
                     function (writeTarget, recursivecallback) {
                         var fullResult= outFile;
                         var buffer='';
-                        var CHARS_TO_WRITE = 2;
+                        var CHARS_TO_WRITE = 50;
                         var writeSize= outFile.length;
                         var fileName;
                         var writePosition = 0;
