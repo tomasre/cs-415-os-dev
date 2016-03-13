@@ -27,7 +27,7 @@
   }
 
     function performSeekOperation(psname, fileHandle, charsRead, cb){
-      console.log("Seek Operation: "+psname);
+     // console.log("Seek Operation: "+psname);
       var entrypoint;
       var startPoint = os._internals.fs.disk[fileHandle.name].meta.pos;
 

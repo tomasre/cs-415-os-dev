@@ -23,7 +23,7 @@
             callback('Error');
 
           } else {
-            console.log('VM: length success---------');
+            //console.log('VM: length success---------');
             // NOTE we are passing no error, then the length to the next item in the waterfall
             callback(null, length);
           }
@@ -46,7 +46,7 @@
 
           } else {
             // NOTE: this is passing the length and fh to the next waterfall function
-            console.log('VM: open success---------');
+            //console.log('VM: open success---------');
             callback(null, length, fh);
           }
         });
@@ -113,7 +113,7 @@
               // read was successful
               // append the data we got
               fullFile += data;
-              console.log('VM: read success---------');
+              //console.log('VM: read success---------');
 
               // now we seek forward what we just read
               os.fs.seek(fh, charCount, function (errorSeek) {
@@ -128,7 +128,7 @@
 
                 } else {
                   currentPosition += charCount;
-                  console.log('VM: seek success---------');
+                  //console.log('VM: seek success---------');
                   // we successfully seeked forward
                   // we can now check if we are finished
                   checkCompleted();

@@ -22,7 +22,7 @@
   //performs fake open operation  on string ie>> creates file handle
   function performOpenOperation (psname, fileName, cb)
   {
-    console.log("Open Operation: "+psname);
+    //console.log("Open Operation: "+psname);
     var entrypoint;
 
 

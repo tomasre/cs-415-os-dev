@@ -103,9 +103,9 @@ this will be using the async.waterfall library to manage callbacks
                     os.fs.read(fh, charCount, function (errorRead, data) {
                         if (errorRead===-1) {
                             // ERROR on the read not continuing
-                            console.log('vector_data.csv: error reading file:');
+                            //console.log('vector_data.csv: error reading file:');
                             //console.log(errorRead);
-                            console.log('\n');
+                            //console.log('\n');
 
                             // note calling waterfall function to exit this whole read 'asynchronous loop'
                             waterfallCallback(errorRead);
@@ -114,7 +114,7 @@ this will be using the async.waterfall library to manage callbacks
                             // read was successful
                             // append the data we got
                             fullFile += data;
-                            console.log('VM: read success---------');
+                            //console.log('VM: read success---------');
 
                             // now we seek forward what we just read
                             os.fs.seek(fh, charCount, function (errorSeek) {
@@ -129,7 +129,7 @@ this will be using the async.waterfall library to manage callbacks
 
                                 } else {
                                     currentPosition += charCount;
-                                    console.log('VM: seek success---------');
+                                    //console.log('VM: seek success---------');
                                     // we successfully seeked forward
                                     // we can now check if we are finished
                                     checkCompleted();
@@ -230,14 +230,14 @@ this will be using the async.waterfall library to manage callbacks
                         console.log('Write Async Block failure');
 
                     } else {
-                        console.log('Write Async Block Success');
+                        //console.log('Write Async Block Success');
                     }
                 });
             }], function (error, result) {
             if (error===-1) {
                 console.log('Contact_Data: ERROR in execution. exited early');
             } else {
-                console.log('Contact Manager Done');
+                //console.log('Contact Manager Done');
             }
         });
     }

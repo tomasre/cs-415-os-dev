@@ -35,7 +35,7 @@
      performs the actual read operation on the disk (syncronously) as operation is wrapping it asynchronously
      */
     function performReadOperation(psname, filehandle, size, cb) {
-        console.log("Read Operation: " +psname);
+        //console.log("Read Operation: " +psname);
 
         var entrypoint;
         if (size > MAX_SIZE_PER_READ) {
