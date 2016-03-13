@@ -11,13 +11,16 @@ var os = {
         ps: {
             pcb: [],
             states: {
-                START: 1,
-                STOP: 2,
-                WAITING: 3,
-                READY: 4,
-                RUNNING: 5
+                START: 'START',
+                STOP: 'STOP',
+                WAITING: 'WAITING',
+                READY: 'READY',
+                RUNNING: 'RUNNING'
             },
-            runningProcess: ''
+            runningProcess: '',
+            waits: {
+                fs: 0
+            }
         },
         stream: {},
         drivers: {}
