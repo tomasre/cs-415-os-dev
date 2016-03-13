@@ -155,31 +155,89 @@ this will be using the async.waterfall library to manage callbacks
                 var outFile = performVectorOperations(fullFile);
 
 
+                async.waterfall([
 
-                os.fs.write('vector_stats_out', outFile, function (error) {
-                   if (error===-1) {
-                       console.log('vector_data.csv: error writing file:');
-                       //console.log(error);
-                       console.log('\n');
-                       callback(error);
+                    function (callback) {
+                        os.fs.create(outFile, function (errCreate, newFile) {
 
-                   } else {
-                       // DONE WRITING - time to just close
-                       console.log('dONE');
-                       callback(null);
-                   }
+                            if (errCreate === -1) {
+                                console.log("error on create");
+                                callback('Error');
+
+                            } else {
+                                console.log('Sucess--------- new file created:' + newFile);
+                                console.log(os._internals.fs.disk);
+                                callback(null, newFile);
+                            }
+                        });
+                    },
+
+                    function (writeTarget, recursivecallback) {
+                        var fullResult= outFile;
+                        var buffer='';
+                        var CHARS_TO_WRITE = 2;
+                        var writeSize= outFile.length;
+                        var fileName;
+                        var writePosition = 0;
+
+
+                        function writeCompleted() {
+                            if (writePosition >= writeSize) {
+                                recursivecallback(null, writeTarget, fileName);
+
+                            } else {
+                                // we need to read another block at least
+                                writeNextBlock();
+                            }
+                        }
+
+                        function writeNextBlock() {
+                            buffer = fullResult.substring(writePosition,CHARS_TO_WRITE);
+
+                            os.fs.write(writeTarget, buffer, function (error, fileName) {
+
+                                if (error === -1) {
+                                    console.log('Contact_Data.csv: error writing');
+                                    console.log(error);
+                                    console.log('\n');
+                                    callback('Error');
+
+                                } else {
+                                    console.log("Write at Postion: " + writePosition);
+                                    writePosition = writePosition + CHARS_TO_WRITE;
+                                    writeCompleted();
+                                }
+                            });
+                        }
+                        writeCompleted();
+                    },
+
+                    function(writeTarget,fileName,callback){
+                        os.fs.close('vector_data.csv',function(errClose,msg){
+
+                            if(errClose === -1){
+                                console.log(msg);
+                            } else {
+                                console.log(msg);
+                                callback(null)
+                            }
+
+
+                        });
+                    }], function (err, writeResult) {
+
+                    if(err===-1){
+                        console.log('Write Async Block failure');
+
+                    } else {
+                        console.log('Write Async Block Success');
+                    }
                 });
-            }
-
-            /*
-            this is the ending function that gets called after the waterfall is complete
-             */
-        ], function (error, result) {
+            }], function (error, result) {
             if (error===-1) {
-                console.log('vector_calculator: ERROR in execution. exited early' );
+                console.log('Contact_Data: ERROR in execution. exited early');
             } else {
-                // NOTE THIS MEANS ALL THE BLOCKS SUCCESSFULLY RAN
-                // DONE
+                console.log('Contact Manager Done');
             }
         });
     }

@@ -1,58 +1,62 @@
-'use strict'
+'use strict';
 
-/*
-  example usage:
-  os.fs.close(FNAME, cb)
-  FNAME is the name of the file which you want to close
-  cb is a function which takes 2 arguments:
-  errorClosingFile: a bool which tells if there was an error
-  errorMessage: the actual error message
-*/
 
 (function() {
   os.fs.close = closeFile;
 
-  function closeFile (FNAME, cb) {
-    var psname = os._internals.ps.runningProcess.slice(0);
+  //points the disk operation on the stack because there must
+  function closeFile (fileName, cb) {
+    var process = os._internals.ps.runningProcess.slice(0);
 
     os._internals.fs.operationQueue.push({
       operation: function () {
         setTimeout(function () {
-          performCloseFile(psname, FNAME, cb);
+          performCloseFile(process, fileName, cb);
         }, generateRandomTimeout());
       },
       processName: process
     });
-  };
+  }
 
   // the actual closing file operation
-  var performCloseFile = function (psname, FNAME, cb) {
+  function performCloseFile (process, fileName, cb) {
     var entrypoint;
+    var msg;
 
-    if (typeof os._internals.fs.disk[FNAME] == "undefined") {
-      // the name of the file does not exist in the drive, return an error
+    if (typeof os._internals.fs.disk[fileName] === "undefined") {
+      msg = "failure";
+      // the name of the file does not exist in the drive, return -1 to denote an error
       entrypoint = function () {
-        cb(true, "The file does not exist, you are attempting to close a ghost file.");
+
+        cb(-1,msg);
       }
-    } else if (!os._internals.fs.disk[FNAME].meta.fileInUse) {
+
+    } else if (!os._internals.fs.disk[fileName].meta.fileInUse) {
+      msg= 'failure';
       // fileInUse was already false i.e. closed return an error
       entrypoint = function () {
-        cb(true, "file was already closed!");
+
+        cb(-1,msg);
       }
+
     } else {
+      msg='success';
       // file exists, and we change the fileInUse to false so others can use the file
       // also need to set position back to zero
-      os._internals.fs.disk[FNAME].meta.fileInUse = false;
-      os._internals.fs.disk[FNAME].meta.pos = 0;
-      cb(false);
+      os._internals.fs.disk[fileName].meta.fileInUse = false;
+      os._internals.fs.disk[fileName].meta.pos = 0;
+
+      entrypoint = function() {
+        cb(0, msg);
+      }
     }
 
     // we have finished performing the close operation
-    os._internals.ps.fsOperationReadyToReturn(psname, entrypoint);
-  };
+    os._internals.ps.fsOperationReadyToReturn(process, entrypoint);
+  }
 
   /*
-   generates a random interval between 10 and 100 ms
+   generates a random interval between 10 and 100 ms to simulate disk operations
    */
   function generateRandomTimeout() {
     return Math.floor(Math.random() * (100 - 10) + 10);

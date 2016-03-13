@@ -23,8 +23,9 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
 
     function performWriteFile(psname, fileName, dataPar, cb){
         console.log("Write Operation: "+psname);
+        console.log(fileName);
         var entrypoint;
-
+            /*
         if (!os._internals.fs.disk[fileName]) {
             os._internals.fs.disk[fileName] = {
                 data:'',
@@ -32,7 +33,7 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
 
                 }
             }
-        }
+        }*/
         var fileString = os._internals.fs.disk[fileName].data;
 
         if(withinMaxSize(dataPar.length) && fileExists(fileName)){

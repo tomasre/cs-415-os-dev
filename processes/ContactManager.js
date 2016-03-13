@@ -1,5 +1,5 @@
 (function() {
-  var targetFile = 'Contact_Data.csv';
+  var openTarget = 'Contact_Data.csv';
 
   var searchKey = "mike";
 
@@ -12,8 +12,8 @@
        First we are going to get the length since that does not require the file to be open
        */
       function (callback) {
-        os.fs.length(targetFile, function (errorLength, length) {
-          //if -1 is "returned" an error has occured
+        os.fs.length(openTarget, function (errorLength, length) {
+          //if -1 is "returned" an error has occurred
           //the proper error UNIX/C error message will be printed
           if (errorLength === -1) {
             console.log('contact data: error getting file length:');
@@ -36,7 +36,7 @@
        like the required 'waterfall function'
        */
       function (length, callback) {
-        os.fs.open(targetFile, function (errorOpen, fh) {
+        os.fs.open(openTarget, function (errorOpen, fh) {
           if (errorOpen === -1) {
             console.log('Contact_Data.csv: error opening file:');
             console.log(errorOpen);
@@ -145,24 +145,91 @@
 
       function (length, fh, fullData, callback) {
 
+
         var result = search(fullData, searchKey);
         console.log("Contact Found: " + result);
         var destinationFile = "newContact.csv";
 
-        os.fs.write(destinationFile, result, function (error) {
-          if (error) {
-            console.log('Contact_Data.csv: error writing');
-            console.log(error);
-            console.log('\n');
-            callback(error);
-          } else {
-            console.log("Done");
-            callback(null);
-          }
+        async.waterfall([
 
+          function (callback) {
+            os.fs.create(destinationFile, function (errCreate, newFile) {
+
+              if (errCreate === -1) {
+                console.log("error on create");
+                callback('Error');
+
+              } else {
+                console.log('Sucess--------- new file created:' + newFile);
+                console.log(os._internals.fs.disk);
+                callback(null, newFile);
+              }
+            });
+          },
+
+          function (writeTarget, recursivecallback) {
+            var fullResult= result;
+            var buffer='';
+            var CHARS_TO_WRITE = 5;
+            var writeSize=result.length;
+            var fileName;
+            var writePosition = 0;
+
+
+            function writeCompleted() {
+              if (writePosition >= writeSize) {
+                recursivecallback(null, writeTarget, fileName);
+
+              } else {
+                // we need to read another block at least
+                writeNextBlock();
+              }
+            }
+
+            function writeNextBlock() {
+              buffer = fullResult.substring(writePosition,CHARS_TO_WRITE);
+
+              os.fs.write(writeTarget, buffer, function (error, fileName) {
+
+                if (error === -1) {
+                  console.log('Contact_Data.csv: error writing');
+                  console.log(error);
+                  console.log('\n');
+                  callback('Error');
+
+                } else {
+                  console.log("Write at Postion: " + writePosition);
+                  writePosition = writePosition + CHARS_TO_WRITE;
+                  writeCompleted();
+                }
+              });
+            }
+            writeCompleted();
+          },
+
+          function(writeTarget,fileName,callback){
+            os.fs.close(openTarget,function(errClose,msg){
+
+              if(errClose === -1){
+                console.log(msg);
+              } else {
+                console.log(msg);
+                callback(null)
+              }
+
+
+            });
+          }], function (err, writeResult) {
+
+                if(err===-1){
+                  console.log('Write Async Block failure');
+
+                } else {
+                  console.log('Write Async Block Success');
+                }
         });
       }], function (error, result) {
-      if (error) {
+      if (error===-1) {
         console.log('Contact_Data: ERROR in execution. exited early');
       } else {
         console.log('Contact Manager Done');

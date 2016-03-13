@@ -6,6 +6,7 @@
   function createFile(fileName, cb){
      var process = os._internals.ps.runningProcess.slice(0);
 
+
      os._internals.fs.operationQueue.push({
       operation: function(){
         setTimeout(function(){
@@ -22,13 +23,14 @@
 
   function performCreateOperation(psname, fileName, cb){
     var entrypoint;
-
+    console.log(fileName);
     if(typeof os._internals.fs.disk[fileName] === "undefined"){
 
   os._internals.fs.disk[fileName]={
 
-    data: "",
+    data: '',
     meta: {}
+
     };
 
     entrypoint = function(){

@@ -23,10 +23,10 @@
      */
     os._internals.fs.disk['vector_data.csv'] = {
         // actual data
-        data: '1,2,5\n' +
-            '2,3,20\n' +
-            '1,3,7\n' +
-            '5,5,5',
+        data: '1,2\n' +
+            '2,3\n' +
+            '1,3\n' +
+            '5,5',
         meta: {}
     };
 

@@ -13,28 +13,26 @@
         }, generateRandomTimeout());
       },
 
-      //copy string ???? do not know why this is required
+
 
       processName: process
     });
   }
 
-  //performs fake open operation  on string ie>> creats file handle
-  function performOpenOperation (psname, fileName, cb) {
+  //performs fake open operation  on string ie>> creates file handle
+  function performOpenOperation (psname, fileName, cb)
+  {
     console.log("Open Operation: "+psname);
-
     var entrypoint;
 
-    //checks if the property is defined
-    if (!os._internals.fs.disk[fileName]){
+
+    if (!os._internals.fs.disk[fileName]){ //checks if the property is defined
       entrypoint = function(){
         cb(-1);
         };
 
-    // if "file" exists creates the file handle setting pos to zero
-
       } else {
-          os._internals.fs.disk[fileName].meta={
+          os._internals.fs.disk[fileName].meta={// if "file" exists creates the file handle setting pos to zero
             name: fileName,
             pos: 0,
             size: os._internals.fs.disk[fileName].data.length,
