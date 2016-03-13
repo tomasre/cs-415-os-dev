@@ -52,7 +52,7 @@
             var process = os._internals.ps.pcb[i];
             if (processValidToBeScheduled(process)) {
 
-                console.log('running: ' + process.name);
+                //console.log('running: ' + process.name);
                 process.state = os._internals.ps.states.RUNNING;
                 os._internals.ps.runningProcess = process.name;
 
@@ -67,7 +67,7 @@
                             process.state = os._internals.ps.states.WAITING;
                             //console.log('waiting for op');
                         } else {
-                            console.log('stopping ' + process.name);
+                            //console.log('stopping ' + process.name);
                             console.log(os._internals);
                             process.state = os._internals.ps.states.STOP;
                         }
