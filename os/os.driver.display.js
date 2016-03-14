@@ -25,4 +25,9 @@
         terminalTextField.innerHTML = terminalTextField.innerHTML +buffer + "<br>";
         console.log('\n');
     }
+/*
+    function clearScreen(){
+        var terminalTextField = document.getElementById('textArea');
+        terminalTextField.innerHTML = "";
+    }*/
 })();
