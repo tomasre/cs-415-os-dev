@@ -10,7 +10,7 @@
     };
 
     function keyboardInputFunction(){
-        document.addEventListener("keydown", keyInput(event),true);
+        document.addEventListener("keypress", keyInput(event),true);
     }
 
     function keyInput(event) {
@@ -18,14 +18,14 @@
         var line = "";
         if (printableKey(keyCode)) {
             var char = String.fromCharCode(keyCode);
-            document.getElementById("cL").innerHTML =
-                document.getElementById('cL').innerHTML + char;
+            document.getElementById("textArea").value =
+                document.getElementById('textArea').value + char;
         } else if (keyCode ===8){
-           document.getElementById("cL").innerHTML = document.getElementById("cL").innerHTML.slice(0,-1);
+           document.getElementById("textArea").value = document.getElementById("textArea").value.slice(0,-1);
 
 
         } else if (keyCode === 13){
-            line = document.getElementById("cL").innerHTML;
+            line = document.getElementById("textArea").value;
             line.appendToBuffer();
            // line also passed to CLI process
         } else {

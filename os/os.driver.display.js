@@ -20,7 +20,7 @@
         right now just printing to console
          */
 
-        var terminalTextField = document.getElementById('terminal');
+        var terminalTextField = document.getElementById('textArea');
         console.log('DISPLAY DRIVER PRINTING:');
         terminalTextField.innerHTML = terminalTextField.innerHTML +buffer + "<br>";
         console.log('\n');
