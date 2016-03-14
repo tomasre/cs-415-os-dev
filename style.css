@@ -1,0 +1,26 @@
+.terminal{
+  border: 5px solid #3f3f3f;
+  margin-left: 20%;
+  background-color: black;
+  width: 60%;
+  height: 720px;
+}
+
+p{
+  color: #fff;
+  margin-left: 2em;
+  margin-top: 2em;
+}
+
+#form{
+  margin-left: 3em;
+  margin-top: 39em;
+}
+
+input{
+  background-color: black;
+  color: #fff;
+  border: #000;
+  width: 90%;
+  height: 20px;
+}
