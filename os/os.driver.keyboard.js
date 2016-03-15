@@ -6,49 +6,43 @@
 (function(){
 
     os._internals.drivers.keyboard = {
-        keyboardInputFunction : keyboardInputFunction
+        attachStream: attachStream
     };
 
-    function keyboardInputFunction(){
-        document.addEventListener("keypress", keyInput(event),true);
+    var attachedStream;
+
+    /*
+     registers a listener function
+     listener is a function which is called with one argument: a string
+     injestKey is the key which is pressed and determines when to update the stream
+     two available options are 'any' and 'enter'
+     */
+    function attachStream(stream) {
+        attachedStream = stream;
     }
 
-    function keyInput(event) {
-        var keyCode = event.keyCode;
-        var line = "";
-        if (printableKey(keyCode)) {
-            var char = String.fromCharCode(keyCode);
-            document.getElementById("textArea").value =
-                document.getElementById('textArea').value + char;
-        } else if (keyCode ===8){
-           document.getElementById("textArea").value = document.getElementById("textArea").value.slice(0,-1);
+    var input = document.querySelector('input');
 
 
-        } else if (keyCode === 13){
-            line = document.getElementById("textArea").value;
-            line.appendToBuffer();
-           // line also passed to CLI process
-        } else {
+    input.addEventListener("keydown",function(e) {
+        var charCode;
 
+
+        if (e && e.which) {
+            charCode = e.which;
+        } else if (window.event) {
+            e = window.event;
+            charCode = e.keyCode;
         }
-    }
-
-    function printableKey(keycode){
-
-        if ((keycode > 47 && keycode < 58) ||
-                keycode === 13 || (keycode > 64 && keycode <91) ||
-            (keycode > 185 && keycode <193))
-        {
-            return true;
-        } else {
-            return false;
+        if (charCode == 13) {
+            console.log("success " + input.value);
+            attachedStream.appendToBuffer(input.value);
+            document.getElementById('cL').value = "";
+            e.preventDefault();
         }
+    });
 
-
-    }
-
-
-
-
-
+    input.addEventListener('input',function() {
+        console.log('input changed to ', input.value);
+    });
 })();
