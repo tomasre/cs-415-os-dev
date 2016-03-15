@@ -167,6 +167,7 @@
     /*
      sets the entrypoint callback as the entrypoint in the pcb for the processName
      also marks it as 'READY' in the pcb
+     TODO: rename to asyncMessageOperationReadyToReturn()
      */
     function fsOperationReadyToReturn(processName, entrypoint) {
         // waiting is done, scheduler is ready to be done
