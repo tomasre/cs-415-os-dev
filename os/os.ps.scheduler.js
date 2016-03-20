@@ -57,7 +57,13 @@
                 os._internals.ps.runningProcess = process.name;
 
                 try {
+                    /*
+                    all process code will log to console.info to be able to filter logs
+                    */
+                    var consoleBackup = window.console.log;
+                    window.console.log = window.console.info;
                     process.entryPoint();
+                    window.console.log = consoleBackup;
 
                     if (process.name !== 'fs') {
                         // treat normally
@@ -68,7 +74,7 @@
                             //console.log('waiting for op');
                         } else {
                             //console.log('stopping ' + process.name);
-                            console.log(os._internals);
+                            //console.log(os._internals);
                             process.state = os._internals.ps.states.STOP;
                         }
                     } else {
