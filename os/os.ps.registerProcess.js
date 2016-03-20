@@ -5,8 +5,12 @@
     /*
     name is the name of the process which is registering itself
     each "process should register a 'main' function with 0 arguments as its entry point"
+    options is an optional parameter with the member:
+        stdin: listenerFunction
+        stdout: true
+    this will request it gets bound to the stdin, and register listenerFunction to the stdin stream
      */
-    function registerProcess(name, cb) {
+    function registerProcess(name, cb, options) {
 
         var pcb = {
             id: os._internals.ps.pcb.length,
@@ -25,9 +29,21 @@
             cb(pcb.streams.stdout, pcb.streams.stdin);
         };
 
-        // for testing attaching all stdout instances to display driver
-        pcb.streams.stdout.registerDriver(os._internals.drivers.display.streamUpdateFunction);
-        pcb.streams.stdin.registerDriver(os._internals.drivers.keyboard.keyboardInputFunction);
+        /*
+        attach the display driver if configured
+        */
+        if (options && options.stdout) {
+            pcb.streams.stdout.registerDriver(os._internals.drivers.display.streamUpdateFunction);
+        }
+
+        /*
+        attach the stream listener if configured
+        */
+        if (options && options.stdin) {
+            pcb.streams.stdin.registerStreamListener(options.stdin, name);
+            os._internals.drivers.keyboard.attachStream(pcb.streams.stdin);
+        }
+
         os._internals.ps.pcb.push(pcb);
     }
 

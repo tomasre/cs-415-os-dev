@@ -63,9 +63,14 @@
 
             // tell the scheduler to schedule our process if it is ready
             if (this._streamListener) {
-                os._internals.ps.fsOperationReadyToReturn(this._streamListenerProcessName, function () {
-                    this._streamListener(this);
-                });
+
+                var stream = this;
+                os._internals.ps.asyncMessageOperationReadyToReturn(
+                    this._streamListenerProcessName,
+                    function () {
+                        stream._streamListener(stream);
+                    },
+                    os._internals.ps.asyncOperationTypes.KEYBOARD_DRIVER);
             }
         };
 
