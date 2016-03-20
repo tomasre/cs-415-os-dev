@@ -3,7 +3,13 @@
 
     os._internals.ps.scheduleProcess = scheduleProcess;
 
+    /*
+    fsOperationReadyToReturn just calls the asyncMessageOperationReadyToReturn with
+    the new parameters, so we dont have to change all the references
+    */
     os._internals.ps.fsOperationReadyToReturn = fsOperationReadyToReturn;
+
+    os._internals.ps.asyncMessageOperationReadyToReturn = asyncMessageOperationReadyToReturn;
 
     /*
      whether or not the scheduler is waiting for disk or some event before running
@@ -15,12 +21,6 @@
      waits for disk to finish before rerunning
      */
     function queueScheduler() {
-
-        if (allProcessesDone()) {
-            console.log('OPERATING SYSTEM EXECUTION FINISHED... Printing fs....');
-            console.log(os._internals.fs.disk);
-            return;
-        }
 
         if (shouldRescheduleInstantly()) {
             //console.log('queued instantly');
@@ -165,13 +165,23 @@
     }
 
     /*
+    just calls asyncMessageOperationReadyToReturn
+    */
+    function fsOperationReadyToReturn(process, entrypoint) {
+        asyncMessageOperationReadyToReturn(
+            process,
+            entrypoint,
+            os._internals.ps.asyncOperationTypes.FS);
+    }
+
+    /*
      sets the entrypoint callback as the entrypoint in the pcb for the processName
      also marks it as 'READY' in the pcb
      TODO: rename to asyncMessageOperationReadyToReturn()
      */
-    function fsOperationReadyToReturn(processName, entrypoint) {
+    function asyncMessageOperationReadyToReturn(processName, entrypoint, type) {
         // waiting is done, scheduler is ready to be done
-        os._internals.ps.waits.fs--;
+        os._internals.ps.waits[type]--;
 
         var found = false;
 
@@ -191,6 +201,7 @@
 
         // disk is back, requeue the schedule if needed
         if (schedulerWaiting) {
+            //console.log('QUEUEING SCHEUDLER');
             queueScheduler();
         }
 
