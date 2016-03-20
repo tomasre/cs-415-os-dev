@@ -19,7 +19,13 @@ var os = {
             },
             runningProcess: '',
             waits: {
-                fs: 0
+                fs: 0,
+                inputDriver: 0
+            },
+            // maps to the above waits
+            asyncOperationTypes: {
+                FS: 'fs',
+                KEYBOARD_DRIVER: 'inputDriver'
             }
         },
         stream: {},
