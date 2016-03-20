@@ -3,6 +3,7 @@
 var os = {
     fs: {},
     ps: {},
+    bin: {},
     _internals: {
         fs: {
             disk:{},
@@ -10,6 +11,7 @@ var os = {
         },
         ps: {
             pcb: [],
+            processTable: {},
             states: {
                 START: 'START',
                 STOP: 'STOP',

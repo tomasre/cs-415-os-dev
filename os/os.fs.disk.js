@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-
+    
     /*
     Stats.js initial file
      */
@@ -15,7 +15,7 @@
         // metadata ie simulated file handle
         meta: {}
     };
-    
+
     // add more initial files here
 
     /*

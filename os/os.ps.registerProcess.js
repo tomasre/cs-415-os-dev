@@ -2,16 +2,15 @@
 (function () {
     os.ps.register = registerProcess;
 
-    /*
-    name is the name of the process which is registering itself
-    each "process should register a 'main' function with 0 arguments as its entry point"
-    options is an optional parameter with the member:
-        stdin: listenerFunction
-        stdout: true
-    this will request it gets bound to the stdin, and register listenerFunction to the stdin stream
-     */
-    function registerProcess(name, cb, options) {
+    os._internals.ps.copyProcessTableEntryToPCB = copyProcessTableEntryToPCB;
 
+    function copyProcessTableEntryToPCB (name) {
+        generatePCBEntry(name,
+            os._internals.ps.processTable[name].cb,
+            os._internals.ps.processTable[name].options);
+    }
+
+    function generatePCBEntry (name, cb, options) {
         var pcb = {
             id: os._internals.ps.pcb.length,
             name: name,
@@ -45,6 +44,22 @@
         }
 
         os._internals.ps.pcb.push(pcb);
+    }
+
+    /*
+    name is the name of the process which is registering itself
+    each "process should register a 'main' function with 0 arguments as its entry point"
+    options is an optional parameter with the member:
+        stdin: listenerFunction
+        stdout: true
+    this will request it gets bound to the stdin, and register listenerFunction to the stdin stream
+     */
+    function registerProcess(name, cb, options) {
+        os._internals.ps.processTable[name] = {
+            name: name,
+            cb: cb,
+            options: options
+        };
     }
 
 })();
