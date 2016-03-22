@@ -37,7 +37,7 @@
         if (charCode == 13) {
             console.log("success " + input.value);
             attachedStream.appendToBuffer(input.value);
-            document.getElementById('cL').value = "";
+            document.getElementById('cL').value = "dummy@OS $ ";
             e.preventDefault();
         }
     });
