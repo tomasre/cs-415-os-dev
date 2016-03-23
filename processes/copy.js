@@ -1,9 +1,6 @@
-/**
- * Created by euphoric on 3/14/16.
- */
-
 (function() {
-    CLI.copy = copyFile;
+    os.bin.copy = copyFile;
+
     function copyFile(source, destination) {
         async.waterfall([
 
@@ -143,7 +140,7 @@
             },
 
             function (length, fh, fullData, callback) {
-
+                var result = fullData;
                 async.waterfall([
 
                     function (callback) {
@@ -162,10 +159,10 @@
                     },
 
                     function (writeTarget, recursivecallback) {
-                        var fullResult = fullFile;
+                        var fullResult = result;
                         var buffer = '';
-                        var CHARS_TO_WRITE = 20 ;
-                        var writeSize = result.length;
+                        var CHARS_TO_WRITE = 5 ;
+                        var writeSize = fullResult.length;
                         var fileName;
                         var writePosition = 0;
 
@@ -186,7 +183,7 @@
                             os.fs.write(writeTarget, buffer, function (error, fileName) {
 
                                 if (error === -1) {
-                                    console.log('error writing');
+                                    console.log('Contact_Data.csv: error writing');
                                     console.log(error);
                                     console.log('\n');
                                     callback('Error');
@@ -228,6 +225,7 @@
                 console.log('Copy Failure: ERROR in execution. exited early');
             } else {
                 console.log('Copy Success');
+                console.log(os._internals.disk);
             }
         });
     }

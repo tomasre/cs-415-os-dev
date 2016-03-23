@@ -22,18 +22,8 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
     }
 
     function performWriteFile(psname, fileName, dataPar, cb){
-        //console.log("Write Operation: "+psname);
-        //console.log(fileName);
         var entrypoint;
-            /*
-        if (!os._internals.fs.disk[fileName]) {
-            os._internals.fs.disk[fileName] = {
-                data:'',
-                meta: {
 
-                }
-            }
-        }*/
         var fileString = os._internals.fs.disk[fileName].data;
 
         if(withinMaxSize(dataPar.length) && fileExists(fileName)){
@@ -46,9 +36,7 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
                 cb(-1);
             }
         }
-
         os._internals.ps.fsOperationReadyToReturn(psname,entrypoint);
-
     }
 
     function generateRandomTimeout() {
@@ -56,15 +44,10 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
     }
 
     function withinMaxSize(dataLength){
-
-        if(dataLength <= 100 ){
-
+        if(dataLength <= MAX_WRITE_SIZE ){
             return true;
-
         } else {
-
             return false;
-
         }
     }
 

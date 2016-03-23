@@ -17,7 +17,6 @@
     var psname = os._internals.ps.runningProcess.slice(0);
 
 
-    //super fucking redundant. i could just pass the file handle but i will stick with your code
     if(os._internals.fs.disk[fileHandle.name].meta) {
       var realFileHandle = os._internals.fs.disk[fileHandle.name].meta;
 
