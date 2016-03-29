@@ -5,7 +5,7 @@ this will be using the async.waterfall library to manage callbacks
  */
 (function () {
 
-    os.ps.register('vectorCalculator', main);
+    os.ps.register('vectorcalculator', main);
 
     function main() {
 
