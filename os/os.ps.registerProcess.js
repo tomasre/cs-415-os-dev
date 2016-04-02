@@ -4,13 +4,26 @@
 
     os._internals.ps.copyProcessTableEntryToPCB = copyProcessTableEntryToPCB;
 
-    function copyProcessTableEntryToPCB (name) {
+    /*
+    name is the process name
+    cliArguments is the array of arguments to pass to the process
+    if options are passed in will override the options which got passed in
+    when the process regisstered itself via os.ps.register;
+    */
+    function copyProcessTableEntryToPCB (name, options, cliArguments) {
+        var pcbOptions;
+        if (!options) {
+            pcbOptions = os._internals.ps.processTable[name].options;
+        } else {
+            pcbOptions = options;
+        }
         generatePCBEntry(name,
             os._internals.ps.processTable[name].cb,
-            os._internals.ps.processTable[name].options);
+            pcbOptions,
+            cliArguments);
     }
 
-    function generatePCBEntry (name, cb, options) {
+    function generatePCBEntry (name, cb, options, args) {
         var pcb = {
             id: os._internals.ps.pcb.length,
             name: name,
@@ -22,10 +35,18 @@
         };
 
         /*
-        the first entrypoint to get registered will pass in stdout and stdin
+        the first entrypoint to get registered will pass in Object and an array of
+        cli arguments
+        options will have options.stdout, and options.stdin
          */
         pcb.entryPoint = function () {
-            cb(pcb.streams.stdout, pcb.streams.stdin);
+            if (!args) {
+                args = [];
+            }
+            cb({
+                stdin: pcb.streams.stdin,
+                stdout: pcb.streams.stdout
+            }, args);
         };
 
         /*
