@@ -29,7 +29,7 @@
 
 
             var terminalTextField = document.getElementById('textArea');
-            console.log('DISPLAY DRIVER PRINTING:');
+            //console.log('DISPLAY DRIVER PRINTING:');
             terminalTextField.innerHTML = lines.join("");
     }
 /*
