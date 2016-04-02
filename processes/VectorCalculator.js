@@ -7,7 +7,12 @@ this will be using the async.waterfall library to manage callbacks
 
     os.ps.register('vectorcalculator', main);
 
-    function main() {
+    function main(options, argv) {
+        /*
+        stdin is accessed via options.stdin
+        stdout is accessed via options.stdout
+        argv is the cli arguments passed into it
+        */
 
         // start doing some fs operations
         async.waterfall([

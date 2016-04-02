@@ -16,8 +16,8 @@
 
     os.ps.register('Bash', main, options);
 
-    function main(out, stdin) {
-        stdout = out;
+    function main(options, argv) {
+        stdout = options.stdout;
         console.log('BASH starting');
     }
 
