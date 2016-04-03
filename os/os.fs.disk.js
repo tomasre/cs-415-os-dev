@@ -41,6 +41,25 @@
         meta: {}
     };
 
+    //GetInitials.js initial file
+    os._internals.fs.disk['rapper_names.csv'] = {
+
+        data: "Calvin Broadus,Andre Young,O'shea Jackson,Eric Wright," + 
+                "Marshall Mathers,Dwayne Carter,Shawn Carter,James Jackson," +
+                "Earl Simmons,Antonio Hardy,Krisna Parker,William Griffin," + 
+                "Nasir Jones,Tariq Trotter,Ahmir Thompson,Kamaal Fareed," +
+                "Malik Taylor,Dante Smith, Talib Greene,Cristopher Bridges," + 
+                "Sean Combs,Christopher Wallace,Trevor Smith,Andre Benjamin," +
+                " Antwan Patton,Tupac Shakur,William Drayton,Carlton Ridenhour," + 
+                "Adam Horovitz,Michael Diamond,Adam Yauch,Joseph Simmons,"+
+                "Darryl McDaniels,Jason Mizell,Robert Diggs,Gary Grice," + 
+                "Russell Jones,Clifford Smith,Corey Woods,Jason Hunter," +
+                "Dennis Coles,Jamel Arief,Lamont Hawkins",
+
+        meta: {}
+
+    };
+
 
 
 
