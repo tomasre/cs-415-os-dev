@@ -37,28 +37,39 @@
                 var response = Object.getOwnPropertyNames(os._internals.fs.disk).join("<br>");
                 stdout.appendToBuffer(response);
                 break;
+            
             case "copy": //copy is finished
                 os._internals.ps.copyProcessTableEntryToPCB('copy', null, [command[1], command[2]]);
                 //os.ps.register('copy',os.bin.copy(command[1],command[2]));
                 stdout.appendToBuffer('Copying' +command[1]+' to destination ' + command[2]);
                 break;
+            
             case "rm":
-                os.ps.register('remove',os.bin.remove(command[1]));
+                os._internals.ps.copyProcessTableEntryToPCB('remove', null, [command[1]]);
                 stdout.appendToBuffer("removing " +command[1]);
                 break;
+            
             // for now hardcoded
             case "vectorcalculator":
                 os._internals.ps.copyProcessTableEntryToPCB('vectorcalculator');
                 //os.ps.register('vectorcalculator', os.bin.vectorcalculator);
                 stdout.appendToBuffer('Running VectorCalculator.js');
                 break;
+            
             case "cat":
-                var response = Object.getOwnPropertyNames(os._internals.fs.disk).join("<br>");
-                stdout.appendToBuffer(response);
+                os._internals.ps.copyProcessTableEntryToPCB('concatenate', null, [command[1]]);
+                //stdout.appendToBuffer(response);
                 break;
-            case "./":
-                var response = Object.getOwnPropertyNames(os._internals.fs.disk).join("<br>");
-                stdout.appendToBuffer(response);
+            
+            case "exe":
+                if(os._internals.ps.processTable[command[1]]){
+                    var args = command.slice(2,command.length);
+                    os._internals.ps.copyProcessTableEntryToPCB(command[1],null,args);
+                } else {
+                    stdout.appendToBuffer("invalid command");
+                }
+
+
                 break;
         }
     }

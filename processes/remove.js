@@ -2,12 +2,19 @@
 (function(){
     os.bin.remove = remove;
 
-    function remove(fileName){
-        if(os._internals.fs.disk[fileName]) {
-            delete os._internals.fs.disk[fileName];
-            console.log(os._internals.fs.disk[fileName]);
+    os.ps.register('remove', remove, {stdout:true});
+
+    function remove(options, argv){
+        var onFailMsg ="The file " + argv[0] + " does not exist";
+        var onSuccessMsg = "The file " + argv[0] + " does not exist";
+        var stdout = options.stdout;
+
+        if(os._internals.fs.disk[argv[0]]) {
+            delete os._internals.fs.disk[argv[0]];
+            console.log(onSuccessMsg);
         } else {
-            console.log("file does not exist");
+            console.log(onFailMsg);
+            stdout.appendToBuffer(onFailMsg);
         }
     }
 })();
