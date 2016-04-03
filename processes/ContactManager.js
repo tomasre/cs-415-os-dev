@@ -1,16 +1,18 @@
 (function() {
-  var openTarget = 'Contact_Data.csv';
 
-  var searchKey = "mike";
 
-  os.ps.register('ContactManager', main);
+  os.bin.ContactManager = ContactManager;
+  os.ps.register('ContactManager', ContactManager, {stdout: true});
 
-  function main() {
+  function ContactManager(options, argv) {
+    var stdout = options.stdout;
+    var openTarget = argv[1];
+    var searchKey = argv[0];
+
     async.waterfall([
 
-      /*
-       First we are going to get the length since that does not require the file to be open
-       */
+      // First we are going to get the length since that does not require the file to be open
+
       function (callback) {
         os.fs.length(openTarget, function (errorLength, length) {
           //if -1 is "returned" an error has occurred
@@ -45,8 +47,10 @@
             callback(errorOpen);
 
           } else {
+            var openMsg = "Opening " + fh.name + " size: " + length;
             // NOTE: this is passing the length and fh to the next waterfall function
             //console.log('VM: open success---------');
+            stdout.appendToBuffer(openMsg);
             callback(null, length, fh);
           }
         });
@@ -144,11 +148,27 @@
       },
 
       function (length, fh, fullData, callback) {
+        var loadSym = "...";
+        var searchMsg = "Searching Contacts ...";
 
+        stdout.appendToBuffer(searchMsg);
+        stdout.appendToBuffer(loadSym);
 
+        var destinationFile;
         var result = search(fullData, searchKey);
+        var defaultDestination = "newContact.csv";
+
         console.log("Contact Found: " + result);
-        var destinationFile = "newContact.csv";
+        stdout.appendToBuffer("Contact Found: " + result);
+
+        // checks if location is specified if not creates a default named file
+        if( argv.length === 3){
+          destinationFile = argv[2];
+        } else {
+          destinationFile = defaultDestination;
+        }
+
+        stdout.appendToBuffer("Exporting Contact to " + destinationFile);
 
         async.waterfall([
 
@@ -232,6 +252,7 @@
       if (error===-1) {
         console.log('Contact_Data: ERROR in execution. exited early');
       } else {
+        stdout.appendToBuffer("Finished");
         console.log('Contact Manager Done');
       }
     });
@@ -240,6 +261,7 @@
 
   //finds the contact in the "file"
   function search(csvString, key) {
+
     var substr = csvString.split('\n');
     var foundContact = "-1";
 
@@ -249,13 +271,9 @@
         foundContact = contact.join(',');
       }
     }
-
-
-
       if(foundContact === "-1"){
         foundContact = "Contact Not Found";
       }
-
       return foundContact;
     }
 

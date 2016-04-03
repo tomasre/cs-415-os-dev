@@ -23,7 +23,7 @@
         /*now just printing to console
          */ var tempStr = buffer + "<br>";
             lines.push(tempStr);
-            if(lines.length > 9) {
+            if(lines.length > 25) {
                 lines.shift();
             }
 
