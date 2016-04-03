@@ -1,9 +1,14 @@
 # cs415-assignment-1
 dummy operating system for 415   
 
+To run the code online visit: [cs-415-os-dev](http://tomassre.github.io/cs-415-os-dev/)    
+
+Note this repo is the development version of this project.  For each of the assignments   
+that we will actually turn in they will have their own branch.   
+
 ## process guidelines   
 'use strict'; as your first line of code   
- 
+
 wrap your entire function in a closure:   
  ```
 (function () {   
