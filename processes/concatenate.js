@@ -1,17 +1,12 @@
-/**
- * Created by euphoric on 3/25/16.
- */
-(function() {
-    os.bin.copy = copyFile;
+'use strict';
 
-    os.ps.register('copy', copyFile, {stdout: true});
+(function () {
+    os.bin.concatenate = catFile;
+    os.ps.register('concatenate', catFile, {stdout: true});
 
-    function copyFile(options, argv) {
-
-        var source  = argv[0];
-        var destination = argv[1];
+    function catFile(options, argv){
         var stdout = options.stdout;
-
+        var fileName = argv[0];
 
         async.waterfall([
 
@@ -19,7 +14,7 @@
              First we are going to get the length since that does not require the file to be open
              */
             function (callback) {
-                os.fs.length(source, function (errorLength, length) {
+                os.fs.length(fileName, function (errorLength, length) {
                     //if -1 is "returned" an error has occurred
                     //the proper error UNIX/C error message will be printed
                     if (errorLength === -1) {
@@ -43,7 +38,7 @@
              like the required 'waterfall function'
              */
             function (length, callback) {
-                os.fs.open(source, function (errorOpen, fh) {
+                os.fs.open(fileName, function (errorOpen, fh) {
                     if (errorOpen === -1) {
                         console.log('Contact_Data.csv: error opening file:');
                         console.log(errorOpen);
@@ -77,7 +72,7 @@
                 var currentPosition = 0;
 
                 // THIS IS WHERE THE FILE DATA IS STORED
-                var fullFile = '';
+                var buffer = '';
 
 
                 /*
@@ -89,7 +84,7 @@
                         // WE ARE DONE READING THE WHOLE FILE,
                         // we can move on with the waterfall
                         // note we are passing all the data we have got so far to the next waterfall function
-                        waterfallCallback(null, length, fh, fullFile);
+                        waterfallCallback(null, length, fh, buffer);
 
                     } else {
                         // we need to read another block at least
@@ -119,7 +114,8 @@
                         } else {
                             // read was successful
                             // append the data we got
-                            fullFile += data;
+                            buffer += data;
+                            stdout.appendToBuffer(data);
                             //console.log('VM: read success---------');
 
                             // now we seek forward what we just read
@@ -151,69 +147,7 @@
             },
 
             function (length, fh, fullData, callback) {
-
-                os.fs.create(destination, function(errCreate, newFile){
-
-                    if (errCreate === -1) {
-                        console.log("error on create");
-                        callback('Error');
-
-                    } else {
-                        console.log('Sucess--------- new file created:' + newFile);
-                        console.log(os._internals.fs.disk);
-                        callback(null, length, fh, fullData, newFile);
-                    }
-                });
-            },
-
-            function (length, fh, fullData, newFile, recursiveCallback){
-                var fullResult = fullData;
-                var buffer = '';
-                var CHARS_TO_WRITE = fullResult.length;
-                var size = 5;
-                var writePosition = 0;
-
-                function writeCompleted() {
-                    if (writePosition >= size) {
-                        recursiveCallback(null, length, fh, fullData, newFile, buffer);
-
-                    } else {
-                        // we need to read another block at least
-                        writeNextBlock();
-                    }
-                }
-
-                function writeNextBlock() {
-                    buffer = fullResult.substring(writePosition, CHARS_TO_WRITE);
-                    console.log(buffer);
-
-                    os.fs.write(newFile, buffer, function (error, fileName) {
-
-                        if (error === -1) {
-                            console.log('error writing');
-                            console.log(error);
-                            console.log('\n');
-                            recursiveCallback('Error in recursive write block');
-
-                        } else {
-                            console.log("Write at Postion: " + writePosition);
-                            writePosition = writePosition + CHARS_TO_WRITE-1;
-                            buffer = '';
-                            writeCompleted();
-
-                        }
-                    });
-                }
-
-                writeCompleted();
-            },
-
-            function(length, fh, fullData, newFile, buffer, callback){
-                //this needs to be removed it is merely a test
-                if (buffer === os._internals.fs.disk[source].data){
-                    console.log("data matches");
-                }
-                os.fs.close(source, function (errClose, msg) {
+                os.fs.close(fh.name, function(errClose, msg){
 
                     if (errClose === -1) {
                         console.log(msg);
@@ -225,21 +159,14 @@
 
 
                 });
-            }], function (err, writeResult) {
+            }], function(err, catResult){
 
-            if (err === -1) {
-                console.log('Write Async Block failure');
-
+            if(err === -1){
+                stdout.appendToBuffer('cat Failure');
             } else {
-                console.log('Write Async Block Success');
-                stdout.appendToBuffer("Copy Process Success. Stream Write Success");
-
+                stdout.appendToBuffer('cat succses');
             }
+
         });
-
     }
-
-
-
-
 })();
