@@ -38,7 +38,8 @@
                 stdout.appendToBuffer(response);
                 break;
             case "copy": //copy is finished
-                os.ps.register('copy',os.bin.copy(command[1],command[2]));
+                os._internals.ps.copyProcessTableEntryToPCB('copy', null, [command[1], command[2]]);
+                //os.ps.register('copy',os.bin.copy(command[1],command[2]));
                 stdout.appendToBuffer('Copying' +command[1]+' to destination ' + command[2]);
                 break;
             case "rm":

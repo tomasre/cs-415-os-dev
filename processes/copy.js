@@ -4,7 +4,14 @@
 (function() {
     os.bin.copy = copyFile;
 
-    function copyFile(source, destination) {
+    os.ps.register('copy', copyFile, {stdout: true});
+
+    function copyFile(options, argv) {
+
+        var source  =argv[0];
+        var destination = argv[1];
+
+
         async.waterfall([
 
             /*
