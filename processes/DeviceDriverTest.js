@@ -12,5 +12,7 @@
 
         stdout.appendToBuffer('Okay im done now\n');
 
+        console.log(argv);
+
     }
 })();
