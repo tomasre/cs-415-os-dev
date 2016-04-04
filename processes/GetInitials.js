@@ -1,3 +1,5 @@
+'use strict';
+
 (function () {
 	os.bin.GetInitials = GetInitials;
 	os.ps.register('GetInitials', GetInitials, {stdout: true});
@@ -9,7 +11,7 @@
 		async.waterfall([
 			//get input file length
 			function (callback) {
-				os.fs.length(inputFile, function (errorLength, Length) {
+				os.fs.length(inputFile, function (errorLength, length) {
 					if (errorLength === -1){
 						console.log('initials data: error getting file length: ' +
 							os.errno.errorCode + '\n');
@@ -49,7 +51,7 @@
 				}
 				function readNextBlock() {
 					var charCount = currentPosition + CHARS_TO_READ > length ?
-						legth - currentPosition : CHARS_TO_READ;
+						length - currentPosition : CHARS_TO_READ;
 
 					os.fs.read(fh, charCount, function (errorRead, data) {
 						if (errorRead === -1){
@@ -175,7 +177,7 @@
 
 	function createInitialsFile(fullData) {
 		var initials = "";
-		var initialsArray = result.content.split(",");
+		var initialsArray = fullData.split(",");
 
 		for (var i = 0; i < initialsArray.length; i++){
 			initials += initialsArray[i].split(' ').map(
