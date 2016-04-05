@@ -147,11 +147,13 @@
             },
 
             function (length, fh, fullData, callback) {
-                var formattedString = fullData.split('\n');
 
-                for (var i = 0; i <formattedString.length;i++ ){
-                    stdout.appendToBuffer(formattedString[i]);
-                }
+                if (fullData) {
+                    var formattedString = fullData.split('\n');
+                    for (var i = 0; i < formattedString.length; i++) {
+                        stdout.appendToBuffer(formattedString[i]);
+                    }
+              }
 
                 os.fs.close(fh.name, function(errClose, msg){
 
@@ -170,7 +172,7 @@
             if(err === -1){
                 stdout.appendToBuffer('cat Failure');
             } else {
-                stdout.appendToBuffer('cat succses');
+
             }
 
         });

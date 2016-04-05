@@ -75,9 +75,12 @@
                 } else {
                     stdout.appendToBuffer("invalid command");
                 }
-
-
                 break;
+            case "more":
+                os._internals.ps.copyProcessTableEntryToPCB('more', null, command[1]);
+                break;
+            case "clear":
+                document.getElementById('textArea').innerHTML = "";
         }
     }
 
