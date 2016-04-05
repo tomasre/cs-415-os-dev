@@ -19,6 +19,7 @@
     function main(options, argv) {
         stdout = options.stdout;
         console.log('BASH starting');
+
     }
 
     function streamListener (stream) {
@@ -81,6 +82,24 @@
                 break;
             case "clear":
                 document.getElementById('textArea').innerHTML = "";
+                break;
+            case "help":
+                var cliCommands = Object.getOwnPropertyNames(os._internals.ps.processTable);
+                stdout.appendToBuffer("Available Programs-----");
+                for(var x in cliCommands){
+                    stdout.appendToBuffer(cliCommands[x]);
+                }
+                stdout.appendToBuffer("To Run a User Process Type");
+                stdout.appendToBuffer("exe (process) (args) ");
+                stdout.appendToBuffer("for more info type man (process)");
+                break;
+            
+            // manual now implemented
+            case "man":
+                if(os._internals.ps.processTable[command[1]]){
+                    stdout.appendToBuffer(os._internals.ps.processTable[command[1]].man);
+                }
+                
         }
     }
 
