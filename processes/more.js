@@ -85,7 +85,7 @@
 			},
 
 			//display file
-			function (length fh,fullFile,callback){
+			function (length, fh,fullFile,callback){
 				var pageLength = 20;
 				var pageWidth = 100;
 				var startLine = 0;
@@ -123,10 +123,10 @@
 								startLine++;
 								endLine = startLine;
 								checkEOF();
-								break();
+								break;
 							case 81: // q - quit
 								waterfallCallBack(null)
-								break();
+								break;
 						}
 					});
 				}
