@@ -79,20 +79,27 @@
                 break;
             case "kill":
             // TODO: change logic
-                if(os._internals.ps.processTable[command[1]]){
-                    var args = command.slice(2,command.length);
-                    os._internals.ps.copyProcessTableEntryToPCB(command[1],null,args);
-                } else {
-                    stdout.appendToBuffer("invalid command");
+                if (command.length === 1)
+                    stdout.appendToBuffer("kill: Missing argument");
+                else {
+                    var pcb = os._internals.ps.pcb;
+                    var i;
+                    for (i = 0; i < pcb.length; i++) {
+                        if (pcb[i].id === command[1])
+                            os._internals.ps.pcb[i].state = os._internals.ps.states.STOP;
+                        break;
+                    }
+                    if (i === pcb.length)
+                        stdout.appendToBuffer("kill: Process not found");
                 }
                 break;
             case "ps":
                 var pcb = os._internals.ps.pcb;
-                var ps = "PID  Name<br>";
+                var ps = "PID&nbsp;&nbsp;Name<br>";
                 for (var i = 0; i < pcb.length; i++) {
-                    if (pcb[i].state === os._internals.ps.states.START ||
+                    if (pcb[i].state === os._internals.ps.states.RUNNING ||
                         pcb[i].state === os._internals.ps.states.WAITING)
-                        ps += " " + pcb[i].id.toString() + "  " + pcb[i].name + "<br>";
+                        ps += "&nbsp;&nbsp;" + pcb[i].id.toString() + "&nbsp;&nbsp;" + pcb[i].name + "<br>";
                 }
                 stdout.appendToBuffer(ps);
                 break;
