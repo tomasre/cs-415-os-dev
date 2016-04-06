@@ -1,6 +1,7 @@
 'use strict';
 (function () {
     os._internals.ps.ps = listProcess;
+    os.ps.register('listProcess', ps, {stdout: true});
     
     function listProcess () {
         // TODO: Find out how we'll be printing to console
@@ -10,6 +11,7 @@
              *     PID TTY           TIME CMD
              *    1403 ttys000    0:00.20 -bash
              */
+             
         }
     }
 })();

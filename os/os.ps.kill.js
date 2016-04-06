@@ -13,6 +13,7 @@
         
         // Stop the process & return the stopped process if found
         os._internals.ps.pcb[i].state = os._internals.ps.states.STOP;
+        os._internals.ps.pcb[i].name = "";
         var removedProcess = os._internals.ps.pcb[i];
         removedProcess["status"] = 0;
         return removedProcess;
