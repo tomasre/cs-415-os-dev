@@ -14,8 +14,28 @@
 
 'use strict';
 (function() {
+	var options = {
+		stdin: someFunction,
+		stdout:true
+
+	};
+
+	os.ps.register('more',more, options);
+
+	var stdout;
+	var stdin;
+	var line[];
+
+	stdout.appendToBuffer(line[0]);
 	
-	function more(source) {
+	
+	
+	
+	function more(options, argv) {
+
+
+		stdout = options.stdout;
+
 		async.waterfall([
 		
 			/**
@@ -40,7 +60,7 @@
 			  * Open function
 			  */
 			function(length, callback) {
-				os.fs.length(source, function(errorOpen, fh) {
+				os.fs.open(source, function(errorOpen, fh) {
 					if(errorOpen === -1) {
 						console.log('more request for file ' + source + ': error opening file:');
 						console.log(errorOpen);
@@ -90,7 +110,7 @@
 				/*
 					reads the next block of data, then seeks forward that amount, then calls check completed to
 					see if it needs to read more before finishing
-					NOTE: this function has two asynchronous fs operations
+					NOTE: this function has two asynchronous fs `operations
 				*/
 				function readNextBlock() {
 					// if there is one character left in the file, dont read 100
@@ -237,6 +257,11 @@
 		}		
 					 
 		return thePage;
+	}
+
+	function moreListener(stream){
+
+
 	}
 	
 })();
