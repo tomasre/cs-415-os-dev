@@ -69,7 +69,7 @@
                 //stdout.appendToBuffer(response);
                 break;
 
-            case "exe":
+            case "exec":
                 if(os._internals.ps.processTable[command[1]]){
                     var args = command.slice(2,command.length);
                     os._internals.ps.copyProcessTableEntryToPCB(command[1],null,args);
@@ -77,6 +77,26 @@
                     stdout.appendToBuffer("invalid command");
                 }
                 break;
+            case "kill":
+            // TODO: change logic
+                if(os._internals.ps.processTable[command[1]]){
+                    var args = command.slice(2,command.length);
+                    os._internals.ps.copyProcessTableEntryToPCB(command[1],null,args);
+                } else {
+                    stdout.appendToBuffer("invalid command");
+                }
+                break;
+            case "ps":
+                var pcb = os._internals.ps.pcb;
+                var ps = "PID  Name<br>";
+                for (var i = 0; i < pcb.length; i++) {
+                    if (pcb[i].state === os._internals.ps.states.START ||
+                        pcb[i].state === os._internals.ps.states.WAITING)
+                        ps += " " + pcb[i].id.toString() + "  " + pcb[i].name + "<br>";
+                }
+                stdout.appendToBuffer(ps);
+                break;
+
             case "more":
                 os._internals.ps.copyProcessTableEntryToPCB('more', null, command[1]);
                 break;
