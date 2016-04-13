@@ -20,6 +20,10 @@
      */
     function updateDisplay(buffer) {
 
+        if (!document.getElementById('textArea').innerHTML){
+                lines.length=0;
+            }
+
         /*now just printing to console
          */ var tempStr = buffer + "<br>";
             lines.push(tempStr);
