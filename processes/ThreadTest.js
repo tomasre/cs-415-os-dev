@@ -23,7 +23,17 @@
         stdout.appendToBuffer('Just created thread: ' + thread2);
 
         var thread3 = os.ps.createThread(function () {
-            stdout.appendToBuffer('Thread3 Running in separate context');
+            stdout.appendToBuffer('Thread3 Running in separate context with fs ops');
+
+            os.fs.length('vector_data.csv', function (errorLength, length) {
+                if (errorLength===-1) {
+                    console.log('Thread3: vector_data.csv: error getting file length:');
+
+                } else {
+                    stdout.appendToBuffer('Thread3: vector_data.csv length: ' + length);
+                }
+            });
+            
         }, allThreadsFinished);
 
         stdout.appendToBuffer('Just created thread: ' + thread3);

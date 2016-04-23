@@ -73,14 +73,12 @@
                             process.state = os._internals.ps.states.WAITING;
                             //console.log('waiting for op');
                         } else {
-                            console.log('stopping ' + process.name);
+                            //console.log('stopping ' + process.name);
                             //console.log(os._internals);
                             process.state = os._internals.ps.states.STOP;
 
                             // if it is a thread and its the last running thread
                             if (process.parentName && process.scheduleOnComplete && lastRunningThread(process.parentName)) {
-                                
-                                console.log('scheduling on Complete');
                                 process.scheduleOnComplete();
                             }
                         }
@@ -235,7 +233,8 @@
             if (process.parentName === parentName) {
 
                 // check if there is one which is not at STOP state
-                if (process.state === os._internals.ps.states.READY || process.state === os._internals.ps.states.START) {
+                if (process.state === os._internals.ps.states.READY || process.state === os._internals.ps.states.START
+                    || process.state === os._internals.ps.states.WAITING) {
                     // there is one which needs to run still
                     return false;
                 }

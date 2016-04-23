@@ -43,8 +43,7 @@
             entryPoint: runnable,
             scheduleOnComplete: onThreadFinish
         };
-        console.log(pcb);
-
+        
         // schedule the thread
         os._internals.ps.pcb.push(pcb);
     }

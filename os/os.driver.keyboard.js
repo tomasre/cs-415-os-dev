@@ -53,13 +53,13 @@
             } else {
                 console.log('WARNING keyboard tried to pass value without attached Stream');
             }
-            
+
             document.getElementById('cL').value = "dummy@OS $ ";
             e.preventDefault();
         }
     });
 
     input.addEventListener('input',function() {
-        console.log('input changed to ', input.value);
+        //console.log('input changed to ', input.value);
     });
 })();
