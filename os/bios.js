@@ -12,6 +12,7 @@ var os = {
         ps: {
             pcb: [],
             processTable: {},
+            lockedStructures: {},
             states: {
                 START: 'START',
                 STOP: 'STOP',
