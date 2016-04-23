@@ -73,9 +73,16 @@
                             process.state = os._internals.ps.states.WAITING;
                             //console.log('waiting for op');
                         } else {
-                            //console.log('stopping ' + process.name);
+                            console.log('stopping ' + process.name);
                             //console.log(os._internals);
                             process.state = os._internals.ps.states.STOP;
+
+                            // if it is a thread and its the last running thread
+                            if (process.parentName && process.scheduleOnComplete && lastRunningThread(process.parentName)) {
+                                
+                                console.log('scheduling on Complete');
+                                process.scheduleOnComplete();
+                            }
                         }
                     } else {
                         //console.log('fs ran');
@@ -216,5 +223,26 @@
             // if we got here we didnt find the process - cant recover
             console.log('os.ps.scheduler.fsOperationReadyToReturn ERROR didnt find matching process name for: ' + processName);
         }
+    }
+
+    /*
+    returns true if there is no other child threads running
+    */
+    function lastRunningThread(parentName) {
+        for (var i = 0; i < os._internals.ps.pcb.length; i++) {
+            var process = os._internals.ps.pcb[i];
+
+            if (process.parentName === parentName) {
+
+                // check if there is one which is not at STOP state
+                if (process.state === os._internals.ps.states.READY || process.state === os._internals.ps.states.START) {
+                    // there is one which needs to run still
+                    return false;
+                }
+            }
+        }
+
+        // didnt find a thread still running
+        return true;
     }
 })();

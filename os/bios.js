@@ -28,7 +28,8 @@ var os = {
             // maps to the above waits
             asyncOperationTypes: {
                 FS: 'fs',
-                KEYBOARD_DRIVER: 'inputDriver'
+                KEYBOARD_DRIVER: 'inputDriver',
+                THREAD_COMPLETE: 'threadComplete'
             }
         },
         stream: {},
