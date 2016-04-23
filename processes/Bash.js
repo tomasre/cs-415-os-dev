@@ -64,6 +64,11 @@
                 stdout.appendToBuffer('Running ddrivertest.js');
                 break;
 
+            case "threadtest":
+                os._internals.ps.copyProcessTableEntryToPCB('ThreadTest', null, ['argument', 'argument2']);
+                stdout.appendToBuffer('Running ddrivertest.js');
+                break;
+
             case "cat":
                 os._internals.ps.copyProcessTableEntryToPCB('concatenate', null, [command[1]]);
                 //stdout.appendToBuffer(response);
@@ -120,13 +125,13 @@
                 stdout.appendToBuffer("exe (process) (args) ");
                 stdout.appendToBuffer("for more info type man (process)");
                 break;
-            
+
             // manual now implemented
             case "man":
                 if(os._internals.ps.processTable[command[1]]){
                     stdout.appendToBuffer(os._internals.ps.processTable[command[1]].man);
                 }
-                
+
         }
     }
 
