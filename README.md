@@ -4,7 +4,14 @@ dummy operating system for 415
 To run the code online visit: [cs-415-os-dev](http://tomassre.github.io/cs-415-os-dev/)    
 
 Note this repo is the development version of this project.  For each of the assignments   
-that we will actually turn in they will have their own branch.   
+that we will actually turn in they will have their own branch.
+
+## a note on processes:
+with the current structure you cannot have multiple async operations at once:   
+you cannot have a fs op and a threadOnComplete at the same time.   
+you can do lots of fs ops, then do threadOnComplete, but each process     
+only has one entryPoint to get back to its context which gets overriden    
+when an async op returns    
 
 ## process guidelines   
 'use strict'; as your first line of code   
