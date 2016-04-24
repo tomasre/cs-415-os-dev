@@ -11,6 +11,15 @@
     function lock(lockName, cb) {
         var process = os._internals.ps.runningProcess.slice(0);
 
+        // add entry to pcb about waiting for mutexLock
+        var pcbEntry = getPCBEntry(process);
+        if (!pcbEntry.mutexCount) {
+            // create if not created
+            pcbEntry.mutexCount = 0;
+        }
+
+        pcbEntry.mutexCount++;
+
         if (!os._internals.ps.lockedStructures[lockName]) {
             os._internals.ps.lockedStructures[lockName] = {
                 requestedLockedProcesses: [],
@@ -28,7 +37,7 @@
             function () {
                 // set the lock
                 os._internals.ps.lockedStructures[lockName].currentLock = process;
-
+                pcbEntry.mutexCount--;
                 cb(os._internals.ps.lockedStructures[lockName].data);
             },
             os._internals.ps.asyncOperationTypes.MUTEX_LOCK
@@ -50,5 +59,19 @@
             },
             os._internals.ps.asyncOperationTypes.MUTEX_LOCK
         );
+    }
+
+    // returns ref to PCB entry
+    function getPCBEntry(processName) {
+        for (var i = 0; i < os._internals.ps.pcb.length; i++) {
+            var process = os._internals.ps.pcb[i];
+
+            if (process.name === processName) {
+                return process;
+            }
+        }
+
+        console.log('mutex lock get pcb entry SHOULD NEVER HAPPEN PANIC');
+        return null;
     }
 })();

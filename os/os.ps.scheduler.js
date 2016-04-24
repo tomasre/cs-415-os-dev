@@ -66,9 +66,17 @@
                     window.console.log = consoleBackup;
 
                     if (process.name !== 'fs') {
+                        var mutexCount = 0;
+                        if (process.mutexCount && process.mutexCount > 0) {
+                            mutexCount = process.mutexCount;
+                        }
+
                         // treat normally
                         // as of right now the processes is done (or waiting for a filesystem operation
-                        if (waitingForFsOp(process.name)) {
+                        if (mutexCount > 0) {
+                            process.state = os._internals.ps.states.READY;
+                            
+                        } else if (waitingForFsOp(process.name)) {
                             // change state to waiting
                             process.state = os._internals.ps.states.WAITING;
                             //console.log('waiting for op');
