@@ -1,5 +1,9 @@
 'use strict';
 (function () {
+    var count = {
+
+    };
+
     os.ps.createThread = createThread;
 
     function createThread(runnableFunction, onComplete) {
@@ -8,8 +12,15 @@
 
         var parentName = os._internals.ps.runningProcess;
 
+        if(!count[parentName]){
+            count[parentName] = 1;
+        } else {
+            count[parentName] = count[parentName] + 1;
+        }
         // name is parent name + thread + random component
-        var name = parentName + '_thread_' + Math.floor(Math.random() * 10000);
+        var name = parentName + '_thread_' + count[parentName];
+
+        if(!count[name])
 
         /*
          REGISTER THE ACTUAL PARENT PROCESS ONCOMPLETE TO BE RUN WHEN ITS DONE
