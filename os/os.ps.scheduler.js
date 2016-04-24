@@ -75,7 +75,7 @@
                         // as of right now the processes is done (or waiting for a filesystem operation
                         if (mutexCount > 0) {
                             process.state = os._internals.ps.states.READY;
-                            
+
                         } else if (waitingForFsOp(process.name)) {
                             // change state to waiting
                             process.state = os._internals.ps.states.WAITING;
@@ -115,7 +115,7 @@
          */
         function processValidToBeScheduled(process) {
             var ready = (process.state === os._internals.ps.states.READY || process.state === os._internals.ps.states.START) && !isProcessWaitingForMutexLock(process.name);
-            console.log('processValidToBeScheduled ' + process.name + ': ' + ready);
+            //console.log('processValidToBeScheduled ' + process.name + ': ' + ready);
             if (ready) {
                 if (process.name === 'fs' && os._internals.fs.operationQueue.length < 1) {
                     return false;
@@ -206,7 +206,7 @@
         os._internals.ps.waits[type]--;
 
         var found = false;
-        console.log('async op ready ' + processName);
+        //console.log('async op ready ' + processName);
 
         for (var i = 0; i < os._internals.ps.pcb.length; i++) {
             var process = os._internals.ps.pcb[i];
@@ -219,7 +219,7 @@
             process.entryPoint = entrypoint;
             process.state = os._internals.ps.states.READY;
             found = true;
-            console.log(process);
+            //console.log(process);
 
             break;
         }
