@@ -37,7 +37,6 @@
             function () {
                 // set the lock
                 os._internals.ps.lockedStructures[lockName].currentLock = process;
-                pcbEntry.mutexCount--;
                 cb(os._internals.ps.lockedStructures[lockName].data);
             },
             os._internals.ps.asyncOperationTypes.MUTEX_LOCK
@@ -50,12 +49,15 @@
 
         os._internals.ps.lockedStructures[lockName].currentLock = null;
 
+        var pcbEntry = getPCBEntry(process);
+
         // set the processes entrypoint when it is ready to be scheduled
         os._internals.ps.asyncMessageOperationReadyToReturn(
             process,
             // has to be wrapped so the cb doesnt run now
             function () {
                 cb();
+                pcbEntry.mutexCount--;
             },
             os._internals.ps.asyncOperationTypes.MUTEX_LOCK
         );
