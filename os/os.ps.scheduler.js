@@ -103,9 +103,12 @@
 
         /*
         returns true if its ready or waiting or its the fs with an open fs operation
+        or if its not waiting for a mutex lock
          */
         function processValidToBeScheduled(process) {
-            if (process.state === os._internals.ps.states.READY || process.state === os._internals.ps.states.START) {
+            var ready = (process.state === os._internals.ps.states.READY || process.state === os._internals.ps.states.START) && !isProcessWaitingForMutexLock(process.name);
+            console.log('processValidToBeScheduled ' + process.name + ': ' + ready);
+            if (ready) {
                 if (process.name === 'fs' && os._internals.fs.operationQueue.length < 1) {
                     return false;
                 } else {
@@ -195,6 +198,7 @@
         os._internals.ps.waits[type]--;
 
         var found = false;
+        console.log('async op ready ' + processName);
 
         for (var i = 0; i < os._internals.ps.pcb.length; i++) {
             var process = os._internals.ps.pcb[i];
@@ -207,6 +211,8 @@
             process.entryPoint = entrypoint;
             process.state = os._internals.ps.states.READY;
             found = true;
+            console.log(process);
+
             break;
         }
 
@@ -244,4 +250,35 @@
         // didnt find a thread still running
         return true;
     }
+
+    /*
+    returns true if processName has requested a lock (and therefore will not be scheduled)
+    otherwise returns false if it can be scheduled normally
+    */
+    function isProcessWaitingForMutexLock(processName) {
+
+        for (var lockedStructureKey in os._internals.ps.lockedStructures) {
+            var struc = os._internals.ps.lockedStructures[lockedStructureKey];
+            if (!struc.currentLock) {
+                // no one holds a lock yet on this resource, even if someone is requesting it doesnt matter yet
+                continue;
+            }
+
+            // someone holds a lock - but it could be processName holding the lock
+            if (struc.currentLock === processName) {
+                // we hold the lock we can still be scheduled
+                continue;
+            }
+
+            // someone else holds the lock
+            if (struc.requestedLockedProcesses.indexOf(processName) > -1) {
+                // we are a part of the array - with a requested lock on the dataset - we are waiting for lock
+                return true;
+            }
+        }
+
+        // we didnt find a lock - good to be scheduled
+        return false;
+    }
+
 })();

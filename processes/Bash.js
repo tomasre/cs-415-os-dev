@@ -69,6 +69,11 @@
                 stdout.appendToBuffer('Running ddrivertest.js');
                 break;
 
+            case "mutextest":
+                os._internals.ps.copyProcessTableEntryToPCB('MutexTest', null, ['argument', 'argument2']);
+                stdout.appendToBuffer('Running mutextest.js');
+                break;
+
             case "cat":
                 os._internals.ps.copyProcessTableEntryToPCB('concatenate', null, [command[1]]);
                 //stdout.appendToBuffer(response);

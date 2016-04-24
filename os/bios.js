@@ -29,7 +29,8 @@ var os = {
             asyncOperationTypes: {
                 FS: 'fs',
                 KEYBOARD_DRIVER: 'inputDriver',
-                THREAD_COMPLETE: 'threadComplete'
+                THREAD_COMPLETE: 'threadComplete',
+                MUTEX_LOCK: 'mutexLock'
             }
         },
         stream: {},
