@@ -1,31 +1,27 @@
 'use strict';
 
 (function () {
-    os.ps.register('MutexTest', main, {stdout: true});
+    os.ps.register('SemaphoreTest', main, {stdout: true});
 
     var stdout;
 
     function main(options, argv) {
-
         stdout = options.stdout;
-        console.log('mutex');
+        console.log('Semaphore');
         stdout.appendToBuffer('Creating 10 Threads\n');
 
         // create 10 threads to test
         for (var i = 0; i < 10; i++) {
             os.ps.createThread(threadRunContext, allThreadsFinished);
         }
-
-
-
     }
 
     function threadRunContext() {
         // DONT ACCESS INTERNALS JUST FOR TEST
         var process = os._internals.ps.runningProcess.slice(0);
-        stdout.appendToBuffer(process + ' Running in separate context');
+        stdout.appendToBuffer(process + ' running in separate context');
 
-        os.ps.pthread_mutex_lock('MutexLockTest', function (lockedData) {
+        os.ps.pthread_semaphore_lock('SemaphoreLockTest', function (lockedData) {
 
             if (lockedData.dumb) {
                 stdout.appendToBuffer( process + ': lockedData.dumb already exists, incrementing by 5');
@@ -38,7 +34,7 @@
             }
 
             // now unlock
-            os.ps.pthread_mutex_unlock('MutexLockTest', function () {
+            os.ps.pthread_semaphore_unlock('SemaphoreLockTest', function () {
                 stdout.appendToBuffer(process + ' done running in separate context');
             });
 

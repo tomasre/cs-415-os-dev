@@ -30,7 +30,8 @@ var os = {
                 FS: 'fs',
                 KEYBOARD_DRIVER: 'inputDriver',
                 THREAD_COMPLETE: 'threadComplete',
-                MUTEX_LOCK: 'mutexLock'
+                MUTEX_LOCK: 'mutexLock',
+                SEMAPHORE_LOCK: 'semaphoreLock'
             }
         },
         stream: {},

@@ -8,7 +8,7 @@
     function main(options, argv) {
 
         stdout = options.stdout;
-        stdout.appendToBuffer('Createing 4 Threads\n');
+        stdout.appendToBuffer('Creating 4 Threads\n');
 
         var thread1 = os.ps.createThread(function () {
             stdout.appendToBuffer('Thread1 Running in separate context');
