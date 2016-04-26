@@ -66,30 +66,61 @@
                     window.console.log = consoleBackup;
 
                     if (process.name !== 'fs') {
-                        var mutexCount = 0;
-                        if (process.mutexCount && process.mutexCount > 0) {
-                            mutexCount = process.mutexCount;
+                        switch (process.name) {
+                            case os._internals.ps.asyncOperationTypes.MUTEX_LOCK:
+                                var mutexCount = 0;
+                                if (process.mutexCount && process.mutexCount > 0) {
+                                    mutexCount = process.mutexCount;
+                                }
+
+                                // treat normally
+                                // as of right now the processes is done (or waiting for a filesystem operation
+                                if (mutexCount > 0) {
+                                    process.state = os._internals.ps.states.READY;
+
+                                } else if (waitingForFsOp(process.name)) {
+                                    // change state to waiting
+                                    process.state = os._internals.ps.states.WAITING;
+                                    //console.log('waiting for op');
+                                } else {
+                                    //console.log('stopping ' + process.name);
+                                    //console.log(os._internals);
+                                    process.state = os._internals.ps.states.STOP;
+
+                                    // if it is a thread and its the last running thread
+                                    if (process.parentName && process.scheduleOnComplete && lastRunningThread(process.parentName)) {
+                                        process.scheduleOnComplete();
+                                    }
+                                }
+                                break;
+                            case os._internals.ps.asyncOperationTypes.SEMAPHORE_LOCK:
+                                var semaphoreCount = 0;
+                                if (process.semaphoreCount && process.semaphoreCount > 0) {
+                                    semaphoreCount = process.semaphoreCount;
+                                }
+
+                                // treat normally
+                                // as of right now the processes is done (or waiting for a filesystem operation
+                                if (semaphoreCount > 0) {
+                                    process.state = os._internals.ps.states.READY;
+
+                                } else if (waitingForFsOp(process.name)) {
+                                    // change state to waiting
+                                    process.state = os._internals.ps.states.WAITING;
+                                    //console.log('waiting for op');
+                                } else {
+                                    //console.log('stopping ' + process.name);
+                                    //console.log(os._internals);
+                                    process.state = os._internals.ps.states.STOP;
+
+                                    // if it is a thread and its the last running thread
+                                    if (process.parentName && process.scheduleOnComplete && lastRunningThread(process.parentName)) {
+                                        process.scheduleOnComplete();
+                                    }
+                                }
+                                break;
                         }
-
-                        // treat normally
-                        // as of right now the processes is done (or waiting for a filesystem operation
-                        if (mutexCount > 0) {
-                            process.state = os._internals.ps.states.READY;
-
-                        } else if (waitingForFsOp(process.name)) {
-                            // change state to waiting
-                            process.state = os._internals.ps.states.WAITING;
-                            //console.log('waiting for op');
-                        } else {
-                            //console.log('stopping ' + process.name);
-                            //console.log(os._internals);
-                            process.state = os._internals.ps.states.STOP;
-
-                            // if it is a thread and its the last running thread
-                            if (process.parentName && process.scheduleOnComplete && lastRunningThread(process.parentName)) {
-                                process.scheduleOnComplete();
-                            }
-                        }
+                        
                     } else {
                         //console.log('fs ran');
                         process.state = os._internals.ps.states.READY;

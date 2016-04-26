@@ -7,27 +7,31 @@
     currentLock
     */
 
-    os.ps.pthread_mutex_lock = lock;
-    os.ps.pthread_mutex_unlock = unlock;
+    os.ps.pthread_semaphore_lock = semaphore_lock;
+    os.ps.pthread_semaphore_unlock = semaphore_unlock;
 
-    function lock(lockName, cb) {
+    function semaphore_lock(lockName, cb) {
         var process = os._internals.ps.runningProcess.slice(0);
 
         // add entry to pcb about waiting for mutexLock
         var pcbEntry = getPCBEntry(process);
-        if (!pcbEntry.mutexCount) {
+        if (!pcbEntry.semaphoreCount) {
             // create if not created
-            pcbEntry.mutexCount = 0;
+            pcbEntry.semaphoreCount = 0;
         }
 
-        pcbEntry.mutexCount++;
+        pcbEntry.semaphoreCount++;
 
         if (!os._internals.ps.lockedStructures[lockName]) {
             os._internals.ps.lockedStructures[lockName] = {
                 requestedLockedProcesses: [],
                 currentLock: null,
-                data: {}
+                data: {},
+                semaphoreStatus: 0
             }
+        }
+        else if (!os._internals.ps.lockedStructures[lockName].semaphoreStatus) {
+            os._internals.ps.lockedStructures[lockName].semaphoreStatus = 0;
         }
 
         os._internals.ps.lockedStructures[lockName].requestedLockedProcesses.push(process);
@@ -39,14 +43,15 @@
             function () {
                 // set the lock
                 os._internals.ps.lockedStructures[lockName].currentLock = process;
+                os._internals.ps.lockedStructures[lockName].semaphoreStatus--;
                 cb(os._internals.ps.lockedStructures[lockName].data);
             },
-            os._internals.ps.asyncOperationTypes.MUTEX_LOCK
+            os._internals.ps.asyncOperationTypes.SEMAPHORE_LOCK
         );
     }
 
 
-    function unlock(lockName, cb) {
+    function semaphore_unlock(lockName, cb) {
         var process = os._internals.ps.runningProcess.slice(0);
 
         os._internals.ps.lockedStructures[lockName].currentLock = null;
@@ -59,9 +64,10 @@
             // has to be wrapped so the cb doesnt run now
             function () {
                 cb();
-                pcbEntry.mutexCount--;
+                pcbEntry.semaphoreCount--;
+                os._internals.ps.lockedStructures[lockName].semaphoreStatus++;
             },
-            os._internals.ps.asyncOperationTypes.MUTEX_LOCK
+            os._internals.ps.asyncOperationTypes.SEMAPHORE_LOCK
         );
     }
 
@@ -75,7 +81,7 @@
             }
         }
 
-        console.log('mutex lock get pcb entry SHOULD NEVER HAPPEN PANIC');
+        console.log('Semaphore lock get pcb entry SHOULD NEVER HAPPEN PANIC');
         return null;
     }
 })();

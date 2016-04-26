@@ -66,12 +66,17 @@
 
             case "threadtest":
                 os._internals.ps.copyProcessTableEntryToPCB('ThreadTest', null, ['argument', 'argument2']);
-                stdout.appendToBuffer('Running ddrivertest.js');
+                stdout.appendToBuffer('Running threadtest.js');
                 break;
 
             case "mutextest":
                 os._internals.ps.copyProcessTableEntryToPCB('MutexTest', null, ['argument', 'argument2']);
                 stdout.appendToBuffer('Running mutextest.js');
+                break;
+
+            case "semaphoretest":
+                os._internals.ps.copyProcessTableEntryToPCB('SemaphoreTest', null, ['argument', 'argument2']);
+                stdout.appendToBuffer('Running semaphoretest.js');
                 break;
 
             case "cat":
