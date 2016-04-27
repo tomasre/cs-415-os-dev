@@ -16,6 +16,33 @@
         meta: {}
     };
 
+    /*
+    dining_philosophers.js files here
+     */
+    os._internals.fs.disk['philo1.csv'] = {
+        // the actual data
+        data: '1,2,3,4,5',
+        meta: {}
+    };
+
+    os._internals.fs.disk['philo2.csv'] = {
+        // the actual data
+        data: '2,4,6,8,10',
+        meta: {}
+    };
+
+    os._internals.fs.disk['philo3.csv'] = {
+        // the actual data
+        data: '2,7,2,4,2',
+        meta: {}
+    };
+
+    os._internals.fs.disk['philo4.csv'] = {
+        // the actual data
+        data: '1,8,4,8,8',
+        meta: {}
+    };
+
     // add more initial files here
 
     /*
