@@ -1,6 +1,13 @@
 'use strict';
 
 (function () {
+    var pwd = {
+        currentDirectory: os._internals.fs.disk.root,
+        string: "root/"
+    };
+
+    console.log(pwd.currentDirectory);
+
     var indent = "     ";
     var options = {
         stdin: streamListener,
@@ -35,7 +42,7 @@
         //
         switch(command[0]){
             case "ls": // need to figure out how to play with the streams
-                var response = Object.getOwnPropertyNames(os._internals.fs.disk).join("<br>");
+                var response = Object.getOwnPropertyNames(pwd.currentDirectory).join("<br>");
                 stdout.appendToBuffer(response);
                 break;
 
@@ -141,9 +148,93 @@
                 if(os._internals.ps.processTable[command[1]]){
                     stdout.appendToBuffer(os._internals.ps.processTable[command[1]].man);
                 }
+                break;
 
+            case "cd":
+                changeDirectory(command[1]);
         }
     }
+
+    function pathAbsolute(path) {
+        var splitPath = path.split("/");
+        if(splitPath[0] === 'root'){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    function validPath(path) {
+        if (path === '..' && pwd.currentDirectory != os._internals.fs.disk.root){
+            return true;
+        }
+
+        var node = os._internals.fs.disk.root;
+        console.log(node);
+        path = convertToAbsolute(path);
+        var splitPath = path.split('/');
+        splitPath.shift();
+
+        for (var i = 0 ; i < splitPath.length; i++){
+            node = node[splitPath[i]];
+
+            if(!node){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function convertToAbsolute(path){
+        if(!pathAbsolute(path)){
+            path = pwd.string + path;
+        }
+        return path
+    }
+
+    function changeDirectory(path){
+        var splitPath;
+
+        if(validPath(path)) {
+            if (path === '..') {
+                var temp = pwd.string.split('/');
+                temp.pop();
+                path = temp.join('/');
+
+                pwd.string = path;
+                pwd.currentDirectory = os._internals.fs.disk.root;
+                splitPath = path.split('/');
+                splitPath.shift();
+
+                for (var i = 0; i < splitPath.length; i++) {
+                    console.log(pwd.currentDirectory);
+                    pwd.currentDirectory = currentDirectory[splitPath[i]];
+
+                }
+            } else {
+                path = convertToAbsolute(path);
+                pwd.string = path;
+                pwd.currentDirectory = os._internals.fs.disk.root;
+                splitPath = path.split('/');
+                splitPath.shift();
+
+                for (var i = 0; i < splitPath.length; i++) {
+                    console.log(splitPath[i]);
+                    console.log('Current Directory In Change Directory Loop: ');
+                    console.log(pwd.currentDirectory);
+                    
+                    var temp;
+                    temp = pwd.currentDirectory[splitPath[i]];
+                   
+                    pwd.currentDirectory = temp;
+                }
+            }
+        } else {
+            stdout.appendToBuffer("Invalid Path");
+        }
+    }
+
+
 
 
 

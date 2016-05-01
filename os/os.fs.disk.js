@@ -1,10 +1,12 @@
 'use strict';
 (function () {
-    
+    os._internals.fs.disk.root={};
+	os._internals.fs.disk.root.home={};
+
     /*
     Stats.js initial file
      */
-    os._internals.fs.disk['Stats_Data.csv'] = {
+    os._internals.fs.disk.root.home['Stats_Data.csv'] = {
         // the actual data
         data: '1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n' +
         '1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n' +
@@ -21,7 +23,7 @@
     /*
     VectorCalculator.js initial file
      */
-    os._internals.fs.disk['vector_data.csv'] = {
+    os._internals.fs.disk.root.home['vector_data.csv'] = {
         // actual data
         data: '1,2\n' +
             '2,3\n' +
@@ -30,7 +32,7 @@
         meta: {}
     };
 
-    os._internals.fs.disk['Contact_Data.csv'] = {
+    os._internals.fs.disk.root.home['Contact_Data.csv'] = {
 
         data: 'LoganF,6264947298\n' +
         'freddy,6264947298\n' +
@@ -42,7 +44,7 @@
     };
 
     //GetInitials.js initial file
-    os._internals.fs.disk['rapper_names.csv'] = {
+    os._internals.fs.disk.root.home['rapper_names.csv'] = {
 
         data: "Calvin Broadus,Andre Young,O'shea Jackson,Eric Wright," + 
                 "Marshall Mathers,Dwayne Carter,Shawn Carter,James Jackson," +
@@ -60,7 +62,7 @@
 
     };
 
-	os._internals.fs.disk['Transaction_Data.csv'] = {
+	os._internals.fs.disk.root.home['Transaction_Data.csv'] = {
 
         data: 	"Starting Balance,+200.00\n" +
 				"Caramel Frappucino,5.88\n" +
