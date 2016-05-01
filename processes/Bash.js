@@ -73,6 +73,10 @@
                 os._internals.ps.copyProcessTableEntryToPCB('MutexTest', null, ['argument', 'argument2']);
                 stdout.appendToBuffer('Running mutextest.js');
                 break;
+                
+            case "philosophers":
+                os._internals.ps.copyProcessTableEntryToPCB('DiningPhilosophers', null, ['argument', 'argument2']);
+                break;
 
             case "semaphoretest":
                 os._internals.ps.copyProcessTableEntryToPCB('SemaphoreTest', null, ['argument', 'argument2']);
