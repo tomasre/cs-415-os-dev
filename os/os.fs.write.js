@@ -6,14 +6,15 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
 
     var MAX_WRITE_SIZE = 100;
     os.fs.write = writeFile;
+    var workingDirectory = os._internals.fs.disk.root;
 
-    function writeFile(fileName,data,cb){
+    function writeFile(path,data,cb){
         var psname = os._internals.ps.runningProcess.slice(0);
 
         os._internals.fs.operationQueue.push({
             operation: function () {
                 setTimeout(function () {
-                    performWriteFile(psname, fileName, data, cb);
+                    performWriteFile(psname, path, data, cb);
                 }, generateRandomTimeout());
             },
             // copy string
@@ -21,15 +22,16 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
         });
     }
 
-    function performWriteFile(psname, fileName, dataPar, cb){
+    function performWriteFile(psname, path, dataPar, cb){
         var entrypoint;
+        var writeTarget = parsePath(path);
 
-        var fileString = os._internals.fs.disk[fileName].data;
+        var fileString = workingDirectory[writeTarget].data;
 
-        if(withinMaxSize(dataPar.length) && fileExists(fileName)){
-            os._internals.fs.disk[fileName].data = fileString + dataPar;
+        if(withinMaxSize(dataPar.length) && fileExists(writeTarget)){
+            workingDirectory[writeTarget].data = fileString + dataPar;
             entrypoint = function(){
-                cb(0,fileName)
+                cb(0,path)
             }
         } else {
             entrypoint = function() {
@@ -52,15 +54,38 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
     }
 
     function fileExists(name){
-
-        if(typeof os._internals.fs.disk[name] === "undefined") {
-
+        if(typeof workingDirectory[name] === "undefined") {
             return false;
-
         } else {
-
             return true;
-
         }
     }
+
+    function parsePath(path) {
+        //splits absolute path provided to the function by pash
+        var splitPath = path.split('/');
+        console.log(splitPath);
+
+        //insures the working directory starts at root
+        workingDirectory = os._internals.fs.disk.root;
+
+        // removes root from the path
+        splitPath.shift();
+
+        //removes destinations from the path
+        var newFileName = splitPath.pop();
+
+        console.log(splitPath);
+
+        if (splitPath.length > 0){
+            for( var i = 0; i< splitPath.length; i++) {
+                var temp;
+                temp = workingDirectory[splitPath[i]];
+                workingDirectory = temp;
+            }
+        }
+        //returns name of the file you want to create
+        return newFileName;
+    }
+
 })();

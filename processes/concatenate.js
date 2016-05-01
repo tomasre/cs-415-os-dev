@@ -155,7 +155,7 @@
                     }
               }
 
-                os.fs.close(fh.name, function(errClose, msg){
+                os.fs.close(fh.path, function(errClose, msg){
 
                     if (errClose === -1) {
                         console.log(msg);

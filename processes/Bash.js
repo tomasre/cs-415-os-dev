@@ -5,9 +5,6 @@
         currentDirectory: os._internals.fs.disk.root,
         string: "root/"
     };
-
-    console.log(pwd.currentDirectory);
-
     var indent = "     ";
     var options = {
         stdin: streamListener,
@@ -26,7 +23,6 @@
     function main(options, argv) {
         stdout = options.stdout;
         console.log('BASH starting');
-
     }
 
     function streamListener (stream) {
@@ -47,13 +43,20 @@
                 break;
 
             case "copy": //copy is finished
-                os._internals.ps.copyProcessTableEntryToPCB('copy', null, [command[1], command[2]]);
-                //os.ps.register('copy',os.bin.copy(command[1],command[2]));
-                stdout.appendToBuffer('Copying' +command[1]+' to destination ' + command[2]);
+                var sourcePath = convertToAbsolute(command[1]);
+                var destinationPath = convertToAbsolute(command[2]);
+                if(validPath(path)) {
+                    os._internals.ps.copyProcessTableEntryToPCB('copy', null, [sourcePath, destinationPath]);
+                    //os.ps.register('copy',os.bin.copy(command[1],command[2]));
+                    stdout.appendToBuffer('Copying' + command[1] + ' to destination ' + command[2]);
+                }
                 break;
 
             case "rm":
-                os._internals.ps.copyProcessTableEntryToPCB('remove', null, [command[1]]);
+                var path = convertToAbsolute(command[1]);
+                if(validPath(path)) {
+                    os._internals.ps.copyProcessTableEntryToPCB('remove', null, [path]);
+                }
                 stdout.appendToBuffer("removing " +command[1]);
                 break;
 
@@ -87,8 +90,10 @@
                 break;
 
             case "cat":
-                os._internals.ps.copyProcessTableEntryToPCB('concatenate', null, [command[1]]);
-                //stdout.appendToBuffer(response);
+                var path = convertToAbsolute(command[1]);
+                if(validPath(path)) {
+                    os._internals.ps.copyProcessTableEntryToPCB('concatenate', null, [path]);
+                }
                 break;
 
             case "exec":
@@ -152,6 +157,18 @@
 
             case "cd":
                 changeDirectory(command[1]);
+                break;
+
+            case "mkdir":
+                var path = convertToAbsolute(command[1]);
+                if(validPath(path)) {
+                    os._internals.ps.copyProcessTableEntryToPCB('mkDir', null, path);
+                }
+                break;
+
+            case "pwd":
+                stdout.appendToBuffer(pwd.string);
+                break;
         }
     }
 
@@ -185,11 +202,15 @@
         return true;
     }
 
-    function convertToAbsolute(path){
-        if(!pathAbsolute(path)){
-            path = pwd.string + path;
+    function convertToAbsolute(path) {
+        if (!pathAbsolute(path)) {
+            if (pwd.string.charAt(pwd.string.length - 1) != '/') {
+                path = pwd.string + '/' + path;
+            } else {
+                path = pwd.string + path;
+            }
         }
-        return path
+        return path;
     }
 
     function changeDirectory(path){
