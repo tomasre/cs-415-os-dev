@@ -14,8 +14,11 @@
         var pcbOptions;
         if (!options) {
             pcbOptions = os._internals.ps.processTable[name].options;
-        } else if (options == 'pipe') {
-			os._internals.ps.processTable[name].options.pipe = true;
+        } else if (options == 'pipeIn') {
+			os._internals.ps.processTable[name].options.pipeIn = true;
+			pcbOptions = os._internals.ps.processTable[name].options;
+		} else if (options == 'pipeOut') {
+			os._internals.ps.processTable[name].options.pipeOut = true;
 			pcbOptions = os._internals.ps.processTable[name].options;
 		} else {
             pcbOptions = options;
@@ -46,16 +49,21 @@
             if (!args) {
                 args = [];
             }
-			var pipeFlag = false;
+			var pipeInFlag = false;
+			var pipeOutFlag = false;
 			if(options != null) {
-				if(options.hasOwnProperty("pipe")) {
-					pipeFlag = options.pipe;
+				if(options.hasOwnProperty("pipeIn")) {
+					pipeInFlag = options.pipeIn;
+				}
+				if(options.hasOwnProperty("pipeOut")) {
+					pipeOutFlag = options.pipeOut;
 				}
 			}		
             cb({
                 stdin: pcb.streams.stdin,
                 stdout: pcb.streams.stdout,
-				pipe: pipeFlag
+				pipeIn: pipeInFlag,
+				pipeOut: pipeOutFlag
             }, args);
         };
 
