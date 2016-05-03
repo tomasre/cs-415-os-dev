@@ -186,7 +186,18 @@
             // manual now implemented
             case "man":
                 if(os._internals.ps.processTable[command[1]]){
-                    stdout.appendToBuffer(os._internals.ps.processTable[command[1]].man);
+					
+			// Determine if man should be piped to other process; if not, print to console
+			if(command[2] == "|" && command[2] != undefined) {
+				if(command[3] == undefined)
+					console.log("pipe redirection error; no process for input");
+				else {
+					os._internals.ps.pipeOutputToBuffer(os._internals.ps.processTable[command[1]].man);
+					os._internals.ps.copyProcessTableEntryToPCB('pipeIn', null, command.slice(3));
+				}
+			}
+			else	
+				stdout.appendToBuffer(os._internals.ps.processTable[command[1]].man);
                 }
 
         }
