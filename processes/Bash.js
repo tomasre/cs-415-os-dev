@@ -83,6 +83,12 @@
                 stdout.appendToBuffer('Running semaphoretest.js');
                 break;
 
+            case "charcounter":
+                os._internals.ps.copyProcessTableEntryToPCB('CharCounter', null, ['argument', 'argument2']);
+                stdout.appendToBuffer('Running CharCounter.js');
+                break;
+
+
             case "cat":
                 os._internals.ps.copyProcessTableEntryToPCB('concatenate', null, [command[1]]);
                 //stdout.appendToBuffer(response);
@@ -96,6 +102,7 @@
                     stdout.appendToBuffer("invalid command");
                 }
                 break;
+                
             case "kill":
             // TODO: change logic
                 if (command.length === 1)
