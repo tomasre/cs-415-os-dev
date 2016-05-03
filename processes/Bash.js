@@ -41,8 +41,10 @@
 				if(command[1] == "|" && command[1] != undefined) {
 					if(command[2] == undefined)
 						console.log("pipe redirection error; no process for input");
-					else
-						os._internals.ps.copyProcessTableEntryToPCB('pipe', null, [response, command[2]]);
+					else {
+						os._internals.ps.pipeOutputToBuffer(response);
+						os._internals.ps.copyProcessTableEntryToPCB('pipeIn', null, command.slice(2));
+					}
 				}
 				else
 					stdout.appendToBuffer(response);
@@ -75,17 +77,12 @@
 
             case "threadtest":
                 os._internals.ps.copyProcessTableEntryToPCB('ThreadTest', null, ['argument', 'argument2']);
-                stdout.appendToBuffer('Running threadtest.js');
+                stdout.appendToBuffer('Running ddrivertest.js');
                 break;
 
             case "mutextest":
                 os._internals.ps.copyProcessTableEntryToPCB('MutexTest', null, ['argument', 'argument2']);
                 stdout.appendToBuffer('Running mutextest.js');
-                break;
-
-            case "semaphoretest":
-                os._internals.ps.copyProcessTableEntryToPCB('SemaphoreTest', null, ['argument', 'argument2']);
-                stdout.appendToBuffer('Running semaphoretest.js');
                 break;
 
             case "cat":
@@ -95,8 +92,25 @@
 
             case "exec":
                 if(os._internals.ps.processTable[command[1]]){
-                    var args = command.slice(2,command.length);
-                    os._internals.ps.copyProcessTableEntryToPCB(command[1],null,args);
+					// Determine if ls should be piped to other process; if not, print to console
+					if(command[3] == "|" && command[3] != undefined) {
+						if(command[4] == undefined)
+							console.log("pipe redirection error; no process for input");
+						else {
+							os._internals.ps.copyProcessTableEntryToPCB('pipeOut', null, command);
+						}
+					}
+					else if(command[4] == "|" && command[4] != undefined) {
+						if(command[5] == undefined)
+							console.log("pipe redirection error; no process for input");
+						else {
+							os._internals.ps.copyProcessTableEntryToPCB('pipeOut', null, command);
+						}
+					}
+					else {
+						var args = command.slice(2,command.length);
+						os._internals.ps.copyProcessTableEntryToPCB(command[1],null,args);
+					}
                 } else {
                     stdout.appendToBuffer("invalid command");
                 }
@@ -125,13 +139,15 @@
                         pcb[i].state === os._internals.ps.states.WAITING)
                         ps += "&nbsp;&nbsp;" + pcb[i].id.toString() + "&nbsp;&nbsp;" + pcb[i].name + "<br>";
                 }
-
-                // Determine if ps should be piped to other process; if not, print to console
+				
+				// Determine if ps should be piped to other process; if not, print to console
 				if(command[1] == "|" && command[1] != undefined) {
 					if(command[2] == undefined)
 						console.log("pipe redirection error; no process for input");
-					else
-						os._internals.ps.copyProcessTableEntryToPCB('pipe', null, [ps, command[2]]);
+					else {
+						os._internals.ps.pipeOutputToBuffer(ps);
+						os._internals.ps.copyProcessTableEntryToPCB('pipeIn', null, command.slice(2));
+					}
 				}
 				else
 					stdout.appendToBuffer(ps);
@@ -158,8 +174,10 @@
 				if(command[1] == "|" && command[1] != undefined) {
 					if(command[2] == undefined)
 						console.log("pipe redirection error; no process for input");
-					else
-						os._internals.ps.copyProcessTableEntryToPCB('pipe', null, [help, command[2]]);
+					else {
+						os._internals.ps.pipeOutputToBuffer(help);
+						os._internals.ps.copyProcessTableEntryToPCB('pipeIn', null, command.slice(2));
+					}
 				}
 				else				
 					stdout.appendToBuffer(help);
