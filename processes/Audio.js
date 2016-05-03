@@ -14,7 +14,13 @@
 
     function Audio_Player (options, argv) {
         stdout = options.stdout;
-        stdout.appendToBuffer('Preparing to Play ' + argv[0]);
+        stdout.appendToBuffer('Preparing ' + argv[0]);
+
+        stdout.appendToBuffer("Pick A Song To Play!");
+        for( var i = 0; i<songs.length; i++) {
+            stdout.appendToBuffer(songs[i]);
+        }
+        stdout.appendToBuffer('Type Play or Pause followed by the [song Name]');
 
         var thread1 = os.ps.createThread(function(){
             juicy = new Sound("AudioSamples/Juicy.mp3");
@@ -84,10 +90,10 @@
     }
 
     function  allThreadsFinished(threadname) {
-        stdout.appendToBuffer("Songs Finished Loading Please Select a Song");
+        stdout.appendToBuffer("Pick A Song To Play!");
         for( var i = 0; i<songs.length; i++) {
             stdout.appendToBuffer(songs[i]);
-        }``
+        }
         stdout.appendToBuffer('Type Play [song Name]');
     }
 

@@ -147,7 +147,7 @@
                 }
                 break;
             case "Audio_Player":
-                os._internals.ps.copyProcessTableEntryToPCB('Audio_Player', null, ["placeholder"]);
+                os._internals.ps.copyProcessTableEntryToPCB('Audio_Player', null, ["Audio Player"]);
 
         }
     }
