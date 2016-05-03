@@ -75,11 +75,12 @@
         stdout: true
     this will request it gets bound to the stdin, and register listenerFunction to the stdin stream
      */
-    function registerProcess(name, cb, options) {
+    function registerProcess(name, cb, options , man) {
         os._internals.ps.processTable[name] = {
             name: name,
             cb: cb,
-            options: options
+            options: options,
+            man: man
         };
     }
 

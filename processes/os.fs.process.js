@@ -12,11 +12,17 @@
         var operation = os._internals.fs.operationQueue.pop();
 
         if (operation) {
+            os.ps.createThread(function () {
 
-            // set the count that a process is waiting for a fs operation and no need to spam the scheduler
-            os._internals.ps.waits.fs++;
+                os._internals.ps.waits.fs++;
 
-            operation.operation();
+                operation.operation();
+
+            }, allThreadsFinished);
         }
+    }
+
+    function allThreadsFinished() {
+        // DONT CARE
     }
 })();

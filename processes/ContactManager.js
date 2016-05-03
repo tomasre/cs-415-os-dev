@@ -1,8 +1,10 @@
 (function() {
-
+// NEW Register process now contains a Manual Property that takes a string which will be displayed
+  // when the user types man process name
+  var userMan = " [search Key] [sourceFile] (optional) [destination file]";
 
   os.bin.ContactManager = ContactManager;
-  os.ps.register('ContactManager', ContactManager, {stdout: true});
+  os.ps.register('ContactManager', ContactManager, {stdout: true},userMan);
 
   function ContactManager(options, argv) {
     var stdout = options.stdout;

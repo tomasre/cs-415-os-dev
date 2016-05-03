@@ -12,6 +12,7 @@ var os = {
         ps: {
             pcb: [],
             processTable: {},
+            lockedStructures: {},
             states: {
                 START: 'START',
                 STOP: 'STOP',
@@ -27,7 +28,10 @@ var os = {
             // maps to the above waits
             asyncOperationTypes: {
                 FS: 'fs',
-                KEYBOARD_DRIVER: 'inputDriver'
+                KEYBOARD_DRIVER: 'inputDriver',
+                THREAD_COMPLETE: 'threadComplete',
+                MUTEX_LOCK: 'mutexLock',
+                SEMAPHORE_LOCK: 'semaphoreLock'
             }
         },
         stream: {},

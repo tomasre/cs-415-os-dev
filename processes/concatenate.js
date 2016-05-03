@@ -3,7 +3,7 @@
 (function () {
     os.bin.concatenate = catFile;
     os.ps.register('concatenate', catFile, {stdout: true});
-
+    var string;
     function catFile(options, argv){
         var stdout = options.stdout;
         var fileName = argv[0];
@@ -20,7 +20,7 @@
                     if (errorLength === -1) {
                         console.log('contact data: error getting file length:');
                         //console.log(os.errno.errorCode);
-                        console.log('\n');
+
                         // NOTE there was an error so we pass an error to the callback
                         callback('Error');
 
@@ -115,7 +115,7 @@
                             // read was successful
                             // append the data we got
                             buffer += data;
-                            stdout.appendToBuffer(data);
+                            //stdout.appendToBuffer(data);
                             //console.log('VM: read success---------');
 
                             // now we seek forward what we just read
@@ -147,6 +147,14 @@
             },
 
             function (length, fh, fullData, callback) {
+
+                if (fullData) {
+                    var formattedString = fullData.split('\n');
+                    for (var i = 0; i < formattedString.length; i++) {
+                        stdout.appendToBuffer(formattedString[i]);
+                    }
+              }
+
                 os.fs.close(fh.name, function(errClose, msg){
 
                     if (errClose === -1) {
@@ -164,7 +172,7 @@
             if(err === -1){
                 stdout.appendToBuffer('cat Failure');
             } else {
-                stdout.appendToBuffer('cat succses');
+
             }
 
         });

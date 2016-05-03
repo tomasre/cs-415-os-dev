@@ -6,10 +6,21 @@
 (function(){
 
     os._internals.drivers.keyboard = {
-        attachStream: attachStream
+        attachStream: attachStream,
+        deregisterStream: deregisterStream
     };
 
-    var attachedStream;
+    /*
+    attached stream is a queue where only the most recently attachStream receives input
+    */
+    var attachedStream = [];
+
+    /*
+    removes the most recently deregisterStream
+    */
+    function deregisterStream() {
+        attachedStream.pop();
+    }
 
     /*
      registers a listener function
@@ -18,7 +29,7 @@
      two available options are 'any' and 'enter'
      */
     function attachStream(stream) {
-        attachedStream = stream;
+        attachedStream.push(stream);
     }
 
     var input = document.querySelector('input');
@@ -36,13 +47,19 @@
         }
         if (charCode == 13) {
             console.log("success " + input.value);
-            attachedStream.appendToBuffer(input.value);
+
+            if (attachedStream.length > 0) {
+                attachedStream[attachedStream.length - 1].appendToBuffer(input.value);
+            } else {
+                console.log('WARNING keyboard tried to pass value without attached Stream');
+            }
+
             document.getElementById('cL').value = "dummy@OS $ ";
             e.preventDefault();
         }
     });
 
     input.addEventListener('input',function() {
-        console.log('input changed to ', input.value);
+        //console.log('input changed to ', input.value);
     });
 })();
