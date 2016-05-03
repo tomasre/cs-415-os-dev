@@ -23,16 +23,81 @@
 */
 
 'use strict';
+
+var pipeBuffer = "";
 (function () {
-    os.ps.register('pipe', pipe, null);
+    os.ps.register('pipeIn', pipeIn, {stdout: true});
 	
-	function pipe(options, args) {
+	os._internals.ps.pipeOutputToBuffer = pipeOutputToBuffer;
+	
+	function pipeIn(options, args) {
+		var stdout = options.stdout;
 		var cmd;
+
 		// Make sure to call the appropriate process name
-		if(args[1] == 'cat')
-			cmd = 'concatenate';
-		else
+		if(args[0] == 'exec') {
 			cmd = args[1];
-		os._internals.ps.copyProcessTableEntryToPCB(cmd, 'pipe', args[0]);
+			if(args[2] != undefined && args[2] != '|') {
+				var temp = pipeBuffer;
+				pipeBuffer = [temp, args[2]];
+			}
+		}
+		else if(args[0] == 'cat')
+			cmd = 'concatenate';
+		else if(args[0] == 'more')
+			cmd = 'more';
+		else {
+			// Invalid command
+			stdout.appendToBuffer(args[0] + ": Invalid command");
+			return;
+		}
+		os._internals.ps.copyProcessTableEntryToPCB(cmd, 'pipeIn', pipeBuffer);
+	}
+	
+	function pipeOutputToBuffer(output) { 
+		pipeBuffer = output;
+	}
+})();
+
+(function () {
+    os.ps.register('pipeOut', pipeOut, {stdout: true});
+	
+	os._internals.ps.pipeInputToBuffer = pipeInputToBuffer;
+	
+	var bufferArgs;
+	
+	function pipeOut(options, args) {
+		var cmd;
+
+		// Make sure to call the appropriate process name
+		if(args[0] == 'exec') {
+			// If exec, execute the program in pipeOut mode
+			os.ps.pthread_mutex_lock('pipeOut', function (lockedData) {
+				console.log("pipeOut lock");
+				bufferArgs = args;
+				if(args[1] == 'ContactManager')
+					os._internals.ps.copyProcessTableEntryToPCB(args[1], 'pipeOut', args.slice(2));
+				else
+					os._internals.ps.copyProcessTableEntryToPCB(args[1], 'pipeOut', [args[2]]);
+			});
+		}
+		else {
+			// Invalid command
+			stdout.appendToBuffer(args[0] + ": Invalid command");
+			return;			
+		}
+	}
+	
+	function pipeInputToBuffer(input) { 
+		pipeBuffer = input;
+		
+		// Input recieved; unlock pipeOut and call the program to pipe the buffered input to
+		os.ps.pthread_mutex_unlock('pipeOut', function () {
+			console.log("pipeOut unlock");
+			if(bufferArgs[1] == 'ContactManager')
+				os._internals.ps.copyProcessTableEntryToPCB('pipeIn', null, bufferArgs.slice(5));
+			else
+				os._internals.ps.copyProcessTableEntryToPCB('pipeIn', null, bufferArgs.slice(4));	
+		});
 	}
 })();
