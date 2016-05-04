@@ -152,6 +152,9 @@
                 if(os._internals.ps.processTable[command[1]]){
                     stdout.appendToBuffer(os._internals.ps.processTable[command[1]].man);
                 }
+                break;
+            case "Audio_Player":
+                os._internals.ps.copyProcessTableEntryToPCB('Audio_Player', null, ["Audio Player"]);
 
         }
     }
