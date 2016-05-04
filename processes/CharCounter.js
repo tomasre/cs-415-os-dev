@@ -1,8 +1,9 @@
 /*
- * CharCount - Author:Darrel Daquigan
+ * GetInitials - Author:Darrel Daquigan
  * 
- * This process reads in a file and outputs a file of an array of
- * the number of occurences of each char in the input file
+ * This process reads in a file of a list of names and ouputs 
+ * a file of a list of corresponding initials
+ * 
 */
 'use strict';
 
@@ -22,7 +23,7 @@
 			function (callback) {
 				os.fs.length(inputFile, function (errorLength, length) {
 					if (errorLength === -1){
-						console.log('CharCounter data: error getting file length: ' +
+						console.log('initials data: error getting file length: ' +
 							os.errno.errorCode + '\n');
 						callback('Error');
 					}
@@ -48,7 +49,7 @@
 
 			// read input file
 			function (length, fh, waterfallCallBack) {
-				var CHARS_TO_READ = ;
+				var CHARS_TO_READ = 100;
 				var currentPosition = 0;
 				var fullFile = '';
 
@@ -87,7 +88,7 @@
 			//open output file
 			function (length, fh, fullData, callback) {
 				var result = countChars(fullData, length);
-				var defaulDestination = "charCount.csv";
+				var defaulDestination = "newCharCount.csv";
 
 				var outputFile;
 
@@ -97,7 +98,7 @@
 				else outputFile = defaulDestination;
 				
 
-				stdout.appendToBuffer("Exporting Char Count to " + outputFile);
+				stdout.appendToBuffer("Exporting Char Counts to " + outputFile);
 
 				async.waterfall([
 					//create output file
@@ -174,72 +175,16 @@
 
 		function (error, result) {
 			if (error === -1) 
-				console.log('CharCount: ERROR in execution. exited early');
+				console.log('CharCounter: ERROR in execution. exited early');
 			else {
 				stdout.appendToBuffer("Finished");
-				console.log('Get Initials Done');
+				console.log('CharCounter Done');
 			}
 		});
 	}
 
-	function countChars(fullData, length) {
-		var countArray = Array.apply(null, Array(128)).map(Number.prototype.valueOf,0);
-		var posArray = Array.apply(null, Array(128)).map(Number.prototype.valueOf,0);
-
-		for (var i = 0; i < 128; i++){
-			os.ps.createThread(checkDone(i),allThreadsFinished);
-		}
-
-		function checkDone(charCode){
-			std.out.appendToBuffer("CharCount running in seperate context");
-
-			os.ps.pthread_mutexlock('PosArrayMutex',function (posArray){
-				if(posArray[index] > length){
-					os.ps.pthread_mutex_unlock('PosArrayMutex', function(){
-						stdout.appendToBuffer('CharCount done running in seperatecontext');
-					});
-				}
-				else
-					checkChar(posArray, charCode);
-			}
-		}
-
-		function checkChar(posArray, charCode){
-			if (fullData.charAt(posArray[charCode]) == String.fromCharCode(charCode)){
-				std.out.appendToBuffer("CharCount running in seperate context");
-				os.ps.pthread_mutexlock('CountArrayMutex', function(countArray){
-					countArray[charCode]++;
-				})
-				os.ps.pthread_mutex_unlock('CountArrayMutex', function(){
-					stdout.appendToBuffer('CharCount done running in seperate context');
-				});
-			}
-			posArray[charCode]++;
-			os.ps.pthread_mutex_unlock('PosArrayMutex',function(){
-					stdout.appendToBuffer('CharCount done running in seperatecontext');
-				});
-			checkDone(charCode);
-		}
-		checkDone();
-
-		function allThreadsFinished(threadName) {
-        	stdout.appendToBuffer('All threads for CharCount Finished --> last thread' + threadName);
-			
-		}
-
-		var countString = "";
-		var first = true;
-
-		for (var i = 0; i< 128; i++){
-			if (countArray[i] > 0){
-				if (!first){
-					countString += ", ";
-				}
-				countString += (String.fromCharCode(i) + ":" + countArray[i]);
-				first = false;
-			}
-		}
-		return countString;
+	function countChars(fullData,length) {
+		return "CharCounter testpass";
 	}
 
 })();
