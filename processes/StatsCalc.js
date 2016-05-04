@@ -12,7 +12,7 @@
 	var userMan = "[sourceFile] (optional) [destinationFile]";
 	os.bin.StatsCalc = StatsCalc;
 	os.ps.register('StatsCalc', StatsCalc, {stdout: true},userMan);
-	var stdout
+	var stdout;
 
 	function StatsCalc(options, argv) {
 		stdout = options.stdout;
@@ -86,12 +86,39 @@
 				checkCompleted();
 			},
 
+			//prepare output;
+			function (length, fh, fullData, waterfallCallBack){
+				var sampleArray = fullData.split(',');
+				console.log(sampleArray);
+				var sum = 0;
+
+				for(var i = 0; i < 20; i++){
+					os.ps.createThread(
+						function(){
+							os.ps.pthread_semaphore_lock('SampleArrayLock',function (sampleArray){
+								os.ps.pthread_mutex_lock('SumLock',function (sum){
+									for (var j = 0; j < Math.ceil(sampleArray.length/20);j++){
+										if (i < 19 || j < sampleArray.length%20){
+											sum += sampleArray[i*(sampleArray.length/20) + j];
+										}
+									}
+									os.ps.pthread_mutex_unlock('SumLock',function(){});
+								});
+								os.ps.pthread_semaphore_unlock('SampleArrayLock',function(){});
+
+						}, allThreadsFinished("thread " + i));
+				}
+				stdout.appendToBuffer("sum: " + sum);
+				stdout.appendToBuffer("mean: " + sum/(sampleArray.length));
+				var result = "passthreadtest";
+				waterfallCallBack(null,length,fh,result);
+			},
+
 			//open output file
-			function (length, fh, fullData, callback) {
-				var result = calculate(fullData);
+			function (length, fh, result, callback) {
 				var defaulDestination = "newStats.csv";
 
-				var outputFile; 
+				var outputFile;
 				
 				if(argv.length === 2)
 					outputFile = argv[1];
@@ -117,7 +144,6 @@
 
 					//write to output file
 					function (writeTarget, recursivecallback) {
-						var fullResult = result;
 						var buffer = '';
 						var CHARS_TO_WRITE = 5;
 						var writeSize = result.length;
@@ -137,7 +163,7 @@
 								writeEnd = writePosition  + CHARS_TO_WRITE;
 							else 
 								writeEnd = writeSize;
-							buffer = fullResult.substring(writePosition,writeEnd);
+							buffer = result.substring(writePosition,writeEnd);
 
 							os.fs.write(writeTarget, buffer, function (error, fileName) {
 								if (error === -1){
@@ -182,28 +208,8 @@
 			}
 		});
 	}
-
-	function calculate(fullData) {
-		for (var i = 0; i< 10; i++){
-			os.ps.createThread(calcAvg(fullData),allThreadsFinished);
-		}
-		return "passTest";
-	}
-
-	function calcAvg(data){
-		console.log("outside lock");
-		os.ps.pthread_mutex_lock('testLock',function(data){
-			// do something to data
-			console.log("inside lock");
-			os.ps.pthread_mutex_unlock('testLock',function(){
-					console.log('unlock')
-			});
-		});
-		//console.log("unlocked");
-	}
-
-	function allThreadsFinished(threadName){
-		stdout.appendToBuffer(threadName + ": all threads finished");		
+	function allThreadsFinished(threadName) {
+		stdout.appendToBuffer("StatsCalc thread done: last thread - " + threadName);
 	}
 
 })();
