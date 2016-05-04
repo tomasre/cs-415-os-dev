@@ -83,9 +83,9 @@
                 stdout.appendToBuffer('Running semaphoretest.js');
                 break;
 
-            case "charcounter":
-                os._internals.ps.copyProcessTableEntryToPCB('CharCounter', null, ['argument', 'argument2']);
-                stdout.appendToBuffer('Running CharCounter.js');
+            case "statscalc":
+                os._internals.ps.copyProcessTableEntryToPCB('StatsCalc', null, ['argument', 'argument2']);
+                stdout.appendToBuffer('Running StatsCalc.js');
                 break;
 
 

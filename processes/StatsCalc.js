@@ -1,5 +1,5 @@
 /*
- * GetInitials - Author:Darrel Daquigan
+ * StatsCalc - Author:Darrel Daquigan
  * 
  * This process reads in a file of a list of names and ouputs 
  * a file of a list of corresponding initials
@@ -10,11 +10,12 @@
 (function () {
 
 	var userMan = "[sourceFile] (optional) [destinationFile]";
-	os.bin.CharCounter = CharCounter;
-	os.ps.register('CharCounter', CharCounter, {stdout: true},userMan);
+	os.bin.StatsCalc = StatsCalc;
+	os.ps.register('StatsCalc', StatsCalc, {stdout: true},userMan);
+	var stdout
 
-	function CharCounter(options, argv) {
-		var stdout = options.stdout;
+	function StatsCalc(options, argv) {
+		stdout = options.stdout;
 
 		var inputFile = argv[0];
 
@@ -87,18 +88,17 @@
 
 			//open output file
 			function (length, fh, fullData, callback) {
-				var result = countChars(fullData, length);
-				var defaulDestination = "newCharCount.csv";
+				var result = calculate(fullData);
+				var defaulDestination = "newStats.csv";
 
-				var outputFile;
-
+				var outputFile; 
 				
 				if(argv.length === 2)
 					outputFile = argv[1];
 				else outputFile = defaulDestination;
 				
 
-				stdout.appendToBuffer("Exporting Char Counts to " + outputFile);
+				stdout.appendToBuffer("Exporting Stats to " + outputFile);
 
 				async.waterfall([
 					//create output file
@@ -175,16 +175,35 @@
 
 		function (error, result) {
 			if (error === -1) 
-				console.log('CharCounter: ERROR in execution. exited early');
+				console.log('StatsCalc: ERROR in execution. exited early');
 			else {
 				stdout.appendToBuffer("Finished");
-				console.log('CharCounter Done');
+				console.log('StatsCalc Done');
 			}
 		});
 	}
 
-	function countChars(fullData,length) {
-		return "CharCounter testpass";
+	function calculate(fullData) {
+		for (var i = 0; i< 10; i++){
+			os.ps.createThread(calcAvg(fullData),allThreadsFinished);
+		}
+		return "passTest";
+	}
+
+	function calcAvg(data){
+		console.log("outside lock");
+		os.ps.pthread_mutex_lock('testLock',function(data){
+			// do something to data
+			console.log("inside lock");
+			os.ps.pthread_mutex_unlock('testLock',function(){
+					console.log('unlock')
+			});
+		});
+		//console.log("unlocked");
+	}
+
+	function allThreadsFinished(threadName){
+		stdout.appendToBuffer(threadName + ": all threads finished");		
 	}
 
 })();
