@@ -14,7 +14,13 @@
         var pcbOptions;
         if (!options) {
             pcbOptions = os._internals.ps.processTable[name].options;
-        } else {
+        } else if (options == 'pipeIn') {
+			os._internals.ps.processTable[name].options.pipeIn = true;
+			pcbOptions = os._internals.ps.processTable[name].options;
+		} else if (options == 'pipeOut') {
+			os._internals.ps.processTable[name].options.pipeOut = true;
+			pcbOptions = os._internals.ps.processTable[name].options;
+		} else {
             pcbOptions = options;
         }
         generatePCBEntry(name,
@@ -43,9 +49,21 @@
             if (!args) {
                 args = [];
             }
+			var pipeInFlag = false;
+			var pipeOutFlag = false;
+			if(options != null) {
+				if(options.hasOwnProperty("pipeIn")) {
+					pipeInFlag = options.pipeIn;
+				}
+				if(options.hasOwnProperty("pipeOut")) {
+					pipeOutFlag = options.pipeOut;
+				}
+			}		
             cb({
                 stdin: pcb.streams.stdin,
-                stdout: pcb.streams.stdout
+                stdout: pcb.streams.stdout,
+				pipeIn: pipeInFlag,
+				pipeOut: pipeOutFlag
             }, args);
         };
 
@@ -63,7 +81,6 @@
             pcb.streams.stdin.registerStreamListener(options.stdin, name);
             os._internals.drivers.keyboard.attachStream(pcb.streams.stdin);
         }
-
         os._internals.ps.pcb.push(pcb);
     }
 
