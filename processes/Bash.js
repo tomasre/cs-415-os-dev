@@ -68,6 +68,11 @@
                 stdout.appendToBuffer('Running VectorCalculator.js');
                 break;
 
+            case "countchars":
+                os.internals.ps.copyProcessTableEntryToPCB('countchars');
+                stdout.appendToBuffer('Running CountChars.js');
+                break;
+
             // for now hardcoded
             case "drivertest":
                 os._internals.ps.copyProcessTableEntryToPCB('DeviceDriverTest');
@@ -88,11 +93,13 @@
             case "philosophers":
                 os._internals.ps.copyProcessTableEntryToPCB('DiningPhilosophers', null, ['argument', 'argument2']);
                 break;
-                
+
             case "semaphoretest":
                 os._internals.ps.copyProcessTableEntryToPCB('SemaphoreTest', null, ['argument', 'argument2']);
                 stdout.appendToBuffer('Running semaphoretest.js');
                 break;
+
+
 
             case "statscalc":
                 os._internals.ps.copyProcessTableEntryToPCB('StatsCalc', null, ['argument', 'argument2']);
@@ -183,7 +190,7 @@
 					help += "<br>";
                 }
                 help += "To Run a User Process Type<br>";
-                help += "exe (process) (args) <br>";
+                help += "exec (process) (args) <br>";
 				help += "for more info type man (process)";
 				
 				// Determine if help should be piped to other process; if not, print to console

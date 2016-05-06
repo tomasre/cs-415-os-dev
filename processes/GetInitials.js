@@ -9,7 +9,8 @@
 
 (function () {
 
-	var userMan = "[sourceFile] (optional) [destinationFile]";
+	var userMan = "[sourceFile] (optional) [destinationFile]\n"+
+		"try exec GetInitials rapper_names.csv";
 	os.bin.GetInitials = GetInitials;
 	os.ps.register('GetInitials', GetInitials, {stdout: true},userMan);
 
