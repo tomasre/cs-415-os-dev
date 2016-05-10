@@ -2,6 +2,9 @@
  * Created by euphoric on 3/25/16.
  */
 (function() {
+    //var sourceDirectory = os._internals.fs.disk.root;
+    //var targetDirectory = os._internals.fs.disk.root;
+
     os.bin.copy = copyFile;
 
     os.ps.register('copy', copyFile, {stdout: true});
@@ -236,6 +239,10 @@
 
             }
         });
+
+    }
+
+    function parsePath(path){
 
     }
 

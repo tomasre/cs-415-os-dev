@@ -84,7 +84,7 @@
             function (length, fh, waterfallCallback) {
 				if(pipe == true) {
 					waterfallCallback(null, length, fh, fileName);
-				} else {				
+				} else {
 					// we want to read and seek until position === length
 					// our position is currently at 0
 
@@ -173,13 +173,14 @@
 
                 if (fullData) {
                     var formattedString = fullData.split('\n');
-					
+
 					// Account for html <br> in case ls has been piped in
 					if(formattedString.length == 1)
 						formattedString = fullData.split('<br>');
                     for (var i = 0; i < formattedString.length; i++) {
                         stdout.appendToBuffer(formattedString[i]);
                     }
+
 				}
 
 				// If piped, set the flag to off to complete the pipe process;
@@ -200,6 +201,7 @@
 
 					});
 				}
+ 0
             }], function(err, catResult){
 
             if(err === -1){

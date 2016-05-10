@@ -178,7 +178,7 @@
 
         var destinationFile;
         var result = search(fullData, searchKey);
-        var defaultDestination = "newContact.csv";
+        var defaultDestination = "root/home/newContact.csv";
 
         console.log("Contact Found: " + result);
         stdout.appendToBuffer("Contact Found: " + result);

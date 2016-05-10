@@ -1,6 +1,10 @@
 'use strict';
 
 (function () {
+    var pwd = {
+        currentDirectory: os._internals.fs.disk.root,
+        string: "root/"
+    };
     var indent = "     ";
     var options = {
         stdin: streamListener,
@@ -19,7 +23,6 @@
     function main(options, argv) {
         stdout = options.stdout;
         console.log('BASH starting');
-
     }
 
     function streamListener (stream) {
@@ -34,9 +37,10 @@
         // need more info on how we are going to handle arugment
         //
         switch(command[0]){
-            case "ls": // need to figure out how to play with the streams
-                var response = Object.getOwnPropertyNames(os._internals.fs.disk).join("<br>");
-				
+            case "ls": // merged branch
+
+                var response = Object.getOwnPropertyNames(pwd.currentDirectory).join("<br>");
+
 				// Determine if ls should be piped to other process; if not, print to console
 				if(command[1] == "|" && command[1] != undefined) {
 					if(command[2] == undefined)
@@ -48,16 +52,24 @@
 				}
 				else
 					stdout.appendToBuffer(response);
+
                 break;
 
             case "copy": //copy is finished
-                os._internals.ps.copyProcessTableEntryToPCB('copy', null, [command[1], command[2]]);
-                //os.ps.register('copy',os.bin.copy(command[1],command[2]));
-                stdout.appendToBuffer('Copying' +command[1]+' to destination ' + command[2]);
+                var sourcePath = convertToAbsolute(command[1]);
+                var destinationPath = convertToAbsolute(command[2]);
+                if(validPath(path)) {
+                    os._internals.ps.copyProcessTableEntryToPCB('copy', null, [sourcePath, destinationPath]);
+                    //os.ps.register('copy',os.bin.copy(command[1],command[2]));
+                    stdout.appendToBuffer('Copying' + command[1] + ' to destination ' + command[2]);
+                }
                 break;
 
             case "rm":
-                os._internals.ps.copyProcessTableEntryToPCB('remove', null, [command[1]]);
+                var path = convertToAbsolute(command[1]);
+                if(validPath(path)) {
+                    os._internals.ps.copyProcessTableEntryToPCB('remove', null, [path]);
+                }
                 stdout.appendToBuffer("removing " +command[1]);
                 break;
 
@@ -106,10 +118,16 @@
                 stdout.appendToBuffer('Running StatsCalc.js');
                 break;
 
+            case "Audio_Player":
+                os._internals.ps.copyProcessTableEntryToPCB('Audio_Player', null, ["Audio Player"]);
+                break;
+
 
             case "cat":
-                os._internals.ps.copyProcessTableEntryToPCB('concatenate', null, [command[1]]);
-                //stdout.appendToBuffer(response);
+                var path = convertToAbsolute(command[1]);
+                if(validPath(path)) {
+                    os._internals.ps.copyProcessTableEntryToPCB('concatenate', null, [path]);
+                }
                 break;
 
             case "exec":
@@ -223,12 +241,104 @@
 				stdout.appendToBuffer(os._internals.ps.processTable[command[1]].man);
                 }
                 break;
-            case "Audio_Player":
-                os._internals.ps.copyProcessTableEntryToPCB('Audio_Player', null, ["Audio Player"]);
 
+            case "cd":
+                changeDirectory(command[1]);
+                break;
+
+            case "mkdir":
+                var path = convertToAbsolute(command[1]);
+                if(validPath(path)) {
+                    os._internals.ps.copyProcessTableEntryToPCB('mkDir', null, path);
+                }
+                break;
+
+            case "pwd":
+                stdout.appendToBuffer(pwd.string);
+                break;
         }
     }
 
+    function pathAbsolute(path) {
+        var splitPath = path.split("/");
+        if(splitPath[0] === 'root'){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    function validPath(path) {
+        if (path === '..' && pwd.currentDirectory != os._internals.fs.disk.root){
+            return true;
+        }
 
+        var node = os._internals.fs.disk.root;
+        console.log(node);
+        path = convertToAbsolute(path);
+        var splitPath = path.split('/');
+        splitPath.shift();
 
+        for (var i = 0 ; i < splitPath.length; i++){
+            node = node[splitPath[i]];
+
+            if(!node){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function convertToAbsolute(path) {
+        if (!pathAbsolute(path)) {
+            if (pwd.string.charAt(pwd.string.length - 1) != '/') {
+                path = pwd.string + '/' + path;
+            } else {
+                path = pwd.string + path;
+            }
+        }
+        return path;
+    }
+
+    function changeDirectory(path){
+        var splitPath;
+
+        if(validPath(path)) {
+            if (path === '..') {
+                var temp = pwd.string.split('/');
+                temp.pop();
+                path = temp.join('/');
+
+                pwd.string = path;
+                pwd.currentDirectory = os._internals.fs.disk.root;
+                splitPath = path.split('/');
+                splitPath.shift();
+
+                for (var i = 0; i < splitPath.length; i++) {
+                    console.log(pwd.currentDirectory);
+                    pwd.currentDirectory = currentDirectory[splitPath[i]];
+
+                }
+            } else {
+                path = convertToAbsolute(path);
+                pwd.string = path;
+                pwd.currentDirectory = os._internals.fs.disk.root;
+                splitPath = path.split('/');
+                splitPath.shift();
+
+                for (var i = 0; i < splitPath.length; i++) {
+                    console.log(splitPath[i]);
+                    console.log('Current Directory In Change Directory Loop: ');
+                    console.log(pwd.currentDirectory);
+                    
+                    var temp;
+                    temp = pwd.currentDirectory[splitPath[i]];
+                   
+                    pwd.currentDirectory = temp;
+                }
+            }
+        } else {
+            stdout.appendToBuffer("Invalid Path");
+        }
+    }
 })();

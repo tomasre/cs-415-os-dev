@@ -1,10 +1,12 @@
 'use strict';
 (function () {
-    
+    os._internals.fs.disk.root={};
+	os._internals.fs.disk.root.home={};
+
     /*
     Stats.js initial file
      */
-    os._internals.fs.disk['Stats_Data.csv'] = {
+    os._internals.fs.disk.root.home['Stats_Data.csv'] = {
         // the actual data
         data: '1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n' +
         '1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n' +
@@ -18,14 +20,14 @@
 
 
     
-    os._internals.fs.disk['integers.csv']={
+    os._internals.fs.disk.root.home['integers.csv']={
 		data: "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37",
 
 		meta:{}
 	};
 
 
-    os._internals.fs.disk['more_integers.csv']={
+    os._internals.fs.disk.root.home['more_integers.csv']={
 		data: "1,14,14,9,3,11,18,1,3,5,4,14,11,11,3,9,4,16,17,13," + 
 				"14,2,2,1,19,14,7,6,19,8,5,13,12,18,9,16,15,20,1,11," +
 				"2,20,11,6,9,14,10,1,15,2,5,4,19,2,19,19,8,16,19,20," +
@@ -50,7 +52,7 @@
     /*
     VectorCalculator.js initial file
      */
-    os._internals.fs.disk['vector_data.csv'] = {
+    os._internals.fs.disk.root.home['vector_data.csv'] = {
         // actual data
         data: '1,2\n' +
             '2,3\n' +
@@ -59,7 +61,7 @@
         meta: {}
     };
 
-    os._internals.fs.disk['Contact_Data.csv'] = {
+    os._internals.fs.disk.root.home['Contact_Data.csv'] = {
 
         data: 'LoganF,6264947298\n' +
         'freddy,6264947298\n' +
@@ -71,7 +73,7 @@
     };
 
     //GetInitials.js initial file
-    os._internals.fs.disk['rapper_names.csv'] = {
+    os._internals.fs.disk.root.home['rapper_names.csv'] = {
 
         data: "Calvin Broadus,Andre Young,O'shea Jackson,Eric Wright," + 
                 "Marshall Mathers,Dwayne Carter,Shawn Carter,James Jackson," +
@@ -89,7 +91,7 @@
 
     };
 
-	os._internals.fs.disk['Transaction_Data.csv'] = {
+	os._internals.fs.disk.root.home['Transaction_Data.csv'] = {
 
         data: 	"Starting Balance,+200.00\n" +
 				"Caramel Frappucino,5.88\n" +
