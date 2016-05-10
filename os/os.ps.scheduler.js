@@ -63,6 +63,10 @@
                     var consoleBackup = window.console.log;
                     window.console.log = window.console.info;
                     process.entryPoint();
+                    if (process.entrypointStack && process.entrypointStack.length > 0) {
+                        // return the older entrypoint back to the stack
+                        process.entrypoint = process.entrypointStack.pop();
+                    }
                     window.console.log = consoleBackup;
 
                     if (process.name !== 'fs') {
@@ -120,7 +124,7 @@
                                 }
                                 break;
                         }
-                        
+
                     } else {
                         //console.log('fs ran');
                         process.state = os._internals.ps.states.READY;
@@ -247,6 +251,13 @@
             }
 
             // found the process
+            // save the current entrypoint to a stack
+            // lazy create if not exists
+            if (!process.entrypointStack) {
+                process.entrypointStack = [];
+            }
+            process.entrypointStack.push(process.entryPoint);
+
             process.entryPoint = entrypoint;
             process.state = os._internals.ps.states.READY;
             found = true;
