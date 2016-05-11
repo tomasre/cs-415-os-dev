@@ -14,7 +14,7 @@
             if(errCreate === -1) {
                 stdout.appendToBuffer("Error Creating Directory");
             } else {
-
+                console.log("Sucess calling Create in mkDir");
             }
         })
         

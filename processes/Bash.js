@@ -197,9 +197,11 @@
             case "more":
                 os._internals.ps.copyProcessTableEntryToPCB('more', null, command[1]);
                 break;
+
             case "clear":
                 document.getElementById('textArea').innerHTML = "";
                 break;
+
             case "help":
 				var help = "Available Programs-----<br>";
                 var cliCommands = Object.getOwnPropertyNames(os._internals.ps.processTable);
@@ -227,17 +229,17 @@
             // manual now implemented
             case "man":
                 if(os._internals.ps.processTable[command[1]]){
-					
 			// Determine if man should be piped to other process; if not, print to console
-			if(command[2] == "|" && command[2] != undefined) {
-				if(command[3] == undefined)
-					console.log("pipe redirection error; no process for input");
-				else {
-					os._internals.ps.pipeOutputToBuffer(os._internals.ps.processTable[command[1]].man);
-					os._internals.ps.copyProcessTableEntryToPCB('pipeIn', null, command.slice(3));
-				}
-			}
-			else	
+			    if(command[2] == "|" && command[2] != undefined) {
+				    if(command[3] == undefined) {
+                        console.log("pipe redirection error; no process for input");
+                    } else {
+					    os._internals.ps.pipeOutputToBuffer(os._internals.ps.processTable[command[1]].man);
+					    os._internals.ps.copyProcessTableEntryToPCB('pipeIn', null, command.slice(3));
+				    }
+                break;
+			    }
+			    else
 				stdout.appendToBuffer(os._internals.ps.processTable[command[1]].man);
                 }
                 break;
@@ -247,6 +249,7 @@
                 break;
 
             case "mkdir":
+                console.log("mkdir Command");
                 var path = convertToAbsolute(command[1]);
                 if(validPath(path)) {
                     os._internals.ps.copyProcessTableEntryToPCB('mkDir', null, path);

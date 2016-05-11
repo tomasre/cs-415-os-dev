@@ -15,10 +15,7 @@
           performCreateOperation(process,fileName, cb);
         }, generateRandomTimeout());
       },
-
       processName: process
-
-
   });
 
    }
@@ -27,6 +24,7 @@
     var entrypoint;
     console.log(fileName);
       var createTarget = parsePath(fileName);
+      console.log("Create Target: " + createTarget);
 
     if(typeof workingDirectory[createTarget] === "undefined"){
 
