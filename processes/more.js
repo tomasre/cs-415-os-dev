@@ -9,7 +9,7 @@
  * opening and reading of file (all code from ContactManager.js)
  */
 
-'use strict';
+
 (function() {
 
     /*var options = {

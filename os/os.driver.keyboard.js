@@ -45,9 +45,8 @@
             e = window.event;
             charCode = e.keyCode;
         }
-        if (charCode == 13) {
-            console.log("success " + input.value);
 
+        if (charCode == 13) {
             if (attachedStream.length > 0) {
                 attachedStream[attachedStream.length - 1].appendToBuffer(input.value);
             } else {

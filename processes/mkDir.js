@@ -9,6 +9,7 @@
 
         var stdout = options.stdout;
         var dirPath = argv;
+        console.log("mkdir function target director: " + dirPath);
         
         os.fs.create(dirPath, function (errCreate, newDirectory) {
             if(errCreate === -1) {

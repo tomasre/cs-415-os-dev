@@ -22,7 +22,8 @@
 
   function performCreateOperation(psname, fileName, cb){
     var entrypoint;
-    console.log(fileName);
+
+      console.log(fileName);
       var createTarget = parsePath(fileName);
       console.log("Create Target: " + createTarget);
 
@@ -55,6 +56,7 @@
     function parsePath(path) {
         //splits absolute path provided to the function by pash
         var splitPath = path.split('/');
+        console.log("Split Path array");
         console.log(splitPath);
 
         //insures the working directory starts at root

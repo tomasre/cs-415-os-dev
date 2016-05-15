@@ -1,11 +1,14 @@
-'use strict';
+
 
 (function () {
+
     os.bin.concatenate = catFile;
     os.ps.register('concatenate', catFile, {stdout: true, pipe: false});
 	
     var string;
 	var pipe;
+
+
     function catFile(options, argv){
         var stdout = options.stdout;
 		pipe = false;

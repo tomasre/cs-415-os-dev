@@ -251,9 +251,10 @@
             case "mkdir":
                 console.log("mkdir Command");
                 var path = convertToAbsolute(command[1]);
-                if(validPath(path)) {
-                    os._internals.ps.copyProcessTableEntryToPCB('mkDir', null, path);
-                }
+                console.log("Path: " + path);
+
+                os._internals.ps.copyProcessTableEntryToPCB('mkDir', null, path);
+
                 break;
 
             case "pwd":
@@ -307,10 +308,12 @@
         var splitPath;
 
         if(validPath(path)) {
+            var temp;
             if (path === '..') {
-                var temp = pwd.string.split('/');
+                temp = pwd.string.split('/');
                 temp.pop();
                 path = temp.join('/');
+                
 
                 pwd.string = path;
                 pwd.currentDirectory = os._internals.fs.disk.root;
@@ -334,7 +337,7 @@
                     console.log('Current Directory In Change Directory Loop: ');
                     console.log(pwd.currentDirectory);
                     
-                    var temp;
+
                     temp = pwd.currentDirectory[splitPath[i]];
                    
                     pwd.currentDirectory = temp;
