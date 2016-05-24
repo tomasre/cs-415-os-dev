@@ -15,7 +15,21 @@
         '1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n' +
         '1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n1,2,3,4,5,6\n4,5,6,7,8,9\n',
         // metadata ie simulated file handle
-        meta: {}
+        meta: {},
+        acl: {
+			owner: {
+				user: 'tomas',
+				permissions: 'rwx'
+			},
+			group: {
+				name: 'manage',
+				users: [],
+				permissions: ''
+			},
+			universe: {
+				permissions: ''
+			}
+
     };
 
 
@@ -23,7 +37,21 @@
     os._internals.fs.disk.root.home['integers.csv']={
 		data: "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37",
 
-		meta:{}
+		meta:{},
+		acl: {
+			owner: {
+				user: 'tomas',
+				permissions: 'rwx'
+			},
+			group: {
+				name: 'manage',
+				users: [],
+				permissions: ''
+			},
+			universe: {
+				permissions: ''
+			}
+
 	};
 
 
@@ -44,7 +72,21 @@
 				"19,15,11,17,20,7,12,5,17,20,5,19,19,10,7,18,6,14,11,2," +
 				"7,12,12,1,20,4,12,3,9,6,11",
 
-		meta:{}
+		meta:{},
+		acl: {
+			owner: {
+				user: 'tomas',
+				permissions: 'rwx'
+			},
+			group: {
+				name: 'manage',
+				users: [],
+				permissions: ''
+			},
+			universe: {
+				permissions: ''
+			}
+
 	};
 
     // add more initial files here
@@ -58,7 +100,21 @@
             '2,3\n' +
             '1,3\n' +
             '5,5',
-        meta: {}
+        meta: {},
+        acl: {
+			owner: {
+				user: 'tomas',
+				permissions: 'rwx'
+			},
+			group: {
+				name: 'manage',
+				users: [],
+				permissions: ''
+			},
+			universe: {
+				permissions: ''
+			}
+
     };
 
     os._internals.fs.disk.root.home['Contact_Data.csv'] = {
@@ -69,7 +125,21 @@
         'mike,5555555\n' +
         'LoganF,6264947298\n',
 
-        meta: {}
+        meta: {},
+        acl: {
+			owner: {
+				user: 'logan',
+				permissions: 'rwx'
+			},
+			group: {
+				name: 'manage',
+				users: [],
+				permissions: ''
+			},
+			universe: {
+				permissions: ''
+			}
+
     };
 
     //GetInitials.js initial file
@@ -87,7 +157,21 @@
                 "Russell Jones,Clifford Smith,Corey Woods,Jason Hunter," +
                 "Dennis Coles,Jamel Arief,Lamont Hawkins",
 
-        meta: {}
+        meta: {},
+        acl: {
+			owner: {
+				user: 'darrel',
+				permissions: 'rwx'
+			},
+			group: {
+				name: 'manage',
+				users: [],
+				permissions: ''
+			},
+			universe: {
+				permissions: ''
+			}
+
 
     };
 
@@ -195,7 +279,21 @@
 				"Forever 21,40.00\n" +
 				"Teller Deposit,+1200",
 
-        meta: {}
+        meta: {},
+        acl: {
+			owner: {
+				user: 'matt',
+				permissions: 'rwx'
+			},
+			group: {
+				name: 'manage',
+				users: [],
+				permissions: ''
+			},
+			universe: {
+				permissions: ''
+			}
+
     };
 
 
