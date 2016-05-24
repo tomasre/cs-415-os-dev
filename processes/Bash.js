@@ -23,6 +23,7 @@
     function main(options, argv) {
         stdout = options.stdout;
         console.log('BASH starting');
+        stdout.appendToBuffer("dummyOS &copy;2016 Tomas Re, Logan Figgins, Matt Kindblad, Edwin Young, Darrel Daquigan");
     }
 
     function streamListener (stream) {
@@ -260,6 +261,32 @@
             case "pwd":
                 stdout.appendToBuffer(pwd.string);
                 break;
+            case "useradd":
+		os._internals.ps.copyProcessTableEntryToPCB('useradd', null, command[1]);
+		break;
+	    case "userdel":
+		os._internals.ps.copyProcessTableEntryToPCB('userdel', null, command[1]);
+		break;
+	    case "passwd":
+		os._internals.ps.copyProcessTableEntryToPCB('passwd', null, command[1]);
+		break;
+	    case "login":
+		if(os._internals.sec.user == '')
+			os._internals.ps.copyProcessTableEntryToPCB('login');
+		else
+			os._internals.ps.copyProcessTableEntryToPCB('logout');
+		break;
+	    case "logout":
+		os._internals.ps.copyProcessTableEntryToPCB('logout');
+		break;
+	    case "groupadd":
+		os._internals.ps.copyProcessTableEntryToPCB('groupadd', null, command);
+		break;
+	    case "groupdel":
+		os._internals.ps.copyProcessTableEntryToPCB('groupdel', null, command);
+		break;
+	    case "chmod":
+		os._internals.ps.copyProcessTableEntryToPCB('chmod', null, [command[1], command[2]]);
         }
     }
 
