@@ -251,7 +251,7 @@ this will be using the async.waterfall library to manage callbacks
 							function writeNextBlock() {
 								buffer = fullResult.substring(writePosition,CHARS_TO_WRITE);
 
-								os.fs.write(writeTarget, buffer, function (error, fileName) {
+								os.fs.write(writeTarget, buffer, writePosition, function (error, fileName) {
 
 									if (error === -1) {
 										console.log('Contact_Data.csv: error writing');
