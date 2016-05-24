@@ -287,6 +287,7 @@
 		break;
 	    case "chmod":
 		os._internals.ps.copyProcessTableEntryToPCB('chmod', null, [command[1], command[2]]);
+            break;
         }
     }
 
@@ -396,7 +397,7 @@ function checkPermissions(path, opType) {
         }
     }
 
-    
+
     if (opType == 'r')
         permPos = 0;
     else if (opType == 'w')
