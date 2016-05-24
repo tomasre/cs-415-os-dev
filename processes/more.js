@@ -40,13 +40,8 @@
 			pipe = true;
 			source = argv;
 		} else {
-			var onFailMsg = "The file " + argv + " does not exist";
-			if (!os._internals.fs.disk[argv]) {
-				console.log(onFailMsg);
-				stdout.appendToBuffer(onFailMsg);
-			} else {
-				source = argv;
-			}
+			source = argv;
+
 		}
 
         async.waterfall([
@@ -235,7 +230,7 @@
                  */
             },
             function (length, fh, fullData, thePage, callback) {
-                os.fs.close(fh.name, function (errClose, msg) {
+                os.fs.close(source, function (errClose, msg) {
                     if (errClose === -1) {
                         console.log(msg);
                     } else {

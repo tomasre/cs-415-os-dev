@@ -196,7 +196,8 @@
                 break;
 
             case "more":
-                os._internals.ps.copyProcessTableEntryToPCB('more', null, command[1]);
+                var path = convertToAbsolute(command[1]);
+                os._internals.ps.copyProcessTableEntryToPCB('more', null, path);
                 break;
 
             case "clear":
