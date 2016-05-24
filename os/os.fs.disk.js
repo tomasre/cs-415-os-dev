@@ -2,8 +2,8 @@
 (function () {
     os._internals.fs.disk.root={};
 	os._internals.fs.disk.root.home={};
-	os._internals.fs.disk.etc= {};
-	os._internals.fs.disk.etc.shadow = {};
+	os._internals.fs.disk.root.etc= {};
+	os._internals.fs.disk.root.etc.shadow = {};
 
     /*
     Stats.js initial file
