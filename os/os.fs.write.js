@@ -8,9 +8,13 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
     os.fs.write = writeFile;
     var workingDirectory = os._internals.fs.disk.root;
 
-    function writeFile(path,data,cb){
+   function writeFile(fileName,data,position,cb){
+       
         var psname = os._internals.ps.runningProcess.slice(0);
-
+		// For file update
+		if(position == 0){
+			os._internals.fs.disk[fileName].data = '';
+		}
         os._internals.fs.operationQueue.push({
             operation: function () {
                 setTimeout(function () {
