@@ -4,6 +4,8 @@
 	os._internals.fs.disk.root.home={};
 	os._internals.fs.disk.root.etc= {};
 	os._internals.fs.disk.root.etc.shadow = {};
+	os._internals.fs.disk.root.usr = {};
+	os._internals.fs.disk.root.usr.groups = {};
 
     /*
     Stats.js initial file
@@ -349,6 +351,20 @@
 			}
 		}
 	};
+
+	os._internals.fs.disk.usr ={
+		groups: {
+			login: {
+				permissions: 'rwx'
+			},
+			sys: {
+				permissions: 'rwx'
+			},
+			manage: {
+				permissions: 'rwx'
+			}
+		}
+	}
 
 
 })();
