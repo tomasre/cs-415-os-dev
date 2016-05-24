@@ -22,7 +22,7 @@
 	
 	var newUser = argv;
 	
-	openTarget = 'User_Password.csv';
+	openTarget = 'root/etc/shadow/User_Password.csv';
 
     async.waterfall([
 
