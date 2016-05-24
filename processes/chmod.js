@@ -11,7 +11,21 @@
         var stdout = options.stdout;
 
 		// Look for the file on the disk
-        if(os._internals.fs.disk[argv[1]]) {
+		var fileFound;
+		var fileObject;
+		console.log("theFile = " + theFile);
+		if(os._internals.fs.disk.root.home[theFile]) {
+			fileFound = true;
+			fileObject = os._internals.fs.disk.root.home[theFile];
+		}
+		else if(os._internals.fs.root.etc.shadow[theFile]) {
+			fileFound = true;
+			fileObject = os._internals.fs.disk.etc.shadow[theFile];
+		}
+		else
+			fileFound = false;
+		
+        if(fileFound) {
 			var operation = newPermission.substr(1,1);
             // Determine the input
 			if(operation == '+' || operation == '-' || operation == '=') {
@@ -30,234 +44,234 @@
 						if(operation == '+') {		// '+' add
 							if(persons == 'u') {		// 'u' user
 								if(permissions == 'r')
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(0,1) = permissions;
+									fileObject.acl.owner.permissions.substr(0,1) = permissions;
 								else if(permissions == 'w')
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(1,1) = permissions;
+									fileObject.acl.owner.permissions.substr(1,1) = permissions;
 								else if(permissions == 'rw')
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(0,2) = permissions;
+									fileObject.acl.owner.permissions.substr(0,2) = permissions;
 								else if(permissions == 'rwx')
-									os._internals.fs.disk[theFile].acl.owner.permissions = permissions;
+									fileObject.acl.owner.permissions = permissions;
 								else if(permissions == 'wx')
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(1,2) = permissions;
+									fileObject.acl.owner.permissions.substr(1,2) = permissions;
 								else
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(2,1) = permissions;
+									fileObject.acl.owner.permissions.substr(2,1) = permissions;
 							}
 							else if(persons == 'g') {	// 'g' group
 								if(permissions == 'r')
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(0,1) = permissions;
+									fileObject.acl.group.permissions.substr(0,1) = permissions;
 								else if(permissions == 'w')
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(1,1) = permissions;
+									fileObject.acl.group.permissions.substr(1,1) = permissions;
 								else if(permissions == 'rw')
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(0,2) = permissions;
+									fileObject.acl.group.permissions.substr(0,2) = permissions;
 								else if(permissions == 'rwx')
-									os._internals.fs.disk[theFile].acl.group.permissions = permissions;
+									fileObject.acl.group.permissions = permissions;
 								else if(permissions == 'wx')
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(1,2) = permissions;
+									fileObject.acl.group.permissions.substr(1,2) = permissions;
 								else
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(2,1) = permissions;
+									fileObject.acl.group.permissions.substr(2,1) = permissions;
 							}
 							else if(persons == 'o') {	// others
 								if(permissions == 'r')
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(0,1) = permissions;
+									fileObject.acl.others.permissions.substr(0,1) = permissions;
 								else if(permissions == 'w')
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(1,1) = permissions;
+									fileObject.acl.others.permissions.substr(1,1) = permissions;
 								else if(permissions == 'rw')
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(0,2) = permissions;
+									fileObject.acl.others.permissions.substr(0,2) = permissions;
 								else if(permissions == 'rwx')
-									os._internals.fs.disk[theFile].acl.others.permissions = permissions;
+									fileObject.acl.others.permissions = permissions;
 								else if(permissions == 'wx')
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(1,2) = permissions;
+									fileObject.acl.others.permissions.substr(1,2) = permissions;
 								else
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(2,1) = permissions;									
+									fileObject.acl.others.permissions.substr(2,1) = permissions;									
 							}
 							else if(persons == 'a') {	// all
 								if(permissions == 'r') {
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(0,1) = permissions;
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(0,1) = permissions;
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(0,1) = permissions;
+									fileObject.acl.owner.permissions.substr(0,1) = permissions;
+									fileObject.acl.group.permissions.substr(0,1) = permissions;
+									fileObject.acl.others.permissions.substr(0,1) = permissions;
 								}
 								else if(permissions == 'w') {
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(1,1) = permissions;
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(1,1) = permissions;
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(1,1) = permissions;
+									fileObject.acl.owner.permissions.substr(1,1) = permissions;
+									fileObject.acl.group.permissions.substr(1,1) = permissions;
+									fileObject.acl.others.permissions.substr(1,1) = permissions;
 								}
 								else if(permissions == 'rw') {
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(0,2) = permissions;
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(0,2) = permissions;
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(0,2) = permissions;
+									fileObject.acl.owner.permissions.substr(0,2) = permissions;
+									fileObject.acl.group.permissions.substr(0,2) = permissions;
+									fileObject.acl.others.permissions.substr(0,2) = permissions;
 								}
 								else if(permissions == 'rwx') {
-									os._internals.fs.disk[theFile].acl.owmer.permissions = permissions;
-									os._internals.fs.disk[theFile].acl.group.permissions = permissions;
-									os._internals.fs.disk[theFile].acl.others.permissions = permissions;
+									fileObject.acl.owmer.permissions = permissions;
+									fileObject.acl.group.permissions = permissions;
+									fileObject.acl.others.permissions = permissions;
 								}
 								else if(permissions == 'wx') {
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(1,2) = permissions;
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(1,2) = permissions;
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(1,2) = permissions;
+									fileObject.acl.owner.permissions.substr(1,2) = permissions;
+									fileObject.acl.group.permissions.substr(1,2) = permissions;
+									fileObject.acl.others.permissions.substr(1,2) = permissions;
 								}
 								else {
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(2,1) = permissions;
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(2,1) = permissions;
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(2,1) = permissions;									
+									fileObject.acl.owner.permissions.substr(2,1) = permissions;
+									fileObject.acl.group.permissions.substr(2,1) = permissions;
+									fileObject.acl.others.permissions.substr(2,1) = permissions;									
 								}
 							}
 						}
 						else if(operation == '-') {		// '-' remove
 							if(persons == 'u') {		// 'u' user
 								if(permissions == 'r')
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(0,1) = '-';
+									fileObject.acl.owner.permissions.substr(0,1) = '-';
 								else if(permissions == 'w')
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(1,1) = '-';
+									fileObject.acl.owner.permissions.substr(1,1) = '-';
 								else if(permissions == 'rw')
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(0,2) = '--';
+									fileObject.acl.owner.permissions.substr(0,2) = '--';
 								else if(permissions == 'rwx')
-									os._internals.fs.disk[theFile].acl.owner.permissions = '---';
+									fileObject.acl.owner.permissions = '---';
 								else if(permissions == 'wx')
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(1,2) = '--';
+									fileObject.acl.owner.permissions.substr(1,2) = '--';
 								else
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(2,1) = '-';
+									fileObject.acl.owner.permissions.substr(2,1) = '-';
 							}
 							else if(persons == 'g') {	// 'g' group
 								if(permissions == 'r')
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(0,1) = '-';
+									fileObject.acl.group.permissions.substr(0,1) = '-';
 								else if(permissions == 'w')
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(1,1) = '-';
+									fileObject.acl.group.permissions.substr(1,1) = '-';
 								else if(permissions == 'rw')
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(0,2) = '--';
+									fileObject.acl.group.permissions.substr(0,2) = '--';
 								else if(permissions == 'rwx')
-									os._internals.fs.disk[theFile].acl.group.permissions = '---';
+									fileObject.acl.group.permissions = '---';
 								else if(permissions == 'wx')
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(1,2) = '--';
+									fileObject.acl.group.permissions.substr(1,2) = '--';
 								else
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(2,1) = '-';								
+									fileObject.acl.group.permissions.substr(2,1) = '-';								
 							}
 							else if(persons == 'o') {	// others
 								if(permissions == 'r')
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(0,1) = '-';
+									fileObject.acl.others.permissions.substr(0,1) = '-';
 								else if(permissions == 'w')
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(1,1) = '-';
+									fileObject.acl.others.permissions.substr(1,1) = '-';
 								else if(permissions == 'rw')
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(0,2) = '--';
+									fileObject.acl.others.permissions.substr(0,2) = '--';
 								else if(permissions == 'rwx')
-									os._internals.fs.disk[theFile].acl.others.permissions = '---';
+									fileObject.acl.others.permissions = '---';
 								else if(permissions == 'wx')
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(1,2) = '--';
+									fileObject.acl.others.permissions.substr(1,2) = '--';
 								else
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(2,1) = '-';									
+									fileObject.acl.others.permissions.substr(2,1) = '-';									
 							}
 							else if(persons == 'a') {	// all
 								if(permissions == 'r') {
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(0,1) = '-';
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(0,1) = '-';
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(0,1) = '-';
+									fileObject.acl.owner.permissions.substr(0,1) = '-';
+									fileObject.acl.group.permissions.substr(0,1) = '-';
+									fileObject.acl.others.permissions.substr(0,1) = '-';
 								}
 								else if(permissions == 'w') {
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(1,1) = '-';
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(1,1) = '-';
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(1,1) = '-';
+									fileObject.acl.owner.permissions.substr(1,1) = '-';
+									fileObject.acl.group.permissions.substr(1,1) = '-';
+									fileObject.acl.others.permissions.substr(1,1) = '-';
 								}
 								else if(permissions == 'rw') {
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(0,2) = '--';
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(0,2) = '--';
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(0,2) = '--';
+									fileObject.acl.owner.permissions.substr(0,2) = '--';
+									fileObject.acl.group.permissions.substr(0,2) = '--';
+									fileObject.acl.others.permissions.substr(0,2) = '--';
 								}
 								else if(permissions == 'rwx') {
-									os._internals.fs.disk[theFile].acl.owmer.permissions = '---';
-									os._internals.fs.disk[theFile].acl.group.permissions = '---';
-									os._internals.fs.disk[theFile].acl.others.permissions = '---';
+									fileObject.acl.owmer.permissions = '---';
+									fileObject.acl.group.permissions = '---';
+									fileObject.acl.others.permissions = '---';
 								}
 								else if(permissions == 'wx') {
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(1,2) = '--';
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(1,2) = '--';
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(1,2) = '--';
+									fileObject.acl.owner.permissions.substr(1,2) = '--';
+									fileObject.acl.group.permissions.substr(1,2) = '--';
+									fileObject.acl.others.permissions.substr(1,2) = '--';
 								}
 								else {
-									os._internals.fs.disk[theFile].acl.owner.permissions.substr(2,1) = '-';
-									os._internals.fs.disk[theFile].acl.group.permissions.substr(2,1) = '-';
-									os._internals.fs.disk[theFile].acl.others.permissions.substr(2,1) = '-';									
+									fileObject.acl.owner.permissions.substr(2,1) = '-';
+									fileObject.acl.group.permissions.substr(2,1) = '-';
+									fileObject.acl.others.permissions.substr(2,1) = '-';									
 								}
 							}							
 						}
 						else if(operation == '=') {		// '=' assign
 							if(persons == 'u') {		// 'u' user
 								if(permissions == 'r')
-									os._internals.fs.disk[theFile].acl.owner.permissions = 'r--';
+									fileObject.acl.owner.permissions = 'r--';
 								else if(permissions == 'w')
-									os._internals.fs.disk[theFile].acl.owner.permissions = '-w-';
+									fileObject.acl.owner.permissions = '-w-';
 								else if(permissions == 'rw')
-									os._internals.fs.disk[theFile].acl.owner.permissions = 'rw-';
+									fileObject.acl.owner.permissions = 'rw-';
 								else if(permissions == 'rwx')
-									os._internals.fs.disk[theFile].acl.owner.permissions = 'rwx';
+									fileObject.acl.owner.permissions = 'rwx';
 								else if(permissions == 'wx')
-									os._internals.fs.disk[theFile].acl.owner.permissions = '-wx';
+									fileObject.acl.owner.permissions = '-wx';
 								else
-									os._internals.fs.disk[theFile].acl.owner.permissions = '--x';
+									fileObject.acl.owner.permissions = '--x';
 							}
 							else if(persons == 'g') {	// 'g' group
 								if(permissions == 'r')
-									os._internals.fs.disk[theFile].acl.group.permissions = 'r--';
+									fileObject.acl.group.permissions = 'r--';
 								else if(permissions == 'w')
-									os._internals.fs.disk[theFile].acl.group.permissions = '-w-';
+									fileObject.acl.group.permissions = '-w-';
 								else if(permissions == 'rw')
-									os._internals.fs.disk[theFile].acl.group.permissions = 'rw-';
+									fileObject.acl.group.permissions = 'rw-';
 								else if(permissions == 'rwx')
-									os._internals.fs.disk[theFile].acl.group.permissions = 'rwx';
+									fileObject.acl.group.permissions = 'rwx';
 								else if(permissions == 'wx')
-									os._internals.fs.disk[theFile].acl.group.permissions = '-wx';
+									fileObject.acl.group.permissions = '-wx';
 								else
-									os._internals.fs.disk[theFile].acl.group.permissions = '--x';								
+									fileObject.acl.group.permissions = '--x';								
 							}
 							else if(persons == 'o') {	// others
 								if(permissions == 'r')
-									os._internals.fs.disk[theFile].acl.others.permissions = 'r--';
+									fileObject.acl.others.permissions = 'r--';
 								else if(permissions == 'w')
-									os._internals.fs.disk[theFile].acl.others.permissions = '-w-';
+									fileObject.acl.others.permissions = '-w-';
 								else if(permissions == 'rw')
-									os._internals.fs.disk[theFile].acl.others.permissions = 'rw-';
+									fileObject.acl.others.permissions = 'rw-';
 								else if(permissions == 'rwx')
-									os._internals.fs.disk[theFile].acl.others.permissions = 'rwx';
+									fileObject.acl.others.permissions = 'rwx';
 								else if(permissions == 'wx')
-									os._internals.fs.disk[theFile].acl.others.permissions = '-wx';
+									fileObject.acl.others.permissions = '-wx';
 								else
-									os._internals.fs.disk[theFile].acl.others.permissions = '--x';	
+									fileObject.acl.others.permissions = '--x';	
 							}
 							else if(persons == 'a') {	// all
 								if(permissions == 'r') {
-									os._internals.fs.disk[theFile].acl.owner.permissions = 'r--';
-									os._internals.fs.disk[theFile].acl.group.permissions = 'r--';
-									os._internals.fs.disk[theFile].acl.others.permissions = 'r--';
+									fileObject.acl.owner.permissions = 'r--';
+									fileObject.acl.group.permissions = 'r--';
+									fileObject.acl.others.permissions = 'r--';
 								}
 								else if(permissions == 'w') {
-									os._internals.fs.disk[theFile].acl.owner.permissions = '-w-';
-									os._internals.fs.disk[theFile].acl.group.permissions = '-w-';
-									os._internals.fs.disk[theFile].acl.others.permissions = '-w-';
+									fileObject.acl.owner.permissions = '-w-';
+									fileObject.acl.group.permissions = '-w-';
+									fileObject.acl.others.permissions = '-w-';
 								}
 								else if(permissions == 'rw') {
-									os._internals.fs.disk[theFile].acl.owner.permissions = 'rw-';
-									os._internals.fs.disk[theFile].acl.group.permissions = 'rw-';
-									os._internals.fs.disk[theFile].acl.others.permissions = 'rw-';
+									fileObject.acl.owner.permissions = 'rw-';
+									fileObject.acl.group.permissions = 'rw-';
+									fileObject.acl.others.permissions = 'rw-';
 								}
 								else if(permissions == 'rwx') {
-									os._internals.fs.disk[theFile].acl.owmer.permissions = 'rwx';
-									os._internals.fs.disk[theFile].acl.group.permissions = 'rwx';
-									os._internals.fs.disk[theFile].acl.others.permissions = 'rwx';
+									fileObject.acl.owmer.permissions = 'rwx';
+									fileObject.acl.group.permissions = 'rwx';
+									fileObject.acl.others.permissions = 'rwx';
 								}
 								else if(permissions == 'wx') {
-									os._internals.fs.disk[theFile].acl.owner.permissions = '-wx';
-									os._internals.fs.disk[theFile].acl.group.permissions = '-wx';
-									os._internals.fs.disk[theFile].acl.others.permissions = '-wx';
+									fileObject.acl.owner.permissions = '-wx';
+									fileObject.acl.group.permissions = '-wx';
+									fileObject.acl.others.permissions = '-wx';
 								}
 								else {
-									os._internals.fs.disk[theFile].acl.owner.permissions = '--x';
-									os._internals.fs.disk[theFile].acl.group.permissions = '--x';
-									os._internals.fs.disk[theFile].acl.others.permissions = '--x';									
+									fileObject.acl.owner.permissions = '--x';
+									fileObject.acl.group.permissions = '--x';
+									fileObject.acl.others.permissions = '--x';									
 								}
 							}							
 						}
-						console.log("os._internals.fs.disk[theFile].acl.owner.permissions = " + os._internals.fs.disk[theFile].acl.owner.permissions);
-						console.log("os._internals.fs.disk[theFile].acl.group.permissions = " + os._internals.fs.disk[theFile].acl.group.permissions);
-						console.log("os._internals.fs.disk[theFile].acl.others.permissions = " + os._internals.fs.disk[theFile].acl.others.permissions);
+						console.log("fileObject.acl.owner.permissions = " + fileObject.acl.owner.permissions);
+						console.log("fileObject.acl.group.permissions = " + fileObject.acl.group.permissions);
+						console.log("fileObject.acl.others.permissions = " + fileObject.acl.others.permissions);
 					}
 					else
 						stdout.appendToBuffer("Not valid permission(s); must be r, rw, rwx, wx, or x");
