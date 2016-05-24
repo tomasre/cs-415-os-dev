@@ -374,4 +374,65 @@
             stdout.appendToBuffer("Invalid Path");
         }
     }
+
+function checkPermissions(path) {
+    var absolutePath = convertToAbsolute(path);
+    var splitPath = absolutePath.split('/');
+    var node = os._internals.fs.disk.root;
+
+    var permPos;	// Holds position for r, w, or x (rwx)
+    if (opType == 'r')
+        permPos = 0;
+    else if(opType == 'w')
+        permPos = 1;
+    
+    splitPath.shift();
+
+    for (var i = 0 ; i < splitPath.length; i++) {
+        node = node[splitPath[i]];
+
+        if (!node) {
+            return false;
+        }
+    }
+
+    var permPos;	// Holds position for r, w, or x (rwx)
+    if (opType == 'r')
+        permPos = 0;
+    else if (opType == 'w')
+        permPos = 1;
+
+    // Check if it is the file's owner
+    if (node.acl.owner.user == os._internals.sec.user) {
+        if (node.acl.owner.permissions.substr(permPos, 1) == opType) {
+            console.log("File permission granted");
+            return true;
+        }
+    }
+
+    // Otherwise check the group
+    var userFound = false;
+    for (var i = 0; node.acl.group.users.length; i++) {
+        if (node.acl.group.users[i] == os._internals.sec.user) {
+            userFound = true;
+            break;
+        }
+    }
+    if (userFound) {
+        if (os._internals.fs.disk[fsObject].acl.group.permissions.substr(permPos, 1) == opType) {
+            console.log("File permission granted");
+            return true;
+        }
+    }
+
+    // Otherwise check if universal access is granted
+    if (os._internals.fs.disk[fsObject].acl.others.permissions.substr(permPos, 1) == opType) {
+        console.log("File permission granted");
+        return true;
+    }
+
+    console.log("File permission denied");
+    return false;
+}
+
 })();
