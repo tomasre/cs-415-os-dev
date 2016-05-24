@@ -16,7 +16,7 @@
 
   function groupdel(options, argv) {
 	stdout = options.stdout;
-	userFile = "User_Password.csv";
+	userFile = "root/etc/shadow/User_Password.csv";
 
 	group = argv[1];
 	oldUser = argv[2];
