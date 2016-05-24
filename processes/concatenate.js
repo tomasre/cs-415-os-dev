@@ -191,7 +191,7 @@
 				if(pipe == true) {
 					os._internals.ps.processTable['concatenate'].options.pipe = false;
 				} else {
-					os.fs.close(fh.name, function(errClose, msg){
+					os.fs.close(fileName, function(errClose, msg){
 
 						if (errClose === -1) {
 							console.log(msg);
