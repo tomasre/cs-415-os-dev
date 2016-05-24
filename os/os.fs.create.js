@@ -31,7 +31,7 @@
 
     workingDirectory[createTarget]={
         acl: {
-			owner: {
+			owner: { os._internals.sec.user;
 			},
 			group: {
 			},
