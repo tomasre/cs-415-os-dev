@@ -30,7 +30,7 @@
 				users: [],
 				permissions: 'rwx'
 			},
-			universe: {
+			others: {
 				permissions: ''
 			}
 		}
@@ -52,7 +52,7 @@
 				users: [],
 				permissions: 'rwx'
 			},
-			universe: {
+			others: {
 				permissions: ''
 			}
 		}
@@ -88,7 +88,7 @@
 				users: [],
 				permissions: 'rwx'
 			},
-			universe: {
+			others: {
 				permissions: ''
 			}
 		}
@@ -117,7 +117,7 @@
 				users: [],
 				permissions: 'rwx'
 			},
-			universe: {
+			others: {
 				permissions: ''
 			}
 		}
@@ -143,7 +143,7 @@
 				users: [],
 				permissions: 'rwx'
 			},
-			universe: {
+			others: {
 				permissions: ''
 			}
 		}
@@ -176,7 +176,7 @@
 				users: [],
 				permissions: 'rwx'
 			},
-			universe: {
+			others: {
 				permissions: ''
 			}
 		}
@@ -299,7 +299,7 @@
 				users: [],
 				permissions: 'rwx'
 			},
-			universe: {
+			others: {
 				permissions: ''
 			}
 		}
