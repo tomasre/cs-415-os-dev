@@ -21,7 +21,7 @@
 	group = argv[1];
 	newUser = argv[2];
 	
-	openTarget = 'Groups.csv';
+	openTarget = 'root/etc/shadow/Groups.csv';
 
     async.waterfall([
 
