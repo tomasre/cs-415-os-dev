@@ -190,7 +190,7 @@
                     buffer = fullResult.substring(writePosition, CHARS_TO_WRITE);
                     console.log(buffer);
 
-                    os.fs.write(newFile, buffer, function (error, fileName) {
+                    os.fs.write(newFile, buffer, writePosition, function (error, fileName) {
 
                         if (error === -1) {
                             console.log('error writing');
