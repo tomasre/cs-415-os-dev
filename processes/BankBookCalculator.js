@@ -274,7 +274,7 @@
 				function writeNextBlock() {
 					buffer = fullResult.substr(writePosition,CHARS_TO_WRITE);
 
-					os.fs.write(writeTarget, buffer, function (error, fileName) {
+					os.fs.write(writeTarget, buffer, writePosition, function (error, fileName) {
 
 						if (error === -1) {
 							console.log(writeTarget, ': error writing');
