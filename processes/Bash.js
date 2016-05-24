@@ -375,7 +375,7 @@
         }
     }
 
-function checkPermissions(path) {
+function checkPermissions(path, opType) {
     var absolutePath = convertToAbsolute(path);
     var splitPath = absolutePath.split('/');
     var node = os._internals.fs.disk.root;
@@ -385,7 +385,7 @@ function checkPermissions(path) {
         permPos = 0;
     else if(opType == 'w')
         permPos = 1;
-    
+
     splitPath.shift();
 
     for (var i = 0 ; i < splitPath.length; i++) {
@@ -396,7 +396,7 @@ function checkPermissions(path) {
         }
     }
 
-    var permPos;	// Holds position for r, w, or x (rwx)
+    
     if (opType == 'r')
         permPos = 0;
     else if (opType == 'w')
