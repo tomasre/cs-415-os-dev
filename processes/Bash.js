@@ -437,7 +437,7 @@ function checkPermissions(path, opType) {
     for (var i = 0; i < x.length ; i++) {
         var y = x[i].split(',');
         if( y[0] === node.acl.group.name){
-            for (var i = 1; i < y.length;i++) {``
+            for (var i = 1; i < y.length;i++) {
                 if (y[i]===os._internals.sec.user) {
                     userFound = true;
                     break;

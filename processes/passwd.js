@@ -251,7 +251,9 @@
 		// Splice the password back into fullData, and write to file
 		var users = lines[result.rownum].split(",");
 		lines[result.rownum] = users[0] + ',' + newPassword;
+
 		newFileData = lines.join("\n");
+		console.log("New Password Information: " + newFileData);
 		
 		os._internals.drivers.keyboard.deregisterStream();
 		
@@ -259,7 +261,7 @@
 			function (callback) {				
 				var fullResult= newFileData;
 				var buffer='';
-				var CHARS_TO_WRITE = 5;
+				var CHARS_TO_WRITE = 100;
 				var writeSize=newFileData.length;		// Dummy variable so it doesn't write, waits for password input
 				var fileName = "";
 				var writePosition = 0;
@@ -276,7 +278,7 @@
 	
 				function writeNextBlock() {
 					buffer = newFileData.substr(writePosition,CHARS_TO_WRITE);
-			
+					console.log("Buffer Value Inside Write Block: " + buffer);
 					os.fs.write(openTarget, buffer, writePosition, function (error, fileName) {				
 						if (error === -1) {
 							console.log('User_Password.csv: error writing');

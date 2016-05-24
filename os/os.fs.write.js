@@ -17,11 +17,16 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
 
        console.log("write target inside Wrapper: " + writeTarget);
        console.log("Working Directory Inside Wrapper: ");
+
        console.log(workingDirectory);
+       console.log("Write Position: " + position);
+
+       console.log("Data Passed To Wrapper: " + data);
+
 
 
 		if(position === 0){
-			workingDirectory.data = '';
+			workingDirectory[writeTarget].data = '';
 		}
         os._internals.fs.operationQueue.push({
             operation: function () {
@@ -43,8 +48,10 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
 
         if(fileExists(writeTarget)){
             console.log("Write Target: " + writeTarget);
-            console.log("Data so far " + workingDirectory[writeTarget].data);
+            console.log("Data before write " + workingDirectory[writeTarget].data);
             workingDirectory[writeTarget].data = fileString + dataPar;
+            console.log("Data Parameter: " + dataPar);
+            console.log("Data after write: " + workingDirectory[writeTarget].data);
             entrypoint = function(){
                 cb(0,path)
             }
