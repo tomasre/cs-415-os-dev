@@ -329,13 +329,14 @@
 		}
 	};
 	
-	os._internals.fs.disk.etc.shadow['Groups.csv'] = {
+	os._internals.fs.disk.root.etc.shadow['Groups.csv'] = {
 		data:	"login,matt,edwin,logan,tomas,darrel\n" +
 				"sys,logan,tomas\n" +
 				"manage,logan,matt,edwin\n" +
 				"users,darrel,matt,edwin\n",
 				
 		meta: {},
+
 		acl: {
 			owner: {
 				user: 'super',
