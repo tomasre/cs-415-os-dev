@@ -140,7 +140,7 @@
 								writeEnd = writeSize;
 							buffer = fullResult.substring(writePosition,writeEnd);
 
-							os.fs.write(writeTarget, buffer, function (error, fileName) {
+							os.fs.write(writeTarget, buffer, writePosition, function (error, fileName) {
 								if (error === -1){
 									console.log(fileName + ': error writing' + error + '\n');
 									callback('Error');
