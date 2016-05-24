@@ -30,6 +30,15 @@
     if(typeof workingDirectory[createTarget] === "undefined"){
 
     workingDirectory[createTarget]={
+        acl: {
+			owner: {
+			},
+			group: {
+			},
+			universe: {
+				permissions: ''
+			}
+
 
     //  data: '',
     //  meta: {}
