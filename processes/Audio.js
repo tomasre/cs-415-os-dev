@@ -20,7 +20,7 @@
         for( var i = 0; i<songs.length; i++) {
             stdout.appendToBuffer(songs[i]);
         }
-        stdout.appendToBuffer('Type Play or Pause followed by the [song Name]');
+        stdout.appendToBuffer('Type play or pause followed by the full [song Name] excluding the track number');
 
         var thread1 = os.ps.createThread(function(){
             juicy = new Sound("AudioSamples/Juicy.mp3");
