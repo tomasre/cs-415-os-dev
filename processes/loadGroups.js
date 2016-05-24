@@ -155,7 +155,7 @@
 		lines = fullData.split("\n");
 
 		// Now load the filesystem's acl's with the current group data
-		for(file in os._internals.fs.disk) {
+		for(file in os._internals.fs.disk.) {
 			var groupName = os._internals.fs.disk[file].acl.group.name;
 			
 			for(var i = 0; i < lines.length; i++) {

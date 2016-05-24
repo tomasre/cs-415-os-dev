@@ -28,7 +28,7 @@
 			group: {
 				name: 'manage',
 				users: [],
-				permissions: ''
+				permissions: 'rwx'
 			},
 			universe: {
 				permissions: ''
@@ -50,7 +50,7 @@
 			group: {
 				name: 'manage',
 				users: [],
-				permissions: ''
+				permissions: 'rwx'
 			},
 			universe: {
 				permissions: ''
@@ -86,7 +86,7 @@
 			group: {
 				name: 'manage',
 				users: [],
-				permissions: ''
+				permissions: 'rwx'
 			},
 			universe: {
 				permissions: ''
@@ -115,7 +115,7 @@
 			group: {
 				name: 'manage',
 				users: [],
-				permissions: ''
+				permissions: 'rwx'
 			},
 			universe: {
 				permissions: ''
@@ -136,12 +136,12 @@
         acl: {
 			owner: {
 				user: 'logan',
-				permissions: 'rwx'
+				permissions: 'wx'
 			},
 			group: {
 				name: 'manage',
 				users: [],
-				permissions: ''
+				permissions: 'rwx'
 			},
 			universe: {
 				permissions: ''
@@ -174,7 +174,7 @@
 			group: {
 				name: 'manage',
 				users: [],
-				permissions: ''
+				permissions: 'rwx'
 			},
 			universe: {
 				permissions: ''
@@ -297,7 +297,7 @@
 			group: {
 				name: 'manage',
 				users: [],
-				permissions: ''
+				permissions: 'rwx'
 			},
 			universe: {
 				permissions: ''
@@ -310,7 +310,8 @@
 				"logan,logan\n" +
 				"tomas,tomas\n" +
 				"edwin,edwin\n" +
-				"darrel,darrel",
+				"darrel,darrel\n" +
+				"su,guest",
 				
 		meta: {},
 		acl: {
@@ -330,10 +331,10 @@
 	};
 	
 	os._internals.fs.disk.root.etc.shadow['Groups.csv'] = {
-		data:	"login,matt,edwin,logan,tomas,darrel\n" +
-				"sys,logan,tomas\n" +
-				"manage,logan,matt,edwin\n" +
-				"users,darrel,matt,edwin\n",
+		data:	"login,matt,edwin,logan,tomas,darrel,su\n" +
+				"sys,su\n" +
+				"manage,logan,matt,edwin,su\n" +
+				"users,darrel,matt,edwin,su\n",
 				
 		meta: {},
 

@@ -56,7 +56,11 @@
 
                 break;
 
-            case "copy": //copy is finished
+            case "copy"://copy is finished
+                if(checkPermissions(command[1], 'r')===false){
+                    stdout.appendToBuffer('Access Denied');
+                    break;
+                }
                 var sourcePath = convertToAbsolute(command[1]);
                 var destinationPath = convertToAbsolute(command[2]);
                 if(validPath(path)) {
@@ -123,8 +127,16 @@
                 os._internals.ps.copyProcessTableEntryToPCB('Audio_Player', null, ["Audio Player"]);
                 break;
 
+            case "su":
+                stdout.appendToBuffer('type su for root access');
+                os._internals.ps.copyProcessTableEntryToPCB('login');
+                break;
 
             case "cat":
+                if(checkPermissions(command[1], 'r')===false){
+                    stdout.appendToBuffer('Access Denied');
+                    break;
+                }
                 var path = convertToAbsolute(command[1]);
                 if(validPath(path)) {
                     os._internals.ps.copyProcessTableEntryToPCB('concatenate', null, [path]);
@@ -196,6 +208,10 @@
                 break;
 
             case "more":
+                if(checkPermissions(command[1], 'r')===false){
+                    stdout.appendToBuffer('Access Denied');
+                    break;
+                }
                 var path = convertToAbsolute(command[1]);
                 os._internals.ps.copyProcessTableEntryToPCB('more', null, path);
                 break;
@@ -399,13 +415,13 @@ function checkPermissions(path, opType) {
     }
 
 
-    if (opType == 'r')
+    if (opType === 'r')
         permPos = 0;
-    else if (opType == 'w')
+    else if (opType === 'w')
         permPos = 1;
 
     // Check if it is the file's owner
-    if (node.acl.owner.user == os._internals.sec.user) {
+    if (node.acl.owner.user === os._internals.sec.user) {
         if (node.acl.owner.permissions.substr(permPos, 1) == opType) {
             console.log("File permission granted");
             return true;
@@ -414,25 +430,35 @@ function checkPermissions(path, opType) {
 
     // Otherwise check the group
     var userFound = false;
-    for (var i = 0; node.acl.group.users.length; i++) {
-        if (node.acl.group.users[i] == os._internals.sec.user) {
-            userFound = true;
-            break;
+    var data = os._internals.fs.disk.root.etc.shadow['Groups.csv'].data;
+
+    var x = data.split('\n');
+    console.log("x: " + x);
+    for (var i = 0; i < x.length ; i++) {
+        var y = x[i].split(',');
+        if( y[0] === node.acl.group.name){
+            for (var i = 1; i < y.length;i++) {``
+                if (y[i]===os._internals.sec.user) {
+                    userFound = true;
+                    break;
+                }
+            }
         }
     }
     if (userFound) {
-        if (os._internals.fs.disk[fsObject].acl.group.permissions.substr(permPos, 1) == opType) {
+        if (node.acl.group.permissions.substr(permPos, 1) === opType) {
             console.log("File permission granted");
             return true;
         }
     }
 
     // Otherwise check if universal access is granted
-    if (os._internals.fs.disk[fsObject].acl.others.permissions.substr(permPos, 1) == opType) {
+    /*
+    if (node.acl.others.permissions.substr(permPos, 1) == opType) {
         console.log("File permission granted");
         return true;
     }
-
+*/
     console.log("File permission denied");
     return false;
 }

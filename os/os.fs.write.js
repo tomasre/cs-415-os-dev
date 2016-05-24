@@ -9,16 +9,24 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
     var workingDirectory = os._internals.fs.disk.root;
 
    function writeFile(fileName,data,position,cb){
-       
+       var temp = fileName;
         var psname = os._internals.ps.runningProcess.slice(0);
+       console.log("Path inside Wrapper: " + fileName);
+        var writeTarget = parsePath(fileName);
 		// For file update
-		if(position == 0){
-			os._internals.fs.disk[fileName].data = '';
+
+       console.log("write target inside Wrapper: " + writeTarget);
+       console.log("Working Directory Inside Wrapper: ");
+       console.log(workingDirectory);
+
+
+		if(position === 0){
+			workingDirectory.data = '';
 		}
         os._internals.fs.operationQueue.push({
             operation: function () {
                 setTimeout(function () {
-                    performWriteFile(psname, path, data, cb);
+                    performWriteFile(psname, temp, data, cb);
                 }, generateRandomTimeout());
             },
             // copy string
@@ -28,11 +36,14 @@ CONDITIONALLY CREATING RIGHT NOW IF DOES NOT EXIST
 
     function performWriteFile(psname, path, dataPar, cb){
         var entrypoint;
+        console.log("path handed to perform write: " + path);
         var writeTarget = parsePath(path);
 
         var fileString = workingDirectory[writeTarget].data;
 
-        if(withinMaxSize(dataPar.length) && fileExists(writeTarget)){
+        if(fileExists(writeTarget)){
+            console.log("Write Target: " + writeTarget);
+            console.log("Data so far " + workingDirectory[writeTarget].data);
             workingDirectory[writeTarget].data = fileString + dataPar;
             entrypoint = function(){
                 cb(0,path)
