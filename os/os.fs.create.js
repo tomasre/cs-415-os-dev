@@ -31,13 +31,14 @@
 
     workingDirectory[createTarget]={
         acl: {
-			owner: { os._internals.sec.user;
-			},
-			group: {
-			},
-			universe: {
-				permissions: ''
-			}
+            owner: {
+                name: os._internals.sec.user
+            },
+            group: {},
+            universe: {
+                permissions: ''
+            }
+        }
 
 
     //  data: '',
