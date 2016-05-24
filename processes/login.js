@@ -14,7 +14,7 @@
     function login(options, argv){
 		stdout = options.stdout;
 		loginSteps = 0;
-		openTarget = "User_Password.csv";
+		openTarget = "root/etc/shadow/User_Password.csv";
 		
 		stdout.appendToBuffer("----Login----");
 		stdout.appendToBuffer("User: ");
